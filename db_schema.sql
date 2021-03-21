@@ -1,14 +1,12 @@
 CREATE TABLE OSOBY (
 	ID integer PRIMARY KEY AUTOINCREMENT,
-	jmeno varchar,
-	prijmeni varchar,
-	ucebnice_id integer
+	jmeno varchar
 );
 
 CREATE TABLE UCEBNICE (
 	ID integer PRIMARY KEY AUTOINCREMENT,
 	nazev varchar,
-	jazyk varchar
+	jazyk_id integer
 );
 
 CREATE TABLE LEKCE (
@@ -27,7 +25,7 @@ CREATE TABLE SLOVICKA (
 
 CREATE TABLE VYSLEDKY (
 	ID integer PRIMARY KEY AUTOINCREMENT,
-	osoby_id integer,
+	osoba_id integer,
 	lekce_id integer,
 	uspesnost integer,
 	datum datetime
@@ -37,4 +35,15 @@ CREATE TABLE TESTOVANA_SLOVICKA (
 	osoba_id integer,
 	slovicko_id integer,
 	testovat boolean
+);
+
+CREATE TABLE JAZYKY (
+	ID integer PRIMARY KEY AUTOINCREMENT,
+	nazev varchar,
+	to_speak string
+);
+
+CREATE TABLE OSOBY_JAZYKY (
+	osoba_id integer,
+	jazyk_id integer
 );

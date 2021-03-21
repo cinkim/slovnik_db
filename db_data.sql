@@ -1,8 +1,11 @@
-insert into ucebnice values(null,'Happy Street 1','AJ');
-insert into ucebnice values(null,'Project 2','AJ');
+insert into jazyky values(null,'AJ','');
+insert into jazyky values(null,'NJ','');
+insert into jazyky values(null,'FJ','');
+insert into jazyky values(null,'ŠJ','');
 
-insert into osoby values(null,'Adam','K',2);
-insert into osoby values(null,'Filip','K',1);
+
+insert into ucebnice values(null,'Happy Street 1',1);
+insert into ucebnice values(null,'Project 2',1);
 
 insert into lekce values(null,1,1,'Greeting colors numbers');
 insert into lekce values(null,1,2,'At school');
@@ -259,7 +262,6 @@ insert into slovicka values(null,'v patøe/poschodí','in the floor',10);
 insert into slovicka values(null,'cvièit','practise',10);
 insert into slovicka values(null,'docházka','registration',10);
 insert into slovicka values(null,'správnì, správný','right',10);
-insert into slovicka values(null,'škola, kde se pøipravuje k maturitì','sixth form college',10);
 insert into slovicka values(null,'jít pìšky','walk',10);
 insert into slovicka values(null,'špatnì','wrong',10);
 insert into slovicka values(null,'ještì (ne)','yet',10);
