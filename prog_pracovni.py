@@ -22,3 +22,5 @@ student = "aaa"
 print(f"Seznam jazyků studenta: {student}")
 print(d.jazyky_studenta(student))
 
+conn, cursor = d.pripojeni_db()
+conn.close()
