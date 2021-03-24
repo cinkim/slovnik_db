@@ -9,13 +9,8 @@ import prace_s_db as d
 if path.exists("db_slovnik.sqlite") == False:
     d.create_sql_db()
 
-
 #conn = sqlite3.connect(db)
 #c = conn.cursor()
-
-
-
-
 
 print()
 print("Seznam studentů:")
@@ -40,9 +35,17 @@ jmeno = "Filip"
 jazyky_ucebnice = [("FJ","Francouz1")]
 # jazyky_ucebnice = []
 
-
 d.pridat_studenta(jmeno,jazyky_ucebnice)
 """
 
 conn, cursor = d.pripojeni_db()
 conn.close()
+
+
+# print("********************************")
+# vypíše nápovědu ke VŠEM funkcím z modulu d (resp. prace_s_db)
+# help(d)
+
+
+# vypíše nápovědu ke konkrétní funkci
+# help(d.seznam_studentu)
