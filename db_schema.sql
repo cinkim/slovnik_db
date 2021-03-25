@@ -1,6 +1,7 @@
 CREATE TABLE OSOBY (
 	ID integer PRIMARY KEY AUTOINCREMENT,
-	jmeno varchar
+	jmeno varchar,
+	akt_jazyk_id integer
 );
 
 CREATE TABLE UCEBNICE (
@@ -45,5 +46,6 @@ CREATE TABLE JAZYKY (
 
 CREATE TABLE OSOBY_JAZYKY (
 	osoba_id integer,
-	jazyk_id integer
+	jazyk_id integer,
+	akt_ucebnice_id integer
 );
