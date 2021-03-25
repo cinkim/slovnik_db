@@ -1,7 +1,10 @@
+insert into jazyky values(null,'Aj','');
+insert into jazyky values(null,'Nj','');
+insert into jazyky values(null,'Fr','');
+insert into jazyky values(null,'Es','');
 insert into jazyky values(null,'AJ','');
-insert into jazyky values(null,'NJ','');
-insert into jazyky values(null,'FJ','');
-insert into jazyky values(null,'ŠJ','');
+insert into jazyky values(null,'It','');
+insert into jazyky values(null,'Ru','');
 
 
 insert into ucebnice values(null,'Happy Street 1',1);
