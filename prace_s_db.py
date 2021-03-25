@@ -1,11 +1,20 @@
 ﻿import sqlite3
+from os import path
 
-def pripojeni_db(db="db_slovnik.sqlite"):
+def overeni_sl():
+    if path.exists("db_slovnik.sqlite") == False:
+        create_sql_db()
+
+    conn, cursor = pripojeni_db()
+    conn.close()
+
+def pripojeni_db():
     """
      - vytvori pripojeni a kruzor do databaze sqlite
     VSTUP: db - nepovinny udaj - cesta k db-souboru; kdyz se nezada, tak db = "db_slovnik.sqlite"
     VYSTUP: connection, cursor
     """
+    db="db_slovnik.sqlite"
     connection = sqlite3.connect(db)
     cursor = connection.cursor()
     return connection, cursor
@@ -27,36 +36,29 @@ def create_sql_db():
     sql_as_string = sql_file.read()
     cursor.executescript(sql_as_string)
     
-def pridat_studenta(jmeno_studenta, jazyky_ucebnice):
+def pridat_studenta(novy):
+    overeni_sl()
     """
-    - vlozi noveho studenta a jeho jazyky+ucebnice
+    - vlozi noveho studenta a jeho jazyky
     VSTUP: jmeno_studenta - retezec
-           jazyky_ucebnice - [("jazyk1","ucebnice1"), ("jazyk2","ucebnice2"), ...]
+           jazyky_ucebnice - ["jazyk1", "jazyk2", ...]
     VYSTUP: odpovidajici zaznamy v db
     """ 
+    jmeno_studenta = novy[0]
     conn, cursor = pripojeni_db()
     # vloží nový záznam do tabulky osoby
     cursor.execute(f'''INSERT INTO OSOBY values (null,'{jmeno_studenta}', null) ''')
     # zjišťuje ID nově vložené osoby
     cursor.execute(f'''SELECT ID FROM OSOBY WHERE JMENO = '{jmeno_studenta}' ''')
-    nova_osoba_id = cursor.fetchone()[0]       
-    for jazyk,ucebnice in jazyky_ucebnice:
-        print(jazyk, ucebnice)
+    nova_osoba_id = cursor.fetchone()[0] 
+    novy.pop(0)      
+    for jazyk in novy:
+        print(jazyk)
         # zjišťuje ID jazyků, které má daný student
         # (jazyk v db musí existovat, uživatel vybírá z nabídky jazyků)
         cursor.execute(f'''SELECT ID FROM JAZYKY WHERE NAZEV = '{jazyk}'  ''')
         jazyk_id = cursor.fetchone()[0]
 
-        try: # pokud skončí chybou, daná učebnice v db není
-            cursor.execute(f'''SELECT ID FROM UCEBNICE WHERE NAZEV = '{ucebnice}'  ''')
-            ucebnice_id = cursor.fetchone()[0]
-            print("JAZYK_ID: ", jazyk_id,"UCEBNICE_ID: ", ucebnice_id)
-            # vkláda jazyk a stávající učebnici nové osoby do vazebni tabulky osoby_jazyky
-            cursor.execute(f'''INSERT INTO OSOBY_JAZYKY values ({nova_osoba_id},{jazyk_id}, {ucebnice_id}) ''')
-        except:
-            print("Učebnice není v db, musí se nová založit")    
-            nova_ucebnice_id = uloz_novou_ucebnici(ucebnice, jazyk_id,cursor)
-            cursor.execute(f'''INSERT INTO OSOBY_JAZYKY values ({nova_osoba_id},{jazyk_id}, {nova_ucebnice_id}) ''')
     conn.commit()
 
 
