@@ -62,12 +62,18 @@ def zaloz_studenta(self):
 def ulozit_noveho_studenta(self):
     vystup = []
     new = self.new_st.get()
+    if new in self.slovnik.seznam_studentu:
+        tk.messagebox.showwarning("ERROR", "Uživatel již existuje\nzvolte jiné jméno.")
+        return
     Aj = self.var_Aj.get()
     Nj = self.var_Nj.get()
     Fr = self.var_Fr.get()
     Es = self.var_Es.get()
     It = self.var_It.get()
     Ru = self.var_Ru.get()
+    if Aj+Nj+Fr+Es+It+Ru == 0:
+        tk.messagebox.showwarning("ERROR", "Zvolte alespoň jeden studijní jazyk.")
+        return
     vystup.append(new)
     if Aj == 1:
         vystup.append("Aj")
