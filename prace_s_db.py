@@ -26,12 +26,12 @@ def create_sql_db():
     VYSTUP: pripravena db ve formatu sqlite
     """
     conn, cursor = pripojeni_db()
-    print('Vytvařím databázi..')
+    # print('Vytvařím databázi..')
     sql_file = open("db_schema.sql")
     sql_as_string = sql_file.read()
     cursor.executescript(sql_as_string)
 
-    print('Plním databázi...')
+    # print('Plním databázi...')
     sql_file = open("db_data.sql")
     sql_as_string = sql_file.read()
     cursor.executescript(sql_as_string)
@@ -53,11 +53,12 @@ def pridat_studenta(novy):
     nova_osoba_id = cursor.fetchone()[0] 
     novy.pop(0)      
     for jazyk in novy:
-        print(jazyk)
+        # print(jazyk)
         # zjišťuje ID jazyků, které má daný student
         # (jazyk v db musí existovat, uživatel vybírá z nabídky jazyků)
         cursor.execute(f'''SELECT ID FROM JAZYKY WHERE NAZEV = '{jazyk}'  ''')
         jazyk_id = cursor.fetchone()[0]
+        cursor.execute(f'''INSERT INTO OSOBY_JAZYKY values ({nova_osoba_id},{jazyk_id}, null) ''')
 
     conn.commit()
 
