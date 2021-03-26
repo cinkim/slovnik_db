@@ -17,7 +17,12 @@ class slovnik:
 
 
     def nacti_studenty(self):
-        self.seznam_studentu = prace_s_db.seznam_studentu()
+        try:
+            prace_s_db.overeni_sl()
+        except:
+            self.seznam_studentu = []
+        else:
+            self.seznam_studentu = prace_s_db.seznam_studentu()
 
 class slovnikGUI(tk.Frame):
 
@@ -55,6 +60,8 @@ class slovnikGUI(tk.Frame):
 
     def novy(self):
         self.novy = ns.ulozit_noveho_studenta(self)
+        if self.novy == None:
+            return
         prace_s_db.pridat_studenta(self.novy)
         self.slovnik.nacti_studenty()
         self.zobraz()
