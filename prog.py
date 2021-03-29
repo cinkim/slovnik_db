@@ -14,7 +14,8 @@ class slovnik:
     def __init__(self):
         self.seznam_studentu = []
         self.nacti_studenty()
-
+        self.jazyky_studenta = []
+        self.akt_jazyk = ""
 
     def nacti_studenty(self):
         try:
@@ -40,10 +41,9 @@ class slovnikGUI(tk.Frame):
         self.kdo = tk.LabelFrame(root, text="Kdo jsi", font="Arial 8")
         self.kdo.grid(row=1, column=0, sticky=W)
 
-        self.tree_zaznamy = ttk.Treeview(self.kdo, column=("student"), height=8)
+        self.tree_zaznamy = ttk.Treeview(self.kdo, column=("student"), height=8, selectmode='browse')
         self.tree_zaznamy['show'] = 'headings' # schová první sloupec s identifikátorem
         self.tree_zaznamy.grid(row=2, column=0)
-
         
         self.tree_zaznamy.heading("#0", text="#")
         self.tree_zaznamy.column("#0", width=0, stretch=NO, anchor='center')
@@ -51,11 +51,43 @@ class slovnikGUI(tk.Frame):
         self.tree_zaznamy.heading("student", text="Student")
         self.tree_zaznamy.column("student", minwidth=0, width=124, stretch=NO, anchor='center')
 
+        self.jazyky = tk.LabelFrame(root, text="Testovat jazyk", font="Arial 8")
+        self.jazyky.grid(row=1, column=1, sticky=N)
+
+         # připravené "pole pro RdaioButtony" se seznamem jazyků vybraného studenta, zatím prázdné
+        self.j_studenta = tk.Label(self.jazyky, text="", font="Arial 8")
+
+        self.button_NacistStudenta = tk.Button(root, text="Načti studenta", command=self.nacti_studenta, fg="blue", font="Arial 8", width=20)
+        self.button_NacistStudenta.grid(row=8, column=0, sticky=W)
+
         self.button_Konec = tk.Button(root, text="Nový student", command=self.novy_student, fg="blue", font="Arial 8", width=20)
         self.button_Konec.grid(row=9, column=0, sticky=W)
 
         self.button_Konec = tk.Button(root, text="Konec", command=self.on_close, fg="red", font="Arial 8", width=20)
         self.button_Konec.grid(row=10, column=0, sticky=W)
+
+    def create_widgets_jazyk(self):
+        # TODO: tohle by asi mělo jít do samostatné funkce, ale nevím kam přesně zakomponovat
+        pozice = 0 # pozice řádky v rámci skupiny RadioButtonu
+        self.akt_jazyk = StringVar()
+        # smaže prvek pro výpis
+        # aby se vynuloval a zobrazolo se to jen pro daného studenta a nemotaly se tam předchozí jazyky
+        self.jazyky.destroy()
+        # a tady se to vytváří znova - "pole pro RadioButtony", buhužel to nehezky přeblikává
+        self.jazyky = tk.LabelFrame(root, text="Testovat jazyk", font="Arial 8")
+        self.jazyky.grid(row=1, column=1, sticky=N)
+
+        # pokud má student nastavený akt_jazyk, už bude předvybraný
+        # self.akt_jazyk = prace_s_db.akt_jazyk_studenta(self.akt_student)
+
+        for jazyk in self.jazyky_studenta:
+            self.j_studenta = tk.Radiobutton(self.jazyky, indicatoron=0, text=jazyk, variable=self.akt_jazyk, command=self.nacti_ucebnice, value=jazyk, width = 15)
+            self.j_studenta.grid(row=pozice, column=0, sticky=W)
+            if jazyk == self.akt_jazyk:
+                self.j_studenta.select()
+            else:
+                self.j_studenta.deselect()
+            pozice = pozice + 1
         
 
     def novy(self):
@@ -74,6 +106,25 @@ class slovnikGUI(tk.Frame):
         """
         ns.zaloz_studenta(self)
 
+
+    def nacti_studenta(self):
+        """
+        Nacte jazyky studenta
+        """
+        # urci vybranou pozici polozky a z toho pak hodnotu dane polozky
+        try:
+            self.akt_student = self.tree_zaznamy.item(self.tree_zaznamy.focus())["values"][0]
+            self.jazyky_studenta = prace_s_db.jazyky_studenta(self.akt_student)
+            self.create_widgets_jazyk()
+        except:
+            tk.messagebox.showwarning("ERROR", "Vyber studenta.")
+            return
+
+        
+
+    def nacti_ucebnice(self):
+        print(self.akt_jazyk.get(), end=": ")
+        print(prace_s_db.seznam_ucebnic(self.akt_jazyk.get()))
 
     def zobraz(self):
         for ii in self.tree_zaznamy.get_children():
@@ -95,4 +146,3 @@ if __name__ == '__main__':
     slovnik = slovnik()
     app = slovnikGUI(root, slovnik)
     app.mainloop()
-
