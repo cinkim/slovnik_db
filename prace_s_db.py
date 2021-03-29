@@ -90,6 +90,16 @@ def seznam_studentu():
     cursor.execute(f''' SELECT jmeno from osoby''')     
     return select_to_seznam(cursor.fetchall())
 
+def seznam_jazyku():
+    """
+    - seznam vsech jazyku v db;
+    VSTUP: bez parametru
+    VYSTUP: seznam jazyku - [jazyk1, jazyk2]
+    """
+    conn, cursor = pripojeni_db()
+    cursor.execute(f''' SELECT nazev from jazyky''')
+    return select_to_seznam(cursor.fetchall())
+
 def seznam_ucebnic(jazyk):
     """
      - seznam vsech ucebnic daneho jazyku
@@ -128,9 +138,30 @@ def jazyky_studenta(jmeno_studenta):
         id_studenta = cursor.fetchone()[0]
     except:
         return f"Student jménem {jmeno_studenta} není v databázi"
-    cursor.execute(f''' SELECT j.nazev from jazyky j join osoby_jazyky oj on oj.jazyk_id = j.id where oj.osoba_id={id_studenta}''')    
+    cursor.execute(f''' SELECT j.nazev from jazyky j join osoby_jazyky oj on oj.jazyk_id = j.id where oj.osoba_id={id_studenta}''')
     return select_to_seznam(cursor.fetchall())
 
+def uloz_akt_jazyk(jazyk, jmeno_studenta):
+    conn, cursor = pripojeni_db()
+    cursor.execute(f''' SELECT id from jazyky where nazev ='{jazyk}'  ''')
+    jazyk_id = cursor.fetchone()[0]
+    print("ukladam akt jazyk:", jazyk_id)
+    cursor.execute(f'''UPDATE OSOBY SET AKT_JAZYK_ID = {jazyk_id} WHERE JMENO = '{jmeno_studenta}' ''')
+    conn.commit()
+
+def akt_jazyk_studenta(jmeno_studenta):
+    """
+    - vrati aktualni jazyk studenta
+    VSTUP: jmeno_studenta - retezec
+    VYSTUP: aktualni jazyk studenta
+    """
+    conn, cursor = pripojeni_db()
+    cursor.execute(f''' SELECT count(j.nazev) from jazyky j join osoby o on o.akt_jazyk_id = j.id where o.jmeno='{jmeno_studenta}'  ''')
+    if cursor.fetchone()[0] == 0:
+        return "" # student nemá nastavený akt_jazyk
+    else:
+        cursor.execute(f''' SELECT j.nazev from jazyky j join osoby o on o.akt_jazyk_id = j.id where o.jmeno='{jmeno_studenta}'  ''')
+        return cursor.fetchone()[0]
 
 # vypíše nápovědu ke konkrétní funkci
 # help(jazyky_studenta)
