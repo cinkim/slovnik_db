@@ -39,6 +39,8 @@ class slovnikGUI(tk.Frame):
 
 
     def create_widgets(self):
+        self.uzivatel = tk.Label(root, text="", font="Arial 16", fg="red")
+        self.uzivatel.grid(row=0, columnspan=3, sticky=W+E)
         self.kdo = tk.LabelFrame(root, text="Kdo jsi", font="Arial 8")
         self.kdo.grid(row=1, column=0, sticky=W)
 
@@ -139,8 +141,9 @@ class slovnikGUI(tk.Frame):
             self.jazyky_studenta = prace_s_db.jazyky_studenta(self.akt_student)
             self.create_widgets_jazyk()
             self.create_ovl_sekce()
-        except:
-            tk.messagebox.showwarning("ERROR", "Vyber studenta.")
+            self.uzivatel["text"] = "Aktuální uživatel je "+self.akt_student
+        except :
+            tk.messagebox.showwarning("ERROR", "Něco se nezdařilo.")
             return
 
         
