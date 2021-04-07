@@ -17,6 +17,7 @@ class slovnik:
         self.nacti_studenty()
         self.jazyky_studenta = []
         self.akt_jazyk = ""
+        self.seznam_ucebnic = []
 
     def nacti_studenty(self):
         try:
@@ -88,7 +89,7 @@ class slovnikGUI(tk.Frame):
         # self.akt_jazyk = prace_s_db.akt_jazyk_studenta(self.akt_student)
 
         for jazyk in self.jazyky_studenta:
-            self.j_studenta = tk.Radiobutton(self.jazyky, indicatoron=0, text=jazyk, variable=self.akt_jazyk, command=self.nacti_ucebnice, value=jazyk, width = 40)
+            self.j_studenta = tk.Radiobutton(self.jazyky, indicatoron=0, text=jazyk, variable=self.akt_jazyk, command=self.nacti_ucebnice, value=jazyk, width = 20)
             self.j_studenta.grid(row=pozice, column=0, sticky=W)
             if jazyk == self.akt_jazyk:
                 self.j_studenta.select()
@@ -96,11 +97,17 @@ class slovnikGUI(tk.Frame):
                 self.j_studenta.deselect()
             pozice = pozice + 1
 
+    def create_widgets_ucebnice(self):
+        self.ucebnice = tk.LabelFrame(root, text="Učebnice", font="Arial 8")
+        self.ucebnice.grid(row=1, column=2, sticky=N)
+        self.ucebnice_ListBox = tk.Listbox(self.ucebnice, width=20)
+        self.ucebnice_ListBox.bind( "<ButtonRelease-1>", self.nacti_lekce)  # po kliknutí se načtou slovíčka z dané učebnice
+        self.ucebnice_ListBox.grid(row=2, column=2, sticky=W)
 
 
     def create_ovl_sekce(self):
         self.pole_nastaveni = tk.LabelFrame(root, text="Nastavení", font="Arial 8")
-        self.pole_nastaveni.grid(row=1, column=2, sticky=N)
+        self.pole_nastaveni.grid(row=1, column=3, sticky=N)
         self.nastav = tk.Label(self.pole_nastaveni, text="", font="Arial 8")
 
         self.button_Nastaveni = tk.Button(self.pole_nastaveni, text="Nastavení studenta", command=self.nastaveni_stud, fg="blue", font="Arial 8", width=20)
@@ -149,8 +156,20 @@ class slovnikGUI(tk.Frame):
         
 
     def nacti_ucebnice(self):
-        print(self.akt_jazyk.get(), end=": ")
-        print(prace_s_db.seznam_ucebnic(self.akt_jazyk.get()))
+        # print(self.akt_jazyk.get(), end=": ")
+        self.seznam_ucebnic = prace_s_db.seznam_ucebnic(self.akt_jazyk.get())
+        self.create_widgets_ucebnice()
+        for ucebnice in self.seznam_ucebnic:
+            self.ucebnice_ListBox.insert(1, ucebnice)
+       
+
+    def nacti_lekce(self, event):
+        self.akt_ucebnice = self.seznam_ucebnic[self.ucebnice_ListBox.curselection()[0]]
+        print("Učebnice: ", self.akt_ucebnice, end=": ")
+        self.seznam_lekci = prace_s_db.seznam_lekci(self.akt_ucebnice)
+        print(self.seznam_lekci)
+        
+
 
 
     def zobraz(self):
