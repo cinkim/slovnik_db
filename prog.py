@@ -7,6 +7,7 @@ import tkinter.messagebox
 
 import new_student as ns
 import prace_s_db
+import nastaveni
 
 
 class slovnik:
@@ -51,11 +52,16 @@ class slovnikGUI(tk.Frame):
         self.tree_zaznamy.heading("student", text="Student")
         self.tree_zaznamy.column("student", minwidth=0, width=124, stretch=NO, anchor='center')
 
+
         self.jazyky = tk.LabelFrame(root, text="Testovat jazyk", font="Arial 8")
         self.jazyky.grid(row=1, column=1, sticky=N)
-
          # připravené "pole pro RdaioButtony" se seznamem jazyků vybraného studenta, zatím prázdné
         self.j_studenta = tk.Label(self.jazyky, text="", font="Arial 8")
+
+
+
+
+
 
         self.button_NacistStudenta = tk.Button(root, text="Načti studenta", command=self.nacti_studenta, fg="blue", font="Arial 8", width=20)
         self.button_NacistStudenta.grid(row=8, column=0, sticky=W)
@@ -67,8 +73,7 @@ class slovnikGUI(tk.Frame):
         self.button_Konec.grid(row=10, column=0, sticky=W)
 
     def create_widgets_jazyk(self):
-        # TODO: tohle by asi mělo jít do samostatné funkce, ale nevím kam přesně zakomponovat
-        pozice = 0 # pozice řádky v rámci skupiny RadioButtonu
+        pozice = 1 # pozice řádky v rámci skupiny RadioButtonu
         self.akt_jazyk = StringVar()
         # smaže prvek pro výpis
         # aby se vynuloval a zobrazolo se to jen pro daného studenta a nemotaly se tam předchozí jazyky
@@ -81,14 +86,31 @@ class slovnikGUI(tk.Frame):
         # self.akt_jazyk = prace_s_db.akt_jazyk_studenta(self.akt_student)
 
         for jazyk in self.jazyky_studenta:
-            self.j_studenta = tk.Radiobutton(self.jazyky, indicatoron=0, text=jazyk, variable=self.akt_jazyk, command=self.nacti_ucebnice, value=jazyk, width = 15)
+            self.j_studenta = tk.Radiobutton(self.jazyky, indicatoron=0, text=jazyk, variable=self.akt_jazyk, command=self.nacti_ucebnice, value=jazyk, width = 40)
             self.j_studenta.grid(row=pozice, column=0, sticky=W)
             if jazyk == self.akt_jazyk:
                 self.j_studenta.select()
             else:
                 self.j_studenta.deselect()
             pozice = pozice + 1
-        
+
+
+
+    def create_ovl_sekce(self):
+        self.pole_nastaveni = tk.LabelFrame(root, text="Nastavení", font="Arial 8")
+        self.pole_nastaveni.grid(row=1, column=2, sticky=N)
+        self.nastav = tk.Label(self.pole_nastaveni, text="", font="Arial 8")
+
+        self.button_Nastaveni = tk.Button(self.pole_nastaveni, text="Nastavení studenta", command=self.nastaveni_stud, fg="blue", font="Arial 8", width=20)
+        self.button_Nastaveni.grid(row=2, column=2, sticky=W)
+
+
+
+
+
+    def nastaveni_stud(self):
+        nastaveni.nastav_studenta(self)
+
 
     def novy(self):
         self.novy = ns.ulozit_noveho_studenta(self)
@@ -116,6 +138,7 @@ class slovnikGUI(tk.Frame):
             self.akt_student = self.tree_zaznamy.item(self.tree_zaznamy.focus())["values"][0]
             self.jazyky_studenta = prace_s_db.jazyky_studenta(self.akt_student)
             self.create_widgets_jazyk()
+            self.create_ovl_sekce()
         except:
             tk.messagebox.showwarning("ERROR", "Vyber studenta.")
             return
@@ -125,6 +148,7 @@ class slovnikGUI(tk.Frame):
     def nacti_ucebnice(self):
         print(self.akt_jazyk.get(), end=": ")
         print(prace_s_db.seznam_ucebnic(self.akt_jazyk.get()))
+
 
     def zobraz(self):
         for ii in self.tree_zaznamy.get_children():
