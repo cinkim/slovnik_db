@@ -164,10 +164,14 @@ class slovnikGUI(tk.Frame):
        
 
     def nacti_lekce(self, event):
-        self.akt_ucebnice = self.seznam_ucebnic[self.ucebnice_ListBox.curselection()[0]]
-        print("Učebnice: ", self.akt_ucebnice, end=": ")
-        self.seznam_lekci = prace_s_db.seznam_lekci(self.akt_ucebnice)
-        print(self.seznam_lekci)
+        try:
+            self.akt_ucebnice = self.seznam_ucebnic[self.ucebnice_ListBox.curselection()[0]]
+            print("Učebnice: ", self.akt_ucebnice, end=": ")
+            self.seznam_lekci = prace_s_db.seznam_lekci(self.akt_ucebnice)
+            print(self.seznam_lekci)
+        except:
+            tk.messagebox.showwarning("ERROR", "Není vybraná učebnice.")
+            return
         
 
 
