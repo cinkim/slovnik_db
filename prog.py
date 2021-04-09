@@ -35,13 +35,13 @@ class slovnikGUI(tk.Frame):
         self.slovnik = slovnik
         self.parent.title("Slovnik")
         self.parent.protocol("WM_DELETE_WINDOW", self.on_close)
-        self.create_widgets()
+        self.create_widgets_uzivatele()
         self.zobraz()
 
 
-    def create_widgets(self):
+    def create_widgets_uzivatele(self):
         self.uzivatel = tk.Label(root, text="", font="Arial 16", fg="red")
-        self.uzivatel.grid(row=0, columnspan=3, sticky=W+E)
+        self.uzivatel.grid(row=0, columnspan=4, sticky=W+E)
 
         self.kdo = tk.LabelFrame(root, text="Kdo jsi", font="Arial 8")
         self.kdo.grid(row=1, column=0, sticky=W)
@@ -50,18 +50,11 @@ class slovnikGUI(tk.Frame):
         self.tree_zaznamy['show'] = 'headings' # schová první sloupec s identifikátorem
         self.tree_zaznamy.grid(row=2, column=0)
         
-        self.tree_zaznamy.heading("#0", text="#")
+        self.tree_zaznamy.heading("#0", text="#\n ")
         self.tree_zaznamy.column("#0", width=0, stretch=NO, anchor='center')
 
-        self.tree_zaznamy.heading("student", text="Student")
+        self.tree_zaznamy.heading("student", text="Student\n ")
         self.tree_zaznamy.column("student", minwidth=0, width=124, stretch=NO, anchor='center')
-
-
-        self.jazyky = tk.LabelFrame(root, text="Testovat jazyk", font="Arial 8")
-        self.jazyky.grid(row=1, column=1, sticky=N)
-         # připravené "pole pro RdaioButtony" se seznamem jazyků vybraného studenta, zatím prázdné
-        self.j_studenta = tk.Label(self.jazyky, text="", font="Arial 8")
-
 
         self.button_NacistStudenta = tk.Button(root, text="Načti studenta", command=self.nacti_studenta, fg="blue", font="Arial 8", width=20)
         self.button_NacistStudenta.grid(row=8, column=0, sticky=W)
@@ -73,6 +66,10 @@ class slovnikGUI(tk.Frame):
         self.button_Konec.grid(row=10, column=0, sticky=W)
 
     def create_widgets_jazyk(self):
+        self.jazyky = tk.LabelFrame(root, text="Testovat jazyk", font="Arial 8")
+        self.jazyky.grid(row=1, column=1, sticky=N)
+         # připravené "pole pro RdaioButtony" se seznamem jazyků vybraného studenta, zatím prázdné
+        self.j_studenta = tk.Label(self.jazyky, text="", font="Arial 8")
         pozice = 1 # pozice řádky v rámci skupiny RadioButtonu
         self.akt_jazyk = StringVar()
         # smaže prvek pro výpis
@@ -110,10 +107,6 @@ class slovnikGUI(tk.Frame):
 
         self.button_Nastaveni = tk.Button(self.pole_nastaveni, text="Nastavení studenta", command=self.nastaveni_stud, fg="blue", font="Arial 8", width=20)
         self.button_Nastaveni.grid(row=2, column=2, sticky=W)
-
-
-
-
 
     def nastaveni_stud(self):
         nastaveni.nastav_studenta(self)
