@@ -4,8 +4,9 @@ from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W
 from tkinter import LEFT, NO, DISABLED, NORMAL
 import tkinter.messagebox
 
+import prace_s_db
 
-def zaloz_studenta(self):
+def vytvor_top_okno_novy_student(self):
         self.st = tk.Toplevel()
         self.st.title("Nový student")
 
@@ -13,6 +14,7 @@ def zaloz_studenta(self):
         self.new_st = tk.Entry(self.st, width=30, justify="center", textvariable=self.newst)
         self.new_st.grid(row=3, column=0, sticky=W)
         self.new_st.config(state=NORMAL)
+
         self.new_popis = tk.Label(self.st, text="Jméno studenta", width=20, font="Arial 8")
         self.new_popis.grid(row=3, column=1, sticky=W)
 
@@ -49,9 +51,6 @@ def zaloz_studenta(self):
         self.radio_Ru.config(state=NORMAL)
         self.radio_Ru.grid(row=10, column=0, sticky=W)
 
-
-
-
         self.button_uloz = tk.Button(self.st, text="Uložit", command=self.novy, fg="blue", font="Arial 8", width=20)
         self.button_uloz.grid(row=11, column=0, sticky=W)
 
@@ -59,9 +58,13 @@ def zaloz_studenta(self):
         self.button_Konec.grid(row=12, column=0, sticky=W)
 
 
+
 def ulozit_noveho_studenta(self):
     vystup = []
     new = self.new_st.get()
+    if new == "":
+        tk.messagebox.showwarning("ERROR", "Zadej jméno studenta.")
+        return
     if new in self.slovnik.seznam_studentu:
         tk.messagebox.showwarning("ERROR", "Uživatel již existuje\nzvolte jiné jméno.")
         return
@@ -88,6 +91,7 @@ def ulozit_noveho_studenta(self):
     if Ru == 1:
         vystup.append("Ru")
 
+    prace_s_db.pridat_studenta(vystup)
 
     self.newst.set("")
     self.var_Aj.set(0)
@@ -97,4 +101,4 @@ def ulozit_noveho_studenta(self):
     self.var_It.set(0)
     self.var_Ru.set(0)
     
-    return vystup
+

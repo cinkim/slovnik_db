@@ -42,6 +42,7 @@ class slovnikGUI(tk.Frame):
     def create_widgets(self):
         self.uzivatel = tk.Label(root, text="", font="Arial 16", fg="red")
         self.uzivatel.grid(row=0, columnspan=3, sticky=W+E)
+
         self.kdo = tk.LabelFrame(root, text="Kdo jsi", font="Arial 8")
         self.kdo.grid(row=1, column=0, sticky=W)
 
@@ -62,15 +63,11 @@ class slovnikGUI(tk.Frame):
         self.j_studenta = tk.Label(self.jazyky, text="", font="Arial 8")
 
 
-
-
-
-
         self.button_NacistStudenta = tk.Button(root, text="Načti studenta", command=self.nacti_studenta, fg="blue", font="Arial 8", width=20)
         self.button_NacistStudenta.grid(row=8, column=0, sticky=W)
 
-        self.button_Konec = tk.Button(root, text="Nový student", command=self.novy_student, fg="blue", font="Arial 8", width=20)
-        self.button_Konec.grid(row=9, column=0, sticky=W)
+        self.button_new_st = tk.Button(root, text="Nový student", command=self.vytvor_top_okno_novy_student, fg="blue", font="Arial 8", width=20)
+        self.button_new_st.grid(row=9, column=0, sticky=W)
 
         self.button_Konec = tk.Button(root, text="Konec", command=self.on_close, fg="red", font="Arial 8", width=20)
         self.button_Konec.grid(row=10, column=0, sticky=W)
@@ -100,6 +97,7 @@ class slovnikGUI(tk.Frame):
     def create_widgets_ucebnice(self):
         self.ucebnice = tk.LabelFrame(root, text="Učebnice", font="Arial 8")
         self.ucebnice.grid(row=1, column=2, sticky=N)
+
         self.ucebnice_ListBox = tk.Listbox(self.ucebnice, width=20)
         self.ucebnice_ListBox.bind( "<ButtonRelease-1>", self.nacti_lekce)  # po kliknutí se načtou slovíčka z dané učebnice
         self.ucebnice_ListBox.grid(row=2, column=2, sticky=W)
@@ -119,23 +117,22 @@ class slovnikGUI(tk.Frame):
 
     def nastaveni_stud(self):
         nastaveni.nastav_studenta(self)
+        return
 
 
     def novy(self):
-        self.novy = ns.ulozit_noveho_studenta(self)
-        if self.novy == None:
-            return
-        prace_s_db.pridat_studenta(self.novy)
+        ns.ulozit_noveho_studenta(self)
         self.slovnik.nacti_studenty()
         self.zobraz()
         return
 
 
-    def novy_student(self):
+    def vytvor_top_okno_novy_student(self):
         """
         Otevře okno pro registraci studenta
         """
-        ns.zaloz_studenta(self)
+        ns.vytvor_top_okno_novy_student(self)
+
 
 
     def nacti_studenta(self):
@@ -149,6 +146,7 @@ class slovnikGUI(tk.Frame):
             self.create_widgets_jazyk()
             self.create_ovl_sekce()
             self.uzivatel["text"] = "Aktuální uživatel je "+self.akt_student
+            return
         except :
             tk.messagebox.showwarning("ERROR", "Něco se nezdařilo.")
             return
@@ -161,18 +159,20 @@ class slovnikGUI(tk.Frame):
         self.create_widgets_ucebnice()
         for ucebnice in self.seznam_ucebnic:
             self.ucebnice_ListBox.insert(1, ucebnice)
+        return
        
-
+  
     def nacti_lekce(self, event):
         try:
             self.akt_ucebnice = self.seznam_ucebnic[self.ucebnice_ListBox.curselection()[0]]
             print("Učebnice: ", self.akt_ucebnice, end=": ")
             self.seznam_lekci = prace_s_db.seznam_lekci(self.akt_ucebnice)
             print(self.seznam_lekci)
+            return
         except:
             tk.messagebox.showwarning("ERROR", "Není vybraná učebnice.")
             return
-        
+   
 
 
 
