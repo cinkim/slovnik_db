@@ -56,6 +56,11 @@ class slovnikGUI(tk.Frame):
         self.tree_zaznamy.heading("student", text="Student\n ")
         self.tree_zaznamy.column("student", minwidth=0, width=124, stretch=NO, anchor='center')
 
+        self.jazyky = tk.LabelFrame(root, text="Testovat jazyk", font="Arial 8")
+        self.jazyky.grid(row=1, column=1, sticky=N)
+         # připravené "pole pro RdaioButtony" se seznamem jazyků vybraného studenta, zatím prázdné
+        self.j_studenta = tk.Label(self.jazyky, text="", font="Arial 8")
+
         self.button_NacistStudenta = tk.Button(root, text="Načti studenta", command=self.nacti_studenta, fg="blue", font="Arial 8", width=20)
         self.button_NacistStudenta.grid(row=8, column=0, sticky=W)
 
@@ -66,10 +71,7 @@ class slovnikGUI(tk.Frame):
         self.button_Konec.grid(row=10, column=0, sticky=W)
 
     def create_widgets_jazyk(self):
-        self.jazyky = tk.LabelFrame(root, text="Testovat jazyk", font="Arial 8")
-        self.jazyky.grid(row=1, column=1, sticky=N)
-         # připravené "pole pro RdaioButtony" se seznamem jazyků vybraného studenta, zatím prázdné
-        self.j_studenta = tk.Label(self.jazyky, text="", font="Arial 8")
+        
         pozice = 1 # pozice řádky v rámci skupiny RadioButtonu
         self.akt_jazyk = StringVar()
         # smaže prvek pro výpis
