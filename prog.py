@@ -2,12 +2,13 @@
 
 import tkinter as tk
 from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W
-from tkinter import LEFT, NO, DISABLED, NORMAL, YES
+from tkinter import LEFT, NO, DISABLED, NORMAL, YES, VERTICAL, ACTIVE
 import tkinter.messagebox
 
 import new_student as ns
 import prace_s_db
 import nastaveni
+import testovani
 
 
 class slovnik:
@@ -83,7 +84,11 @@ class slovnikGUI(tk.Frame):
 
         # pokud má student nastavený akt_jazyk, už bude předvybraný
         # self.akt_jazyk = prace_s_db.akt_jazyk_studenta(self.akt_student)
-
+        try:
+            self.ucebnice.destroy()
+            self.Lekce.destroy()
+        except AttributeError:
+            pass
         for jazyk in self.jazyky_studenta:
             self.j_studenta = tk.Radiobutton(self.jazyky, indicatoron=0, text=jazyk, variable=self.akt_jazyk, command=self.nacti_ucebnice, value=jazyk, width = 20)
             self.j_studenta.grid(row=pozice, column=0, sticky=W)
@@ -93,18 +98,37 @@ class slovnikGUI(tk.Frame):
                 self.j_studenta.deselect()
             pozice = pozice + 1
 
-    def create_widgets_ucebnice(self):
+    def create_widgets_ucebnice(self):       
+        try:
+            self.ucebnice.destroy()
+            self.Lekce.destroy()
+        except AttributeError:
+            pass
         self.ucebnice = tk.LabelFrame(root, text="Učebnice", font="Arial 8")
         self.ucebnice.grid(row=1, column=2, sticky=N)
-
-        self.ucebnice_ListBox = tk.Listbox(self.ucebnice, width=20)
+        self.scrollbar_ucebnice = tk.Scrollbar(self.ucebnice, orient=VERTICAL)
+        self.ucebnice_ListBox = tk.Listbox(self.ucebnice, width=20, yscrollcommand=self.scrollbar_ucebnice.set)
         self.ucebnice_ListBox.bind( "<ButtonRelease-1>", self.nacti_lekce)  # po kliknutí se načtou slovíčka z dané učebnice
         self.ucebnice_ListBox.grid(row=2, column=2, sticky=W)
 
 
+    def create_widgets_Lekce(self):
+        try:
+            self.Lekce.destroy()
+        except AttributeError:
+            pass
+        self.Lekce = tk.LabelFrame(root, text="Lekce", font="Arial 8")
+        self.Lekce.grid(row=1, column=3, sticky=N)
+
+        self.scrollbar_Lekce = tk.Scrollbar(self.Lekce, orient=VERTICAL)
+        self.Lekce_ListBox = tk.Listbox(self.Lekce, width=30, yscrollcommand=self.scrollbar_Lekce.set)
+        self.Lekce_ListBox.bind( "<ButtonRelease-1>", self.testuj)  # po kliknutí se otevře okno pro testovaní
+        self.Lekce_ListBox.grid(row=2, column=3, sticky=W)
+
+
     def create_ovl_sekce(self):
         self.pole_nastaveni = tk.LabelFrame(root, text="Nastavení", font="Arial 8")
-        self.pole_nastaveni.grid(row=1, column=3, sticky=N)
+        self.pole_nastaveni.grid(row=1, column=4, sticky=N)
         self.nastav = tk.Label(self.pole_nastaveni, text="", font="Arial 8")
 
         self.button_Nastaveni = tk.Button(self.pole_nastaveni, text="Nastavení studenta", command=self.nastaveni_stud, fg="blue", font="Arial 8", width=20)
@@ -113,6 +137,10 @@ class slovnikGUI(tk.Frame):
     def nastaveni_stud(self):
         nastaveni.nastav_studenta(self)
         return
+
+    def testuj(self, event):
+        testovani.tes(self)
+
 
 
     def novy(self):
@@ -142,8 +170,8 @@ class slovnikGUI(tk.Frame):
             self.create_ovl_sekce()
             self.uzivatel["text"] = "Aktuální uživatel je "+self.akt_student
             return
-        except :
-            tk.messagebox.showwarning("ERROR", "Něco se nezdařilo.")
+        except IndexError:
+            tk.messagebox.showwarning("ERROR", "Nejdříve vyber studenta.")
             return
 
         
@@ -157,20 +185,18 @@ class slovnikGUI(tk.Frame):
         return
        
   
-    def nacti_lekce(self, event):
-        try:
-            self.akt_ucebnice = self.seznam_ucebnic[self.ucebnice_ListBox.curselection()[0]]
-            print("Učebnice: ", self.akt_ucebnice, end=": ")
-            self.seznam_lekci = prace_s_db.seznam_lekci(self.akt_ucebnice)
-            print(self.seznam_lekci)
-            return
-        except:
-            tk.messagebox.showwarning("ERROR", "Není vybraná učebnice.")
-            return
+    def nacti_lekce(self, event):       
+        self.akt_ucebnice = self.seznam_ucebnic[self.ucebnice_ListBox.curselection()[0]]
+        self.create_widgets_Lekce()
+        print("Učebnice: ", self.akt_ucebnice, end=": ")
+        self.seznam_lekci = prace_s_db.seznam_lekci(self.akt_ucebnice)
+        pozice = 1
+        for lekce in self.seznam_lekci:
+            self.Lekce_ListBox.insert(pozice, lekce)
+            pozice +=1
+        return
+
    
-
-
-
     def zobraz(self):
         for ii in self.tree_zaznamy.get_children():
             self.tree_zaznamy.delete(ii)
