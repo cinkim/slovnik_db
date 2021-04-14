@@ -162,6 +162,9 @@ class slovnikGUI(tk.Frame):
         """
         Nacte jazyky studenta
         """
+        if self.slovnik.seznam_studentu == []:
+            tk.messagebox.showwarning("ERROR", "Nejdříve se zaregistruj.")
+            return
         # urci vybranou pozici polozky a z toho pak hodnotu dane polozky
         try:
             self.akt_student = self.tree_zaznamy.item(self.tree_zaznamy.focus())["values"][0]
