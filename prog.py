@@ -95,6 +95,7 @@ class slovnikGUI(tk.Frame):
             self.j_studenta.grid(row=pozice, column=0, sticky=W)
             if jazyk == self.akt_jazyk:
                 self.j_studenta.select()
+                
             else:
                 self.j_studenta.deselect()
             pozice = pozice + 1
@@ -149,24 +150,33 @@ class slovnikGUI(tk.Frame):
         self.button_Nastaveni = tk.Button(self.pole_nastaveni, text="Nastavení studenta", command=self.nastaveni_stud, fg="blue", font="Arial 8", width=20)
         self.button_Nastaveni.grid(row=2, column=2, sticky=W)
 
-        self.mezera1 = tk.Entry(self.pole_nastaveni, text="")
+        self.mezera1 = tk.Label(self.pole_nastaveni, text="")
         self.mezera1.grid(row=3, column=2, sticky=W)
 
+        self.button_pridat_ucebnici = tk.Button(self.pole_nastaveni, text="Přidat novou učebnici", command=self.pridat_ucebnici, fg="blue", font="Arial 8", width=20)
+        self.button_pridat_ucebnici.grid(row=4, column=2, sticky=W)
+
+        self.mezera2 = tk.Label(self.pole_nastaveni, text="")
+        self.mezera2.grid(row=5, column=2, sticky=W)
+
         self.button_pridat_slovicka = tk.Button(self.pole_nastaveni, text="Přidat slovíčka", command=self.pridat_slovicka, fg="blue", font="Arial 8", width=20)
-        self.button_pridat_slovicka.grid(row=5, column=2, sticky=W)
+        self.button_pridat_slovicka.grid(row=6, column=2, sticky=W)
 
 
-    # vše k nastavení a editaci studenta
+    # vše k pravému MENU nastavení
     def nastaveni_stud(self):
         nastaveni.nastav_studenta(self)
         return
+
+    def pridat_ucebnici(self):
+        print("Musíš mě doprogramovat")
 
     # vše k novému oknu přidat slovíčka(otevření, zavření, ukládání)
     def pridat_slovicka(self):
         """
         Otevře okno pro přidání učebnice, lekce, slovíček
         """
-        sl.new_words(self)
+        sl.nacti_lekci(self)
 
     def dalsi_slovo(self, event):
         """
@@ -174,22 +184,17 @@ class slovnikGUI(tk.Frame):
         """
         print("Musíš mě doprogramovat")
 
-    def pridat_Ulozit(self):
+    def ulozit(self):
         """
         Uložení nových slovíček
         """
-        print("Musíš mě doprogramovat")
+        sl.ulozit(self)
 
     def pridat_Konec(self):
         """
         Ukončí okno ukládání slovíček
         """
         self.words.destroy()
-
-
-    # vše k novému oknu testování
-    def testuj(self, event):
-        testovani.tes(self)
 
 
     # vše k oknu nový student
@@ -234,6 +239,7 @@ class slovnikGUI(tk.Frame):
     # načte učebnice podle zvoleného jazyka
     def nacti_ucebnice(self):
         # print(self.akt_jazyk.get(), end=": ")
+        self.akt_j = self.akt_jazyk.get()
         self.seznam_ucebnic = prace_s_db.seznam_ucebnic(self.akt_jazyk.get())
         self.create_widgets_ucebnice()
         for ucebnice in self.seznam_ucebnic:
@@ -241,10 +247,15 @@ class slovnikGUI(tk.Frame):
         return
        
     # načte lekce podle vybrané učebnice
-    def nacti_lekce(self, event):       
-        self.akt_ucebnice = self.seznam_ucebnic[self.ucebnice_ListBox.curselection()[0]]
+    def nacti_lekce(self, event):
+        try:       
+            self.akt_ucebnice = self.seznam_ucebnic[self.ucebnice_ListBox.curselection()[0]]
+        except IndexError:
+            tk.messagebox.showwarning("ERROR", "Vyber, nebo založ novou učebnici.")
+            self.akt_ucebnice = []
+            return
         self.create_widgets_Lekce()
-        print("Učebnice: ", self.akt_ucebnice, end=": ")
+        # print("Učebnice: ", self.akt_ucebnice, end=": ")
         self.seznam_lekci = prace_s_db.seznam_lekci(self.akt_ucebnice)
         for ii in self.tree_Lekce.get_children():
             self.tree_Lekce.delete(ii)
