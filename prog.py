@@ -108,7 +108,7 @@ class slovnikGUI(tk.Frame):
         self.ucebnice = tk.LabelFrame(root, text="Učebnice", font="Arial 8")
         self.ucebnice.grid(row=1, column=2, sticky=N)
         self.scrollbar_ucebnice = tk.Scrollbar(self.ucebnice, orient=VERTICAL)
-        self.ucebnice_ListBox = tk.Listbox(self.ucebnice, width=20, yscrollcommand=self.scrollbar_ucebnice.set)
+        self.ucebnice_ListBox = tk.Listbox(self.ucebnice, width=20, yscrollcommand=self.scrollbar_ucebnice.set, height=12, font="Arial 8")
         self.ucebnice_ListBox.bind( "<ButtonRelease-1>", self.nacti_lekce)  # po kliknutí se načtou slovíčka z dané učebnice
         self.ucebnice_ListBox.grid(row=2, column=2, sticky=W)
 
@@ -121,11 +121,25 @@ class slovnikGUI(tk.Frame):
         self.Lekce = tk.LabelFrame(root, text="Lekce", font="Arial 8")
         self.Lekce.grid(row=1, column=3, sticky=N)
 
+        self.tree_Lekce = ttk.Treeview(self.Lekce, column=("c_lekce", "nazev"), height=8, selectmode='browse')
+        self.tree_Lekce['show'] = 'headings' # schová první sloupec s identifikátorem
+        self.tree_Lekce.grid(row=2, column=0)
+        
+        self.tree_Lekce.heading("#0", text="#\n ")
+        self.tree_Lekce.column("#0", width=0, stretch=NO, anchor='center')
+
+        self.tree_Lekce.heading("c_lekce", text="lekce\n ")
+        self.tree_Lekce.column("c_lekce", minwidth=0, width=50, stretch=NO, anchor='center')
+
+        self.tree_Lekce.heading("nazev", text="Název lekce\n ")
+        self.tree_Lekce.column("nazev", minwidth=0, width=200, stretch=NO, anchor='center')
+
+        """
         self.scrollbar_Lekce = tk.Scrollbar(self.Lekce, orient=VERTICAL)
         self.Lekce_ListBox = tk.Listbox(self.Lekce, width=30, yscrollcommand=self.scrollbar_Lekce.set)
         self.Lekce_ListBox.bind( "<ButtonRelease-1>", self.testuj)  # po kliknutí se otevře okno pro testovaní
         self.Lekce_ListBox.grid(row=2, column=3, sticky=W)
-
+        """
 
     def create_ovl_sekce(self):
         self.pole_nastaveni = tk.LabelFrame(root, text="Nastavení", font="Arial 8")
@@ -198,6 +212,10 @@ class slovnikGUI(tk.Frame):
         """
         Nacte jazyky studenta
         """
+        try:
+            self.words.destroy()
+        except AttributeError:
+            pass
         if self.slovnik.seznam_studentu == []:
             tk.messagebox.showwarning("ERROR", "Nejdříve se zaregistruj.")
             return
@@ -228,11 +246,13 @@ class slovnikGUI(tk.Frame):
         self.create_widgets_Lekce()
         print("Učebnice: ", self.akt_ucebnice, end=": ")
         self.seznam_lekci = prace_s_db.seznam_lekci(self.akt_ucebnice)
-        pozice = 1
-        for lekce in self.seznam_lekci:
-            self.Lekce_ListBox.insert(pozice, lekce)
-            pozice +=1
-        return
+        for ii in self.tree_Lekce.get_children():
+            self.tree_Lekce.delete(ii)
+
+        pozice = 0
+        for cislo in self.seznam_lekci:
+            self.tree_Lekce.insert("", "end", text=pozice, values=cislo)
+            pozice += 1
 
     # zobrazí registrované studenty
     def zobraz(self):
