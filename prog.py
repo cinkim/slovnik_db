@@ -10,6 +10,8 @@ import prace_s_db
 import nastaveni
 import testovani
 import pridat_sl as sl
+import pridat_uc as uc
+import pridat_lek as lek
 
 
 class slovnik:
@@ -20,6 +22,7 @@ class slovnik:
         self.jazyky_studenta = []
         self.akt_jazyk = ""
         self.seznam_ucebnic = []
+        
 
     def nacti_studenty(self):
         try:
@@ -39,6 +42,8 @@ class slovnikGUI(tk.Frame):
         self.parent.protocol("WM_DELETE_WINDOW", self.on_close)
         self.create_widgets_uzivatele()
         self.zobraz()
+        self.akt_ucebnice = ""
+        
 
 
     def create_widgets_uzivatele(self):
@@ -107,12 +112,23 @@ class slovnikGUI(tk.Frame):
         except AttributeError:
             pass
         self.ucebnice = tk.LabelFrame(root, text="Učebnice", font="Arial 8")
-        self.ucebnice.grid(row=1, column=2, sticky=N)
+        self.ucebnice.grid(row=1, column=2, rowspan=11, sticky=N)
         self.scrollbar_ucebnice = tk.Scrollbar(self.ucebnice, orient=VERTICAL)
-        self.ucebnice_ListBox = tk.Listbox(self.ucebnice, width=20, yscrollcommand=self.scrollbar_ucebnice.set, height=12, font="Arial 8")
+        self.ucebnice_ListBox = tk.Listbox(self.ucebnice, width=21, yscrollcommand=self.scrollbar_ucebnice.set, height=15, font="Arial 8")
         self.ucebnice_ListBox.bind( "<ButtonRelease-1>", self.nacti_lekce)  # po kliknutí se načtou slovíčka z dané učebnice
+        
         self.ucebnice_ListBox.grid(row=2, column=2, sticky=W)
 
+        """
+        self.mezera = tk.Label(self.ucebnice, text="")
+        self.mezera.grid(row=3, column=2, sticky=W)
+        """
+        self.button_pridat_ucebnici = tk.Button(self.ucebnice, text="Přidat učebnici", command=self.pridat_ucebnici, fg="blue", font="Arial 8", width=20)
+        self.button_pridat_ucebnici.grid(row=8, column=2, sticky=W)
+
+        self.button_smazat_ucebnici = tk.Button(self.ucebnice, text="Smazat učebnici", command=self.smazat_ucebnici, fg="blue", font="Arial 8", width=20)
+        self.button_smazat_ucebnici.grid(row=9, column=2, sticky=W)
+        
 
     def create_widgets_Lekce(self):
         try:
@@ -120,11 +136,11 @@ class slovnikGUI(tk.Frame):
         except AttributeError:
             pass
         self.Lekce = tk.LabelFrame(root, text="Lekce", font="Arial 8")
-        self.Lekce.grid(row=1, column=3, sticky=N)
+        self.Lekce.grid(row=1, column=3, rowspan=11, sticky=N)
 
-        self.tree_Lekce = ttk.Treeview(self.Lekce, column=("c_lekce", "nazev"), height=8, selectmode='browse')
+        self.tree_Lekce = ttk.Treeview(self.Lekce, column=("c_lekce", "nazev"), height=10, selectmode='browse')
         self.tree_Lekce['show'] = 'headings' # schová první sloupec s identifikátorem
-        self.tree_Lekce.grid(row=2, column=0)
+        self.tree_Lekce.grid(row=2, column=0,  columnspan=2)
         
         self.tree_Lekce.heading("#0", text="#\n ")
         self.tree_Lekce.column("#0", width=0, stretch=NO, anchor='center')
@@ -134,6 +150,16 @@ class slovnikGUI(tk.Frame):
 
         self.tree_Lekce.heading("nazev", text="Název lekce\n ")
         self.tree_Lekce.column("nazev", minwidth=0, width=200, stretch=NO, anchor='center')
+
+        self.button_pridat_lekci = tk.Button(self.Lekce, text="Přidat lekci", command=self.pridat_lekci, fg="blue", font="Arial 8", width=20)
+        self.button_pridat_lekci.grid(row=4, column=0, sticky=W)
+
+        self.button_smazat_lekci = tk.Button(self.Lekce, text="Smazat lekci", command=self.smazat_lekci, fg="blue", font="Arial 8", width=20)
+        self.button_smazat_lekci.grid(row=5, column=0, sticky=W)
+
+        self.button_pridat_slovicka = tk.Button(self.Lekce, text="Přidat slovíčka", command=self.pridat_slovicka, fg="blue", font="Arial 8", width=20)
+        self.button_pridat_slovicka.grid(row=4, column=1, sticky=W)
+        
 
         """
         self.scrollbar_Lekce = tk.Scrollbar(self.Lekce, orient=VERTICAL)
@@ -153,23 +179,57 @@ class slovnikGUI(tk.Frame):
         self.mezera1 = tk.Label(self.pole_nastaveni, text="")
         self.mezera1.grid(row=3, column=2, sticky=W)
 
-        self.button_pridat_ucebnici = tk.Button(self.pole_nastaveni, text="Přidat novou učebnici", command=self.pridat_ucebnici, fg="blue", font="Arial 8", width=20)
-        self.button_pridat_ucebnici.grid(row=4, column=2, sticky=W)
-
-        self.mezera2 = tk.Label(self.pole_nastaveni, text="")
-        self.mezera2.grid(row=5, column=2, sticky=W)
-
-        self.button_pridat_slovicka = tk.Button(self.pole_nastaveni, text="Přidat slovíčka", command=self.pridat_slovicka, fg="blue", font="Arial 8", width=20)
-        self.button_pridat_slovicka.grid(row=6, column=2, sticky=W)
-
-
     # vše k pravému MENU nastavení
     def nastaveni_stud(self):
         nastaveni.nastav_studenta(self)
         return
 
     def pridat_ucebnici(self):
-        print("Musíš mě doprogramovat")
+        if self.akt_jazyk.get() !="":
+            uc.nova_ucebnice(self)
+        else:
+            tk.messagebox.showwarning("ERROR", "Vyber jazyk.")
+          
+    def ulozit_ucebnice(self, jazyk, nazev):
+        if nazev=="":
+            tk.messagebox.showwarning("ERROR", "Zadej název učebnice.")
+        else:
+            prace_s_db.uloz_ucebnici(jazyk,nazev)
+            # self.nova_uc.insert(0,"")
+            self.akt_ucebnice = nazev # nová učebnice se stává aktuální učebnicí
+            self.ucebnice_Konec() # uzavře okno
+            self.ucebnice_ListBox.select_set(self.seznam_ucebnic.index(self.akt_ucebnice)) # označení řádku aktuální učebnice
+            self.nacti_lekce()
+            
+    def smazat_ucebnici(self):
+        print("Doprogramovat....")
+
+    def pridat_lekci(self): 
+        if self.akt_jazyk.get() !="" and self.akt_ucebnice !="":
+            lek.nova_lekce(self)
+        else:
+            tk.messagebox.showwarning("ERROR", "Vyber jazyk i učebnici.")
+    
+    def ulozit_lekci(self, jazyk, ucebnice, cislo, nazev):
+        try:
+            if nazev == "":
+                 tk.messagebox.showwarning("ERROR", "Zadej název učebnice.")
+            else:
+                prace_s_db.uloz_lekci(jazyk, ucebnice, nazev, int(cislo))
+                self.akt_lekce = nazev
+                self.lekce_Konec()
+                
+        except ValueError:
+            tk.messagebox.showwarning("ERROR", "Zadej správně číslo lekce.")
+        self.akt_lekce = nazev
+        
+        # nastavení vybraného řádku právě vložené lekce child_id ... ITEM ID vložené lekce
+        child_id = self.tree_Lekce.get_children()[-1] # poslední řádek
+        child_id = self.tree_Lekce.get_children()[self.seznam_lekci.index((int(cislo),nazev))] # máme řazené tak hledá ID pro danou hodnotu
+        self.tree_Lekce.selection_set(child_id)
+
+    def smazat_lekci(self):
+        print("Doprogramovat")
 
     # vše k novému oknu přidat slovíčka(otevření, zavření, ukládání)
     def pridat_slovicka(self):
@@ -196,6 +256,20 @@ class slovnikGUI(tk.Frame):
         """
         self.words.destroy()
 
+    def ucebnice_Konec(self):
+        """
+        Ukončí okno ukládání učebnice
+        """
+        self.ucebnice_nova.destroy()
+        self.nacti_ucebnice()
+    
+    def lekce_Konec(self):
+        """
+        Ukončí okno ukládání lekce
+        """
+        self.lekce_nova.destroy()
+        self.nacti_lekce()
+        
 
     # vše k oknu nový student
     def novy(self):
@@ -219,6 +293,7 @@ class slovnikGUI(tk.Frame):
         """
         try:
             self.words.destroy()
+            self.ucebnice.destroy()
         except AttributeError:
             pass
         if self.slovnik.seznam_studentu == []:
@@ -230,7 +305,7 @@ class slovnikGUI(tk.Frame):
             self.jazyky_studenta = prace_s_db.jazyky_studenta(self.akt_student)
             self.create_widgets_jazyk()
             self.create_ovl_sekce()
-            self.uzivatel["text"] = "Aktuální uživatel je "+self.akt_student
+            self.uzivatel["text"] = "Aktuální uživatel je "+ str(self.akt_student)
             return
         except IndexError:
             tk.messagebox.showwarning("ERROR", "Nejdříve vyber studenta.")
@@ -241,18 +316,21 @@ class slovnikGUI(tk.Frame):
         # print(self.akt_jazyk.get(), end=": ")
         self.akt_j = self.akt_jazyk.get()
         self.seznam_ucebnic = prace_s_db.seznam_ucebnic(self.akt_jazyk.get())
+        #print(self.seznam_ucebnic)
         self.create_widgets_ucebnice()
         for ucebnice in self.seznam_ucebnic:
-            self.ucebnice_ListBox.insert(1, ucebnice)
+            #print(ucebnice)
+            self.ucebnice_ListBox.insert(tkinter.END, ucebnice)
         return
        
     # načte lekce podle vybrané učebnice
-    def nacti_lekce(self, event):
-        try:       
-            self.akt_ucebnice = self.seznam_ucebnic[self.ucebnice_ListBox.curselection()[0]]
+    def nacti_lekce(self, event=""):
+        try:
+            if event !="":  # funkci spouštím z akce ListBoxu - <on click>     
+                self.akt_ucebnice = self.seznam_ucebnic[self.ucebnice_ListBox.curselection()[0]]
         except IndexError:
             tk.messagebox.showwarning("ERROR", "Vyber, nebo založ novou učebnici.")
-            self.akt_ucebnice = []
+            self.akt_ucebnice = ""
             return
         self.create_widgets_Lekce()
         # print("Učebnice: ", self.akt_ucebnice, end=": ")

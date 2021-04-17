@@ -63,12 +63,33 @@ def pridat_studenta(novy):
     conn.commit()
 
 
-def uloz_novou_ucebnici(ucebnice, jazyk_id,cursor):
+def uloz_ucebnici(jazyk, ucebnice):
     # conn, cursor = pripojeni_db()
-    # při vkládání nového studenta
+    # zjišťuje ID jazyka
+    conn, cursor = pripojeni_db()
+    cursor.execute(f'''SELECT ID FROM JAZYKY WHERE NAZEV = '{jazyk}' ''')
+    jazyk_id = cursor.fetchone()[0] 
+
     cursor.execute(f'''INSERT INTO UCEBNICE values (null,'{ucebnice}', {jazyk_id}) ''')
-    return cursor.execute(f'''SELECT ID FROM UCEBNICE WHERE NAZEV = '{ucebnice}' ''').fetchone()[0]        
-    # conn.commit()
+    # return cursor.execute(f'''SELECT ID FROM UCEBNICE WHERE NAZEV = '{ucebnice}' ''').fetchone()[0]        
+    conn.commit()
+
+def uloz_lekci(jazyk, ucebnice, lekce, cislo):
+    # conn, cursor = pripojeni_db()
+    # zjišťuje ID jazyka
+    conn, cursor = pripojeni_db()
+    cursor.execute(f'''SELECT ID FROM JAZYKY WHERE NAZEV = '{jazyk}' ''')
+    jazyk_id = cursor.fetchone()[0] 
+
+    cursor.execute(f'''SELECT ID FROM UCEBNICE WHERE NAZEV = '{ucebnice}' AND JAZYK_ID = {jazyk_id} ''')
+    #print(cursor.fetchall())
+    ucebnice_id = cursor.fetchone()[0] 
+
+    cursor.execute(f'''INSERT INTO LEKCE values (null,{ucebnice_id}, {cislo}, '{lekce}') ''')
+    
+    conn.commit()
+    
+
 
 def select_to_seznam(data):
     """
@@ -112,6 +133,7 @@ def seznam_ucebnic(jazyk):
                         where j.nazev = '{jazyk}' order by j.nazev''')     
     return select_to_seznam(cursor.fetchall())
 
+
 def seznam_lekci(ucebnice):
     """
     - seznam vsech lekci dane ucebnice
@@ -119,7 +141,7 @@ def seznam_lekci(ucebnice):
     VYSTUP: seznam dvojic - [(id1, lekce1),(id2, lekce2)]
     """
     conn, cursor = pripojeni_db()
-    cursor.execute(f''' select l.id, l.nazev from ucebnice u
+    cursor.execute(f''' select l.cislo, l.nazev from ucebnice u
 	                        join lekce l on l.ucebnice_id = u.id
                     where u.nazev = '{ucebnice}'
                     order by l.cislo
@@ -145,7 +167,6 @@ def uloz_akt_jazyk(jazyk, jmeno_studenta):
     conn, cursor = pripojeni_db()
     cursor.execute(f''' SELECT id from jazyky where nazev ='{jazyk}'  ''')
     jazyk_id = cursor.fetchone()[0]
-    print("ukladam akt jazyk:", jazyk_id)
     cursor.execute(f'''UPDATE OSOBY SET AKT_JAZYK_ID = {jazyk_id} WHERE JMENO = '{jmeno_studenta}' ''')
     conn.commit()
 
@@ -166,3 +187,10 @@ def akt_jazyk_studenta(jmeno_studenta):
 # vypíše nápovědu ke konkrétní funkci
 # help(jazyky_studenta)
 # help(seznam_studentu)
+
+"""
+#zkušební kód
+conn, cursor = pripojeni_db()
+cursor.execute(f''' SELECT * from ucebnice where jazyk_id=1''')
+print(cursor.fetchall())
+"""
