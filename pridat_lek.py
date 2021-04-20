@@ -43,18 +43,24 @@ def smazat_Lek(self):
     print("Doprogramovat")
 
 def ulozit_Lek(self):
-    if (self.nova_lek.get() or self.nova_lek_cislo.get()) == "":
-        tk.messagebox.showwarning("ERROR", "Vyplňte číslo a název lekce")
-        return
-    try:
-        db.uloz_lekci(self.akt_j, self.akt_ucebnice, self.nova_lek.get(), int(self.nova_lek_cislo.get()))        
-    except ValueError:
-        tk.messagebox.showwarning("ERROR", "Zadej správně číslo lekce.")
-        return
+    if messagebox.askyesno("Uložit???", "Přidat lekci?") == True:
+        while True:
+            if (self.nova_lek.get() or self.nova_lek_cislo.get()) == "":
+                tk.messagebox.showwarning("ERROR", "Vyplňte číslo a název lekce")
+                return
+            try:
+                db.uloz_lekci(self.akt_j, self.akt_ucebnice, self.nova_lek.get(), int(self.nova_lek_cislo.get()))
+                self.nacti_lekce()
+                self.cl.set("")
+                self.nl.set("") 
+                return       
+            except ValueError:
+                tk.messagebox.showwarning("ERROR", "Zadej správně číslo lekce.")
+                return
+    else:
+        pass
     
-    self.nacti_lekce()
-    self.cl.set("")
-    self.nl.set("")
+
     # nastavení vybraného řádku právě vložené lekce child_id ... ITEM ID vložené lekce
     # child_id = self.tree_Lekce.get_children()[-1] # poslední řádek
     # child_id = self.tree_Lekce.get_children()[self.seznam_lekci.index((int(cislo),nazev))] # máme řazené tak hledá ID pro danou hodnotu
