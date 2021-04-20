@@ -33,18 +33,22 @@ def nova_ucebnice(self):
 
 
 def ulozit_novou_ucebnici(self):
-    if self.nova_uc.get() == "":
-        tk.messagebox.showwarning("ERROR", "Zadej název učebnice.")
-        return
+    if messagebox.askyesno("Uložit???", "Uložit učebnici?") == True:
+        while True:
+            if self.nova_uc.get() == "":
+                tk.messagebox.showwarning("ERROR", "Zadej název učebnice.")
+                return
+            else:
+                db.uloz_ucebnici(self.akt_j,self.nova_uc.get())
+                # self.nova_uc.insert(0,"")
+                # self.akt_ucebnice = self.nova_uc # nová učebnice se stává aktuální učebnicí  
+                self.nacti_ucebnice()
+                # self.ucebnice_ListBox.select_set(self.seznam_ucebnic.index(self.akt_ucebnice)) # označení řádku aktuální učebnice
+                self.nacti_lekce()
+                self.uc.set("")
+                return
     else:
-        db.uloz_ucebnici(self.akt_j,self.nova_uc.get())
-        # self.nova_uc.insert(0,"")
-        # self.akt_ucebnice = self.nova_uc # nová učebnice se stává aktuální učebnicí  
-        self.nacti_ucebnice()
-        # self.ucebnice_ListBox.select_set(self.seznam_ucebnic.index(self.akt_ucebnice)) # označení řádku aktuální učebnice
-        self.nacti_lekce()
-        self.uc.set("")
-        return
+        pass
 
 def smazat_uc(self):
     print("Doprogramovat")
