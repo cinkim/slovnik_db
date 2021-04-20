@@ -184,7 +184,7 @@ class slovnikGUI(tk.Frame):
         nastaveni.nastav_studenta(self)
         return
 
-    """________________________________________________________________________________________________"""
+    """_______________________ pridat_uc.py _________________________________________________________________________"""
     # vše k učebnici
     def pridat_ucebnici(self):
         uc.nova_ucebnice(self)
@@ -195,10 +195,7 @@ class slovnikGUI(tk.Frame):
     def smazat_ucebnici(self):
         uc.smazat_uc(self)
 
-    def ukoncit(self):
-        self.ucebnice_nova.destroy()
-
-    """_______________________________________________________________________________________________"""
+    """____________________________ pridat_lek.py ___________________________________________________________________"""
 
     # vše k lekci
     def pridat_lekci(self): 
@@ -236,7 +233,7 @@ class slovnikGUI(tk.Frame):
         self.lekce_nova.destroy()
         self.nacti_lekce()
 
-    """___________________________________________________________________________________________"""
+    """____________________________ pridat_sl.py _______________________________________________________________"""
 
     # vše k novému oknu přidat slovíčka(otevření, zavření, ukládání)
     def pridat_slovicka(self):
@@ -263,7 +260,7 @@ class slovnikGUI(tk.Frame):
         """
         self.words.destroy()
 
-    """___________________________________________________________________________________________"""
+    """_____________________________ new_student.py ______________________________________________________________"""
 
     # vše k oknu nový student
 
@@ -280,7 +277,6 @@ class slovnikGUI(tk.Frame):
         self.zobraz()
         return
     """_______________________________________________________________________________________"""
-
 
     # načtení studenta
     def nacti_studenta(self):
