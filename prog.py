@@ -184,26 +184,23 @@ class slovnikGUI(tk.Frame):
         nastaveni.nastav_studenta(self)
         return
 
+    """________________________________________________________________________________________________"""
+    # vše k učebnici
     def pridat_ucebnici(self):
-        if self.akt_jazyk.get() !="":
-            uc.nova_ucebnice(self)
-        else:
-            tk.messagebox.showwarning("ERROR", "Vyber jazyk.")
-          
-    def ulozit_ucebnice(self, jazyk, nazev):
-        if nazev=="":
-            tk.messagebox.showwarning("ERROR", "Zadej název učebnice.")
-        else:
-            prace_s_db.uloz_ucebnici(jazyk,nazev)
-            # self.nova_uc.insert(0,"")
-            self.akt_ucebnice = nazev # nová učebnice se stává aktuální učebnicí
-            self.ucebnice_Konec() # uzavře okno
-            self.ucebnice_ListBox.select_set(self.seznam_ucebnic.index(self.akt_ucebnice)) # označení řádku aktuální učebnice
-            self.nacti_lekce()
+        uc.nova_ucebnice(self)
+         
+    def ulozit_ucebnice(self):
+        uc.ulozit_novou_ucebnici(self)
             
     def smazat_ucebnici(self):
-        print("Doprogramovat....")
+        uc.smazat_uc(self)
 
+    def ukoncit(self):
+        self.ucebnice_nova.destroy()
+
+    """_______________________________________________________________________________________________"""
+
+    # vše k lekci
     def pridat_lekci(self): 
         if self.akt_jazyk.get() !="" and self.akt_ucebnice !="":
             lek.nova_lekce(self)
@@ -231,6 +228,16 @@ class slovnikGUI(tk.Frame):
     def smazat_lekci(self):
         print("Doprogramovat")
 
+
+    def lekce_Konec(self):
+        """
+        Ukončí okno ukládání lekce
+        """
+        self.lekce_nova.destroy()
+        self.nacti_lekce()
+
+    """___________________________________________________________________________________________"""
+
     # vše k novému oknu přidat slovíčka(otevření, zavření, ukládání)
     def pridat_slovicka(self):
         """
@@ -256,34 +263,23 @@ class slovnikGUI(tk.Frame):
         """
         self.words.destroy()
 
-    def ucebnice_Konec(self):
-        """
-        Ukončí okno ukládání učebnice
-        """
-        self.ucebnice_nova.destroy()
-        self.nacti_ucebnice()
-    
-    def lekce_Konec(self):
-        """
-        Ukončí okno ukládání lekce
-        """
-        self.lekce_nova.destroy()
-        self.nacti_lekce()
-        
+    """___________________________________________________________________________________________"""
 
     # vše k oknu nový student
-    def novy(self):
-        ns.ulozit_noveho_studenta(self)
-        self.slovnik.nacti_studenty()
-        self.zobraz()
-        return
-
 
     def vytvor_top_okno_novy_student(self):
         """
         Otevře okno pro registraci studenta
         """
         ns.vytvor_top_okno_novy_student(self)
+
+
+    def novy(self):
+        ns.ulozit_noveho_studenta(self)
+        self.slovnik.nacti_studenty()
+        self.zobraz()
+        return
+    """_______________________________________________________________________________________"""
 
 
     # načtení studenta
