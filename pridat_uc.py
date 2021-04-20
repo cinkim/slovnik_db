@@ -17,15 +17,39 @@ def nova_ucebnice(self):
     self.popisek = tk.Label(self.ucebnice_nova, text="Název učebnice:", font="Ariel 10")
     self.popisek.grid(row=2, column=0)
 
-    self.nova_uc = tk.Entry(self.ucebnice_nova, width=25)
+    self.uc = StringVar()
+    self.nova_uc = tk.Entry(self.ucebnice_nova, width=25, textvariable=self.uc)
     self.nova_uc.grid(row=2, column=1, columnspan=2 )
 
-    self.Ulozit = tk.Button(self.ucebnice_nova, width=20, text="OK", fg="green", command=lambda: self.ulozit_ucebnice(self.akt_jazyk.get(), self.nova_uc.get()))
+    self.Ulozit = tk.Button(self.ucebnice_nova, width=20, text="OK", fg="green", command=self.ulozit_ucebnice)
     self.Ulozit.grid(row=2, column=3, sticky=W)
 
     
     self.mezera = tk.Label(self.ucebnice_nova, text="", font="Ariel 10")
     self.mezera.grid(row=3, column=0)
+
+    self.Konec_prid_uc = tk.Button(self.ucebnice_nova, width=20, text="Konec", fg="red", command=self.ukoncit)
+    self.Konec_prid_uc.grid(row=4, column=0, sticky=W)
+
+
+def ulozit_novou_ucebnici(self):
+    if self.nova_uc.get() == "":
+        tk.messagebox.showwarning("ERROR", "Zadej název učebnice.")
+        return
+    else:
+        db.uloz_ucebnici(self.akt_j,self.nova_uc.get())
+        # self.nova_uc.insert(0,"")
+        # self.akt_ucebnice = self.nova_uc # nová učebnice se stává aktuální učebnicí  
+        self.nacti_ucebnice()
+        # self.ucebnice_ListBox.select_set(self.seznam_ucebnic.index(self.akt_ucebnice)) # označení řádku aktuální učebnice
+        self.nacti_lekce()
+        self.uc.set("")
+        return
+
+def smazat_uc(self):
+    print("Doprogramovat")
+    return
+
 
 
 
