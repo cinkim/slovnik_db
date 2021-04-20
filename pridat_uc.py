@@ -28,7 +28,7 @@ def nova_ucebnice(self):
     self.mezera = tk.Label(self.ucebnice_nova, text="", font="Ariel 10")
     self.mezera.grid(row=3, column=0)
 
-    self.Konec_prid_uc = tk.Button(self.ucebnice_nova, width=20, text="Konec", fg="red", command=self.ukoncit)
+    self.Konec_prid_uc = tk.Button(self.ucebnice_nova, width=20, text="Konec", fg="red", command=self.ucebnice_nova.destroy)
     self.Konec_prid_uc.grid(row=4, column=0, sticky=W)
 
 

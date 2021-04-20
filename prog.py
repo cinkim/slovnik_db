@@ -184,59 +184,31 @@ class slovnikGUI(tk.Frame):
         nastaveni.nastav_studenta(self)
         return
 
-    """________________________________________________________________________________________________"""
+    """_______________________ pridat_uc.py _________________________________________________________________________"""
     # vše k učebnici
     def pridat_ucebnici(self):
-        uc.nova_ucebnice(self)
+        uc.nova_ucebnice(self) # otevře nové okno
          
     def ulozit_ucebnice(self):
-        uc.ulozit_novou_ucebnici(self)
+        uc.ulozit_novou_ucebnici(self) # uloží novou učebnici
             
     def smazat_ucebnici(self):
-        uc.smazat_uc(self)
+        uc.smazat_uc(self) # smaže učebnici
 
-    def ukoncit(self):
-        self.ucebnice_nova.destroy()
-
-    """_______________________________________________________________________________________________"""
+    """____________________________ pridat_lek.py ___________________________________________________________________"""
 
     # vše k lekci
     def pridat_lekci(self): 
-        if self.akt_jazyk.get() !="" and self.akt_ucebnice !="":
-            lek.nova_lekce(self)
-        else:
-            tk.messagebox.showwarning("ERROR", "Vyber jazyk i učebnici.")
+        lek.nova_lekce(self) # otevře nové okno
+
     
-    def ulozit_lekci(self, jazyk, ucebnice, cislo, nazev):
-        try:
-            if nazev == "":
-                 tk.messagebox.showwarning("ERROR", "Zadej název učebnice.")
-            else:
-                prace_s_db.uloz_lekci(jazyk, ucebnice, nazev, int(cislo))
-                self.akt_lekce = nazev
-                self.lekce_Konec()
-                
-        except ValueError:
-            tk.messagebox.showwarning("ERROR", "Zadej správně číslo lekce.")
-        self.akt_lekce = nazev
-        
-        # nastavení vybraného řádku právě vložené lekce child_id ... ITEM ID vložené lekce
-        child_id = self.tree_Lekce.get_children()[-1] # poslední řádek
-        child_id = self.tree_Lekce.get_children()[self.seznam_lekci.index((int(cislo),nazev))] # máme řazené tak hledá ID pro danou hodnotu
-        self.tree_Lekce.selection_set(child_id)
+    def ulozit_lekci(self): # uloží novou lekci
+        lek.ulozit_Lek(self)
 
     def smazat_lekci(self):
-        print("Doprogramovat")
+        lek.smazat_Lek(self) # smaže lekci
 
-
-    def lekce_Konec(self):
-        """
-        Ukončí okno ukládání lekce
-        """
-        self.lekce_nova.destroy()
-        self.nacti_lekce()
-
-    """___________________________________________________________________________________________"""
+    """____________________________ pridat_sl.py _______________________________________________________________"""
 
     # vše k novému oknu přidat slovíčka(otevření, zavření, ukládání)
     def pridat_slovicka(self):
@@ -263,7 +235,7 @@ class slovnikGUI(tk.Frame):
         """
         self.words.destroy()
 
-    """___________________________________________________________________________________________"""
+    """_____________________________ new_student.py ______________________________________________________________"""
 
     # vše k oknu nový student
 
@@ -280,7 +252,6 @@ class slovnikGUI(tk.Frame):
         self.zobraz()
         return
     """_______________________________________________________________________________________"""
-
 
     # načtení studenta
     def nacti_studenta(self):
