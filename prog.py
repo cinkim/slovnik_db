@@ -12,6 +12,7 @@ import testovani
 import pridat_sl as sl
 import pridat_uc as uc
 import pridat_lek as lek
+import import_slovicek as im
 
 
 class slovnik:
@@ -63,11 +64,6 @@ class slovnikGUI(tk.Frame):
         self.tree_zaznamy.heading("student", text="Student\n ")
         self.tree_zaznamy.column("student", minwidth=0, width=124, stretch=NO, anchor='center')
 
-        self.jazyky = tk.LabelFrame(root, text="Testovat jazyk", font="Arial 8")
-        self.jazyky.grid(row=1, column=1, sticky=N)
-         # připravené "pole pro RdaioButtony" se seznamem jazyků vybraného studenta, zatím prázdné
-        self.j_studenta = tk.Label(self.jazyky, text="", font="Arial 8")
-
         self.button_NacistStudenta = tk.Button(root, text="Načti studenta", command=self.nacti_studenta, fg="blue", font="Arial 8", width=20)
         self.button_NacistStudenta.grid(row=8, column=0, sticky=W)
 
@@ -77,25 +73,22 @@ class slovnikGUI(tk.Frame):
         self.button_Konec = tk.Button(root, text="Konec", command=self.on_close, fg="red", font="Arial 8", width=20)
         self.button_Konec.grid(row=10, column=0, sticky=W)
 
+
     """________________________ vytvoří pole jazyků, podle zvoleného studenta ___________________"""
-    def create_widgets_jazyk(self):
-        
+    def create_widgets_jazyk(self):      
         pozice = 1 # pozice řádky v rámci skupiny RadioButtonu
         self.akt_jazyk = StringVar()
-        # smaže prvek pro výpis
-        # aby se vynuloval a zobrazolo se to jen pro daného studenta a nemotaly se tam předchozí jazyky
-        self.jazyky.destroy()
-        # a tady se to vytváří znova - "pole pro RadioButtony", buhužel to nehezky přeblikává
-        self.jazyky = tk.LabelFrame(root, text="Testovat jazyk", font="Arial 8")
-        self.jazyky.grid(row=1, column=1, sticky=N)
 
-        # pokud má student nastavený akt_jazyk, už bude předvybraný
-        # self.akt_jazyk = prace_s_db.akt_jazyk_studenta(self.akt_student)
         try:
+            self.jazyky.destroy()
             self.ucebnice.destroy()
             self.Lekce.destroy()
         except AttributeError:
             pass
+
+        self.jazyky = tk.LabelFrame(root, text="Testovat jazyk", font="Arial 8")
+        self.jazyky.grid(row=1, column=1, sticky=N)
+
         for jazyk in self.jazyky_studenta:
             self.j_studenta = tk.Radiobutton(self.jazyky, indicatoron=0, text=jazyk, variable=self.akt_jazyk, command=self.nacti_ucebnice, value=jazyk, width = 20)
             self.j_studenta.grid(row=pozice, column=0, sticky=W)
@@ -226,6 +219,9 @@ class slovnikGUI(tk.Frame):
         Uložení nových slovíček
         """
         sl.ulozit(self)
+
+    def nacist(self):
+        im.import_sl(self)
 
 
     """_____________________________ new_student.py ______________________________________________________________"""
