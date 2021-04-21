@@ -23,7 +23,7 @@ class slovnik:
         self.akt_jazyk = ""
         self.seznam_ucebnic = []
         
-
+    """_____________ načtení všech studentů po startu aplikace ______________"""
     def nacti_studenty(self):
         try:
             prace_s_db.overeni_sl()
@@ -45,7 +45,7 @@ class slovnikGUI(tk.Frame):
         self.akt_ucebnice = ""
         
 
-
+    """__________________ vytvoří pole se seznamem studentů _________________________________________"""
     def create_widgets_uzivatele(self):
         self.uzivatel = tk.Label(root, text="", font="Arial 16", fg="red")
         self.uzivatel.grid(row=0, columnspan=4, sticky=W+E)
@@ -77,6 +77,7 @@ class slovnikGUI(tk.Frame):
         self.button_Konec = tk.Button(root, text="Konec", command=self.on_close, fg="red", font="Arial 8", width=20)
         self.button_Konec.grid(row=10, column=0, sticky=W)
 
+    """________________________ vytvoří pole jazyků, podle zvoleného studenta ___________________"""
     def create_widgets_jazyk(self):
         
         pozice = 1 # pozice řádky v rámci skupiny RadioButtonu
@@ -105,6 +106,7 @@ class slovnikGUI(tk.Frame):
                 self.j_studenta.deselect()
             pozice = pozice + 1
 
+    """___________________________ vytvoří pole se seznamem učebnic podle zvoleného studenta a jazyka ________________________"""
     def create_widgets_ucebnice(self):       
         try:
             self.ucebnice.destroy()
@@ -130,6 +132,7 @@ class slovnikGUI(tk.Frame):
         self.button_smazat_ucebnici.grid(row=9, column=2, sticky=W)
         
 
+    """____________________vytvoří pole se seznamem lekcí podle zvoleného studenta/jazyka/učebnice ____________________"""
     def create_widgets_Lekce(self):
         try:
             self.Lekce.destroy()
@@ -161,13 +164,7 @@ class slovnikGUI(tk.Frame):
         self.button_pridat_slovicka.grid(row=4, column=1, sticky=W)
         
 
-        """
-        self.scrollbar_Lekce = tk.Scrollbar(self.Lekce, orient=VERTICAL)
-        self.Lekce_ListBox = tk.Listbox(self.Lekce, width=30, yscrollcommand=self.scrollbar_Lekce.set)
-        self.Lekce_ListBox.bind( "<ButtonRelease-1>", self.testuj)  # po kliknutí se otevře okno pro testovaní
-        self.Lekce_ListBox.grid(row=2, column=3, sticky=W)
-        """
-
+    """_________________ vytvoří pravé pole pro další volby - nastavení/testování/historie ____________________________"""
     def create_ovl_sekce(self):
         self.pole_nastaveni = tk.LabelFrame(root, text="Nastavení", font="Arial 8")
         self.pole_nastaveni.grid(row=1, column=4, sticky=N)
@@ -179,7 +176,8 @@ class slovnikGUI(tk.Frame):
         self.mezera1 = tk.Label(self.pole_nastaveni, text="")
         self.mezera1.grid(row=3, column=2, sticky=W)
 
-    # vše k pravému MENU nastavení
+    """_______________________ nastaveni.py ___________________________________________________________________"""
+    # vše k pravému nastavení
     def nastaveni_stud(self):
         nastaveni.nastav_studenta(self)
         return
@@ -229,11 +227,6 @@ class slovnikGUI(tk.Frame):
         """
         sl.ulozit(self)
 
-    def pridat_Konec(self):
-        """
-        Ukončí okno ukládání slovíček
-        """
-        self.words.destroy()
 
     """_____________________________ new_student.py ______________________________________________________________"""
 
@@ -251,8 +244,9 @@ class slovnikGUI(tk.Frame):
         self.slovnik.nacti_studenty()
         self.zobraz()
         return
-    """_______________________________________________________________________________________"""
 
+
+    """___________________________ načtení studenta ____________________________________________________________"""
     # načtení studenta
     def nacti_studenta(self):
         """
@@ -278,6 +272,8 @@ class slovnikGUI(tk.Frame):
             tk.messagebox.showwarning("ERROR", "Nejdříve vyber studenta.")
             return
 
+
+    """____________________ načtení učebnice _________________________________________________________"""
     # načte učebnice podle zvoleného jazyka
     def nacti_ucebnice(self):
         # print(self.akt_jazyk.get(), end=": ")
@@ -290,6 +286,7 @@ class slovnikGUI(tk.Frame):
             self.ucebnice_ListBox.insert(tkinter.END, ucebnice)
         return
        
+    """___________________________ načtení lekce ______________________________________"""
     # načte lekce podle vybrané učebnice
     def nacti_lekce(self, event=""):
         try:
@@ -310,6 +307,7 @@ class slovnikGUI(tk.Frame):
             self.tree_Lekce.insert("", "end", text=pozice, values=cislo)
             pozice += 1
 
+    """_______________________ zobrazí registrované studenty __________________________"""
     # zobrazí registrované studenty
     def zobraz(self):
         for ii in self.tree_zaznamy.get_children():
@@ -320,6 +318,7 @@ class slovnikGUI(tk.Frame):
             self.tree_zaznamy.insert("", "end", text=pozice, values=zaznam)
             pozice += 1
 
+    """_______________________ ukončení celé aplikace _____________________________"""
     # zavře celou aplikaci včetně všech oken
     def on_close(self):
        self.parent.destroy()
