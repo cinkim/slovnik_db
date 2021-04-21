@@ -43,6 +43,13 @@ def smazat_Lek(self):
     print("Doprogramovat")
 
 def ulozit_Lek(self):
+    id_l = self.nova_lek_cislo.get()
+    nazev = self.nova_lek.get()
+    seznam_l = db.seznam_lekci(self.akt_ucebnice)
+    for qq in seznam_l:
+        if (id_l in str(qq[0])) or (nazev in qq[1]):
+            tk.messagebox.showwarning("ERROR", "Číslo lekce, nebo název již existuje.")
+            return
     if messagebox.askyesno("Uložit???", "Přidat lekci?") == True:
         while True:
             if (self.nova_lek.get() or self.nova_lek_cislo.get()) == "":
