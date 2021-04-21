@@ -33,6 +33,10 @@ def nova_ucebnice(self):
 
 
 def ulozit_novou_ucebnici(self):
+    seznam = db.seznam_ucebnic(self.akt_j)
+    if self.nova_uc.get() in seznam:
+        tk.messagebox.showwarning("???", "Učebnice již existuje")
+        return
     if messagebox.askyesno("Uložit???", "Uložit učebnici?") == True:
         while True:
             if self.nova_uc.get() == "":
