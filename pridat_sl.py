@@ -60,6 +60,8 @@ def new_words(self):
 
         self.Ulozit = tk.Button(self.words, width=20, text="Uložit", fg="green", command=self.ulozit)
         self.Ulozit.grid(row=17, column=0, sticky=W)
+        self.nacist_ze_souboru = tk.Button(self.words, width=20, text="Načíst ze souboru", fg="green", command=self.nacist)
+        self.nacist_ze_souboru.grid(row=17, column=2, sticky=E)
 
         self.mez = tk.Label(self.words, text="", height=1)
         self.mez.grid(row=18, column=0)
