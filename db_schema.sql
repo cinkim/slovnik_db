@@ -1,6 +1,6 @@
 CREATE TABLE OSOBY (
 	ID integer PRIMARY KEY AUTOINCREMENT,
-	jmeno varchar,
+	jmeno text,
 	akt_jazyk_id integer
 );
 
