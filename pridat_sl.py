@@ -64,7 +64,7 @@ def new_words(self):
         self.mez = tk.Label(self.words, text="", height=1)
         self.mez.grid(row=18, column=0)
 
-        self.Konec = tk.Button(self.words, width=20, text="Konec", fg="red", command=self.pridat_Konec)
+        self.Konec = tk.Button(self.words, width=20, text="Konec", fg="red", command=self.words.destroy)
         self.Konec.grid(row=19, column=0, sticky=W)
 
 
