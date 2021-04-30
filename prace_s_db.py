@@ -184,6 +184,13 @@ def akt_jazyk_studenta(jmeno_studenta):
         cursor.execute(f''' SELECT j.nazev from jazyky j join osoby o on o.akt_jazyk_id = j.id where o.jmeno='{jmeno_studenta}'  ''')
         return cursor.fetchone()[0]
 
+def pridej_slovicka(export):
+    # 1. parametr-jazyk
+    # 2. parametr-ucebnice
+    # 3. parametr-lekce
+    # 4. parametr-seznam seznamů slovíček
+    print(export)
+
 # vypíše nápovědu ke konkrétní funkci
 # help(jazyky_studenta)
 # help(seznam_studentu)
