@@ -72,7 +72,7 @@ def new_words(self):
 
 def nacti_lekci(self):
         try:
-                self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][0])
+                self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
                 new_words(self)
         except IndexError:
                 tk.messagebox.showwarning("ERROR", "Nejdříve vyber jazyk/učebnici/lekci.")

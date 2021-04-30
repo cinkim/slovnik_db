@@ -21,7 +21,7 @@ def import_sl(self):
         tk.messagebox.showwarning("ERROR", "Nepodporovaný typ souboru\naplikace podporuje pouze soubory typu\ncsv, txt, xls")
         return
     seznam_slov = seznam_slov.values.tolist()
-    akt_prostredi = [self.akt_j, self.akt_ucebnice, self.akt_Lekce]
+    akt_prostredi = [self.akt_Lekce]
     export = akt_prostredi + seznam_slov
 
     prace_s_db.pridej_slovicka(export)

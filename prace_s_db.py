@@ -185,11 +185,13 @@ def akt_jazyk_studenta(jmeno_studenta):
         return cursor.fetchone()[0]
 
 def pridej_slovicka(export):
-    # 1. parametr-jazyk
-    # 2. parametr-ucebnice
-    # 3. parametr-lekce
-    # 4. parametr-seznam seznamů slovíček
-    print(export)
+    # 0. parametr-lekce
+    # 1. parametr-seznam seznamů slovíček
+
+    conn, cursor = pripojeni_db()
+    cursor.execute(f'''SELECT id from lekce where nazev = "{export[0]}"''')     
+    id_Lekce = cursor.fetchall()
+    print(id_Lekce)
 
 # vypíše nápovědu ke konkrétní funkci
 # help(jazyky_studenta)
@@ -201,3 +203,4 @@ conn, cursor = pripojeni_db()
 cursor.execute(f''' SELECT * from ucebnice where jazyk_id=1''')
 print(cursor.fetchall())
 """
+
