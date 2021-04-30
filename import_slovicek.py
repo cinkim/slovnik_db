@@ -4,13 +4,11 @@ import tkinter.messagebox
 
 import pandas as pd
 import pathlib
-from prace_s_db import pripojeni_db
+import prace_s_db
 
 
 def import_sl(self):
     file_path = filedialog.askopenfilename()
-    print(file_path)
-
     try:
         soubor_typ = pathlib.Path(file_path).suffix       
         if "xl" in soubor_typ:
@@ -22,19 +20,13 @@ def import_sl(self):
     except ValueError:
         tk.messagebox.showwarning("ERROR", "Nepodporovaný typ souboru\naplikace podporuje pouze soubory typu\ncsv, txt, xls")
         return
-    print("haha")
-    """
-    seznam_slov['lekce_id'] = lekce_id
+    seznam_slov = seznam_slov.values.tolist()
+    akt_prostredi = [self.akt_j, self.akt_ucebnice, self.akt_Lekce]
+    export = akt_prostredi + seznam_slov
 
-    conn, cursor = pripojeni_db()
-    seznam_slov.to_sql("SLOVICKA", conn, if_exists='append', index=False)
-    """
+    prace_s_db.pridej_slovicka(export)
+    
 
-#import_slovicek(99,soubor)
-
-#conn, cursor = pripojeni_db()
-#data = cursor.execute(f'SELECT count(*) FROM SLOVICKA WHERE lekce_id = "99";')
-#print(data.fetchall())
 
 
 
