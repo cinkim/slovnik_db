@@ -23,8 +23,8 @@ def import_sl(self):
     seznam_slov = seznam_slov.values.tolist()
     akt_prostredi = [self.akt_Lekce]
     export = akt_prostredi + seznam_slov
-
-    prace_s_db.pridej_slovicka(export)
+    pocet = prace_s_db.pridej_slovicka(export)
+    tk.messagebox.showwarning("ULOŽENO", "Do databáze bylo uloženo " + str(pocet) + " slovíček.")
     
 
 

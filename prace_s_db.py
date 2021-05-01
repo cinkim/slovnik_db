@@ -1,6 +1,7 @@
 ﻿import sqlite3
 from os import path
 
+
 def overeni_sl():
     if path.exists("db_slovnik.sqlite") == False:
         create_sql_db()
@@ -184,23 +185,56 @@ def akt_jazyk_studenta(jmeno_studenta):
         cursor.execute(f''' SELECT j.nazev from jazyky j join osoby o on o.akt_jazyk_id = j.id where o.jmeno='{jmeno_studenta}'  ''')
         return cursor.fetchone()[0]
 
-def pridej_slovicka(export):
+
+def pridej_slovicka(seznam_slovicek):
     # 0. parametr-lekce
     # 1. parametr-seznam seznamů slovíček
-
+    
     conn, cursor = pripojeni_db()
-    cursor.execute(f'''SELECT id from lekce where nazev = "{export[0]}"''')     
-    id_Lekce = cursor.fetchall()
-    print(id_Lekce)
+    cursor.execute(f'''SELECT id from lekce where nazev = "{seznam_slovicek[0]}"''')     
+    id_lekce = cursor.fetchone()[0]
+    seznam_slovicek.pop(0) # zbyde seznam slovíček
+    for slovo in seznam_slovicek:     
+        cursor.execute(f'''INSERT INTO SLOVICKA values (null,"{slovo[0]}", "{slovo[1]}", {id_lekce}) ''')
+    conn.commit()
+    cursor.execute(f'''SELECT count(*) from slovicka where lekce_id = {id_lekce}''')
+    return cursor.fetchone()[0]
+
+    
+    
+    
+
+def slovicka_lekce(id_lekce):
+    conn, cursor = pripojeni_db()
+    cursor.execute(f''' SELECT id, cz,preklad from slovicka where lekce_id = {id_lekce}''')
+    return cursor.fetchall()
+    
+
+
+
 
 # vypíše nápovědu ke konkrétní funkci
 # help(jazyky_studenta)
 # help(seznam_studentu)
 
-"""
-#zkušební kód
-conn, cursor = pripojeni_db()
-cursor.execute(f''' SELECT * from ucebnice where jazyk_id=1''')
-print(cursor.fetchall())
-"""
 
+
+
+#print("začínáme")
+#moje_slovicka = ["první", ["ahoj", "oneeeee"], ["nazdar", "twoooo"], ["čau", "treeeeee"]]
+#pridej_slovicka(moje_slovicka)
+
+#print(slovicka_lekce(12))
+
+#print(seznam_ucebnic("Aj"))
+#print(seznam_lekci("Project 2"))
+#print()
+
+
+#zkušební kód
+
+        
+        
+conn, cursor = pripojeni_db()
+cursor.execute(f'''SELECT count(*) from slovicka where lekce_id =100''')
+print(cursor.fetchone()[0])
