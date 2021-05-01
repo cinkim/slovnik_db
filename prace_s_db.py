@@ -234,7 +234,8 @@ def slovicka_lekce(id_lekce):
 #zkušební kód
 
         
-        
+"""        
 conn, cursor = pripojeni_db()
 cursor.execute(f'''SELECT count(*) from slovicka where lekce_id =100''')
 print(cursor.fetchone()[0])
+"""
