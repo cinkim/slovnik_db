@@ -200,12 +200,10 @@ def pridej_slovicka(seznam_slovicek):
     cursor.execute(f'''SELECT count(*) from slovicka where lekce_id = {id_lekce}''')
     return cursor.fetchone()[0]
 
-    
-    
-    
-
-def slovicka_lekce(id_lekce):
+def slovicka_lekce(lekce):
     conn, cursor = pripojeni_db()
+    cursor.execute(f'''SELECT id from lekce where nazev = "{lekce}"''')     
+    id_lekce = cursor.fetchone()[0]
     cursor.execute(f''' SELECT id, cz,preklad from slovicka where lekce_id = {id_lekce}''')
     return cursor.fetchall()
     

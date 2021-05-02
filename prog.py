@@ -10,6 +10,7 @@ import prace_s_db
 import nastaveni
 import testovani
 import pridat_sl as sl
+import vypsat_sl as v_sl
 import pridat_uc as uc
 import pridat_lek as lek
 import import_slovicek as im
@@ -155,6 +156,9 @@ class slovnikGUI(tk.Frame):
 
         self.button_pridat_slovicka = tk.Button(self.Lekce, text="Přidat slovíčka", command=self.pridat_slovicka, fg="blue", font="Arial 8", width=20)
         self.button_pridat_slovicka.grid(row=4, column=1, sticky=W)
+
+        self.button_pridat_slovicka = tk.Button(self.Lekce, text="Vypsat slovíčka", command=self.vypsat_slovicka, fg="blue", font="Arial 8", width=20)
+        self.button_pridat_slovicka.grid(row=5, column=1, sticky=W)
         
 
     """_________________ vytvoří pravé pole pro další volby - nastavení/testování/historie ____________________________"""
@@ -222,6 +226,16 @@ class slovnikGUI(tk.Frame):
 
     def nacist(self):
         im.import_sl(self)
+
+    """____________________________ vypsat_sl.py _______________________________________________________________"""
+
+    # vše k novému oknu vypsat slovíčka(otevření, zavření, ukládání)
+    def vypsat_slovicka(self):
+        """
+        Vypíše seznam slovíček vybrané lekce
+        """
+        self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
+        v_sl.vypis_slovicka(self,prace_s_db.slovicka_lekce(self.akt_Lekce))
 
 
     """_____________________________ new_student.py ______________________________________________________________"""
