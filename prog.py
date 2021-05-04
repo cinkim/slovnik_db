@@ -74,7 +74,6 @@ class slovnikGUI(tk.Frame):
         self.button_Konec = tk.Button(root, text="Konec", command=self.on_close, fg="red", font="Arial 8", width=20)
         self.button_Konec.grid(row=10, column=0, sticky=W)
 
-
     """________________________ vytvoří pole jazyků, podle zvoleného studenta ___________________"""
     def create_widgets_jazyk(self):      
         pozice = 1 # pozice řádky v rámci skupiny RadioButtonu
@@ -115,10 +114,6 @@ class slovnikGUI(tk.Frame):
         
         self.ucebnice_ListBox.grid(row=2, column=2, sticky=W)
 
-        """
-        self.mezera = tk.Label(self.ucebnice, text="")
-        self.mezera.grid(row=3, column=2, sticky=W)
-        """
         self.button_pridat_ucebnici = tk.Button(self.ucebnice, text="Přidat učebnici", command=self.pridat_ucebnici, fg="blue", font="Arial 8", width=20)
         self.button_pridat_ucebnici.grid(row=8, column=2, sticky=W)
 
@@ -159,8 +154,7 @@ class slovnikGUI(tk.Frame):
 
         self.button_pridat_slovicka = tk.Button(self.Lekce, text="Vypsat slovíčka", command=self.vypsat_slovicka, fg="blue", font="Arial 8", width=20)
         self.button_pridat_slovicka.grid(row=5, column=1, sticky=W)
-        
-
+              
     """_________________ vytvoří pravé pole pro další volby - nastavení/testování/historie ____________________________"""
     def create_ovl_sekce(self):
         self.pole_nastaveni = tk.LabelFrame(root, text="Nastavení", font="Arial 8")
@@ -174,10 +168,11 @@ class slovnikGUI(tk.Frame):
         self.mezera1.grid(row=3, column=2, sticky=W)
 
     """_______________________ nastaveni.py ___________________________________________________________________"""
-    # vše k pravému nastavení
+    # vše k pravému nastavení + testování
     def nastaveni_stud(self):
         nastaveni.nastav_studenta(self)
         return
+    
 
     """_______________________ pridat_uc.py _________________________________________________________________________"""
     # vše k učebnici
@@ -234,8 +229,11 @@ class slovnikGUI(tk.Frame):
         """
         Vypíše seznam slovíček vybrané lekce
         """
-        self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
-        v_sl.vypis_slovicka(self,prace_s_db.slovicka_lekce(self.akt_Lekce))
+        try:
+            self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
+            v_sl.vypis_slovicka(self,prace_s_db.slovicka_lekce(self.akt_Lekce))
+        except:
+            tk.messagebox.showwarning("ERROR", "Vyber lekci.")
 
 
     """_____________________________ new_student.py ______________________________________________________________"""

@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W, NO
-import tkinter.messagebox
-from tkinter import messagebox
+#import tkinter.messagebox
+#from tkinter import messagebox
 
 def vypis_slovicka(self,seznam_slovicek):
         self.slovicka = tk.Toplevel()
@@ -29,32 +29,10 @@ def vypis_slovicka(self,seznam_slovicek):
 
         self.Konec = tk.Button(self.slovicka, width=20, text="Konec", fg="red", command=self.slovicka.destroy)
         self.Konec.grid(row=19, column=0, sticky=W)
-        """
-        for ii in self.tree_slovicka.get_children():
-            self.tree_slovicka.delete(ii)
-        """
+
         pozice = 0
         for zaznam in seznam_slovicek:
             self.tree_slovicka.insert("", "end", text=pozice, values=(zaznam[1], zaznam[2]))
             pozice += 1
 
-"""
-def nacti_lekci(self):
-        try:
-                self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
-                new_words(self)
-        except IndexError:
-                tk.messagebox.showwarning("ERROR", "Nejdříve vyber jazyk/učebnici/lekci.")
-                return
-        except tkinter.TclError:
-                tk.messagebox.showwarning("ERROR", "Nejdříve vyber jazyk/učebnici/lekci.")
-                return
-        except AttributeError:
-                tk.messagebox.showwarning("ERROR", "Nejdříve vyber jazyk/učebnici/lekci.")
-                return
-def ulozit(self):
-        if messagebox.askyesno("???", "Uložit slovíčka?") == True:
-                print("Budu ukládat - doprogramuj")
-        else:
-                pass
-"""
+
