@@ -24,6 +24,7 @@ class slovnik:
         self.jazyky_studenta = []
         self.akt_jazyk = ""
         self.seznam_ucebnic = []
+        self.nova_sl = []
         
     """_____________ načtení všech studentů po startu aplikace ______________"""
     def nacti_studenty(self):
@@ -211,7 +212,9 @@ class slovnikGUI(tk.Frame):
         """
         Postupné ukládání slovíček
         """
-        print("Musíš mě doprogramovat")
+        sl.dalsi(self)
+        sl.vypsat_manualni_slovicka(self)
+
 
     def ulozit(self):
         """
