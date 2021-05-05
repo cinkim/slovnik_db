@@ -35,6 +35,7 @@ def new_words(self):
         self.w1 = StringVar()
         self.wc = tk.Entry(self.words, width=40, justify="center", textvariable=self.w1)
         self.wc.grid(row=12, column=0, sticky=W)
+        self.wc.focus_set()
         self.wc.config(state=NORMAL)
 
         self.w2 = StringVar()
@@ -101,6 +102,7 @@ def dalsi(self):
             self.s = []
             self.w1.set("")
             self.w2.set("") 
+            self.wc.focus_set()
 
 
 def vypsat_manualni_slovicka(self):
