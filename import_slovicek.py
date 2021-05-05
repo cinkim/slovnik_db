@@ -24,7 +24,7 @@ def import_sl(self):
     akt_prostredi = [self.akt_Lekce]
     export = akt_prostredi + seznam_slov
     pocet = prace_s_db.pridej_slovicka(export)
-    tk.messagebox.showwarning("ULOŽENO", "Do databáze bylo uloženo " + str(pocet) + " slovíček.")
+    tk.messagebox.showwarning("ULOŽENO", "V databáti je uloženo " + str(pocet) + "\nslovíček pro tuto lekci.")
     
 
 
