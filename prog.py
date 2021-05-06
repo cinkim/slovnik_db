@@ -24,6 +24,7 @@ class slovnik:
         self.jazyky_studenta = []
         self.akt_jazyk = ""
         self.seznam_ucebnic = []
+        self.nova_sl = []
         
     """_____________ načtení všech studentů po startu aplikace ______________"""
     def nacti_studenty(self):
@@ -116,10 +117,11 @@ class slovnikGUI(tk.Frame):
 
         self.button_pridat_ucebnici = tk.Button(self.ucebnice, text="Přidat učebnici", command=self.pridat_ucebnici, fg="blue", font="Arial 8", width=20)
         self.button_pridat_ucebnici.grid(row=8, column=2, sticky=W)
-
+        """
         self.button_smazat_ucebnici = tk.Button(self.ucebnice, text="Smazat učebnici", command=self.smazat_ucebnici, fg="blue", font="Arial 8", width=20)
         self.button_smazat_ucebnici.grid(row=9, column=2, sticky=W)
-        
+        """
+
 
     """____________________vytvoří pole se seznamem lekcí podle zvoleného studenta/jazyka/učebnice ____________________"""
     def create_widgets_Lekce(self):
@@ -145,15 +147,15 @@ class slovnikGUI(tk.Frame):
 
         self.button_pridat_lekci = tk.Button(self.Lekce, text="Přidat lekci", command=self.pridat_lekci, fg="blue", font="Arial 8", width=20)
         self.button_pridat_lekci.grid(row=4, column=0, sticky=W)
-
+        """
         self.button_smazat_lekci = tk.Button(self.Lekce, text="Smazat lekci", command=self.smazat_lekci, fg="blue", font="Arial 8", width=20)
         self.button_smazat_lekci.grid(row=5, column=0, sticky=W)
-
+        """
         self.button_pridat_slovicka = tk.Button(self.Lekce, text="Přidat slovíčka", command=self.pridat_slovicka, fg="blue", font="Arial 8", width=20)
         self.button_pridat_slovicka.grid(row=4, column=1, sticky=W)
 
         self.button_pridat_slovicka = tk.Button(self.Lekce, text="Vypsat slovíčka", command=self.vypsat_slovicka, fg="blue", font="Arial 8", width=20)
-        self.button_pridat_slovicka.grid(row=5, column=1, sticky=W)
+        self.button_pridat_slovicka.grid(row=5, column=0, sticky=W)
               
     """_________________ vytvoří pravé pole pro další volby - nastavení/testování/historie ____________________________"""
     def create_ovl_sekce(self):
@@ -211,7 +213,9 @@ class slovnikGUI(tk.Frame):
         """
         Postupné ukládání slovíček
         """
-        print("Musíš mě doprogramovat")
+        sl.dalsi(self)
+        sl.vypsat_manualni_slovicka(self)
+
 
     def ulozit(self):
         """
@@ -221,6 +225,9 @@ class slovnikGUI(tk.Frame):
 
     def nacist(self):
         im.import_sl(self)
+
+    def edit(self):
+        sl.opravit(self)
 
     """____________________________ vypsat_sl.py _______________________________________________________________"""
 
