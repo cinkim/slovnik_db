@@ -50,30 +50,23 @@ class slovnikGUI(tk.Frame):
 
     """__________________ vytvoří pole se seznamem studentů _________________________________________"""
     def create_widgets_uzivatele(self):
+
         self.uzivatel = tk.Label(root, text="", font="Arial 16", fg="red")
         self.uzivatel.grid(row=0, columnspan=4, sticky=W+E)
 
-        self.kdo = tk.LabelFrame(root, text="Kdo jsi", font="Arial 8")
-        self.kdo.grid(row=1, column=0, sticky=W)
+        self.studenti = tk.LabelFrame(root, text="Studenti", font="Arial 8")
+        self.studenti.grid(row=1, column=0, sticky=N)
 
-        self.tree_zaznamy = ttk.Treeview(self.kdo, column=("student"), height=8, selectmode='browse')
-        self.tree_zaznamy['show'] = 'headings' # schová první sloupec s identifikátorem
-        self.tree_zaznamy.grid(row=2, column=0)
-        
-        self.tree_zaznamy.heading("#0", text="#\n ")
-        self.tree_zaznamy.column("#0", width=0, stretch=NO, anchor='center')
-
-        self.tree_zaznamy.heading("student", text="Student\n ")
-        self.tree_zaznamy.column("student", minwidth=0, width=124, stretch=NO, anchor='center')
-
-        self.button_NacistStudenta = tk.Button(root, text="Načti studenta", command=self.nacti_studenta, fg="blue", font="Arial 8", width=20)
-        self.button_NacistStudenta.grid(row=8, column=0, sticky=W)
+        self.scrollbar_studenti = tk.Scrollbar(self.studenti, orient=VERTICAL)
+        self.studenti_ListBox = tk.Listbox(self.studenti, width=21, yscrollcommand=self.scrollbar_studenti.set, height=15, font="Arial 8")
+        self.studenti_ListBox.bind( "<ButtonRelease-1>", self.nacti_studenta)  # po kliknutí se načtou slovíčka z dané učebnice 
+        self.studenti_ListBox.grid(row=2, column=0, sticky=W)
 
         self.button_new_st = tk.Button(root, text="Nový student", command=self.vytvor_top_okno_novy_student, fg="blue", font="Arial 8", width=20)
-        self.button_new_st.grid(row=9, column=0, sticky=W)
+        self.button_new_st.grid(row=10, column=0, sticky=W)
 
         self.button_Konec = tk.Button(root, text="Konec", command=self.on_close, fg="red", font="Arial 8", width=20)
-        self.button_Konec.grid(row=10, column=0, sticky=W)
+        self.button_Konec.grid(row=11, column=0, sticky=W)
 
     """________________________ vytvoří pole jazyků, podle zvoleného studenta ___________________"""
     def create_widgets_jazyk(self):      
@@ -256,36 +249,36 @@ class slovnikGUI(tk.Frame):
 
     def novy(self):
         ns.ulozit_noveho_studenta(self)
+        self.slovnik.seznam_studentu = []
         self.slovnik.nacti_studenty()
+        self.studenti.destroy()
+        self.create_widgets_uzivatele()
         self.zobraz()
         return
 
 
     """___________________________ načtení studenta ____________________________________________________________"""
     # načtení studenta
-    def nacti_studenta(self):
+    def nacti_studenta(self, event=""):
         """
         Nacte jazyky studenta
         """
         try:
+            if event !="":  # funkci spouštím z akce ListBoxu - <on click>     
+                self.akt_student = self.slovnik.seznam_studentu[self.studenti_ListBox.curselection()[0]]
+                print(self.akt_student)
             self.words.destroy()
             self.ucebnice.destroy()
+        except IndexError:
+            tk.messagebox.showwarning("ERROR", "Vyber studenta.")
+            return
         except AttributeError:
             pass
-        if self.slovnik.seznam_studentu == []:
-            tk.messagebox.showwarning("ERROR", "Nejdříve se zaregistruj.")
-            return
-        # urci vybranou pozici polozky a z toho pak hodnotu dane polozky
-        try:
-            self.akt_student = self.tree_zaznamy.item(self.tree_zaznamy.focus())["values"][0]
-            self.jazyky_studenta = prace_s_db.jazyky_studenta(self.akt_student)
-            self.create_widgets_jazyk()
-            self.create_ovl_sekce()
-            self.uzivatel["text"] = "Aktuální uživatel je "+ str(self.akt_student)
-            return
-        except IndexError:
-            tk.messagebox.showwarning("ERROR", "Nejdříve vyber studenta.")
-            return
+        self.jazyky_studenta = prace_s_db.jazyky_studenta(self.akt_student)
+        self.create_widgets_jazyk()
+        self.create_ovl_sekce()
+        self.uzivatel["text"] = "Aktuální uživatel je "+ str(self.akt_student)
+        return
 
 
     """____________________ načtení učebnice _________________________________________________________"""
@@ -325,13 +318,10 @@ class slovnikGUI(tk.Frame):
     """_______________________ zobrazí registrované studenty __________________________"""
     # zobrazí registrované studenty
     def zobraz(self):
-        for ii in self.tree_zaznamy.get_children():
-            self.tree_zaznamy.delete(ii)
+        for student in self.slovnik.seznam_studentu:
+            self.studenti_ListBox.insert(tkinter.END, student)
+        return
 
-        pozice = 0
-        for zaznam in self.slovnik.seznam_studentu:
-            self.tree_zaznamy.insert("", "end", text=pozice, values=zaznam)
-            pozice += 1
 
     """_______________________ ukončení celé aplikace _____________________________"""
     # zavře celou aplikaci včetně všech oken
