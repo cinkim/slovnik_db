@@ -48,7 +48,7 @@ def pridat_studenta(novy):
     jmeno_studenta = novy[0]
     conn, cursor = pripojeni_db()
     # vloží nový záznam do tabulky osoby
-    cursor.execute(f'''INSERT INTO OSOBY values (null,'{jmeno_studenta}', null) ''')
+    cursor.execute(f'''INSERT INTO OSOBY (jmeno) values ('{jmeno_studenta}') ''')
     # zjišťuje ID nově vložené osoby
     cursor.execute(f'''SELECT ID FROM OSOBY WHERE JMENO = '{jmeno_studenta}' ''')
     nova_osoba_id = cursor.fetchone()[0] 

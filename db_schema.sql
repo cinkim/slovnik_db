@@ -1,7 +1,10 @@
 CREATE TABLE OSOBY (
 	ID integer PRIMARY KEY AUTOINCREMENT,
 	jmeno text,
-	akt_jazyk_id integer
+	akt_jazyk_id integer,
+	pocet_test_slovicek integer DEFAULT 20,
+	pocet_spravne_netestovat integer DEFAULT 3
+	
 );
 
 CREATE TABLE UCEBNICE (
