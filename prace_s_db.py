@@ -1,6 +1,8 @@
 ﻿import sqlite3
 from os import path
 
+import datetime
+
 
 def overeni_sl():
     if path.exists("db_slovnik.sqlite") == False:
@@ -244,14 +246,53 @@ def nastaveni_studenta(student):
     """
     - vrací nastavení studenta
     VSTUP: student - retezec
-    VYSTUP: (pocet_testovanych_slovicek, pocet_spravne_kdy uz netestovat)
+    VYSTUP: (pocet_testovanych_slovicek, pocet_spravne_kdy_uz_netestovat)
     """
     conn, cursor = pripojeni_db()
     cursor.execute(f'''SELECT pocet_test_slovicek, pocet_spravne_netestovat
         from osoby where jmeno = "{student}"''')  
     return cursor.fetchone()
 
-    
+def  uloz_test_studenta(data):
+    """
+    - uloží výsledek testu
+    VSTUP: seznam dat ["student","lekce",hodnoceni,[id_slovicka,pocet_spravne,pocet_spatne],[id_slovicka,pocet_spravne,pocet_spatne],... ]
+    """
+    conn, cursor = pripojeni_db()
+    cursor.execute(f'''SELECT id from osoby where jmeno = "{data[0]}"''')     
+    id_studenta = cursor.fetchone()[0]
+    cursor.execute(f'''SELECT id from lekce where jmeno = "{data[1]}"''')     
+    lekce_id = cursor.fetchone()[0]
+    hodnoceni = data[2]
+    # ze seznamu odstraní první hodnoty, aby zbyl čistý seznam se slovíčky a údaji
+    data.pop(2)
+    data.pop(1)
+    data.pop(0)
+    # ukládání informací ke slovíčkám - správné/špatné odpovědi
+    for slovo in data: 
+        if slovo[1] == 0 and slovo[2] == 0: #slovo nebylo testováno(přišlo s nulovými počty)
+            pass
+        else: 
+            cursor.execute(f'''SELECT count(*) from testovana_slovicka 
+                        where slovicko_id = {slovo[0]} and osoba_id={id_studenta}''')
+            if  cursor.fetchone()[0] > 0: #slovíčko už je v tabulce testovana_slovicka --> UPDATE pocet_spravne, pocet_spatne
+                cursor.execute(f'''UPDATE testovana_slovicka 
+                                    SET pocet_spravne = pocet_spravne + {slovo[1]} 
+                                    where slovicko_id = {slovo[0]} and osoba_id={id_studenta}
+                                ''')
+                cursor.execute(f'''UPDATE testovana_slovicka 
+                                    SET pocet_spatne = pocet_spatne + {slovo[2]} 
+                                    where slovicko_id = {slovo[0]} and osoba_id={id_studenta}
+                                ''')
+            else: # slovíčko ještě není v tabulce testovana_slovicka
+                cursor.execute(f'''INSERT INTO testovana_slovicka 
+                                VALUES({id_studenta},{slovo[0]},{slovo[1]}, {slovo[2]})''')
+    now = datetime.datetime.now()
+    akt_datum = str(now.year)+ "_" + str(now.month) + "_" + str(now.day) + " " + str(now.hour) + ":" + str(now.minute)
+    cursor.execute(f'''INSERT INTO vysledky  
+                                VALUES(null,{id_studenta},{lekce_id},{hodnoceni},datetime("{now}")
+                                )''')
+    conn.commit()  
 
 
 #print(nastaveni_studenta("Lenka"))
@@ -265,3 +306,7 @@ conn, cursor = pripojeni_db()
 cursor.execute(f'''SELECT count(*) from slovicka where lekce_id =100''')
 print(cursor.fetchone()[0])
 """
+
+
+d = ["Lenka","Greeting colors numbers",8,[1,1,3],[12,2,0], [11,3,0]]
+uloz_test_studenta(d)
