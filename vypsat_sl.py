@@ -18,11 +18,11 @@ def vypis_slovicka(self,seznam_slovicek):
         self.tree_slovicka.column("#0", width=0, stretch=NO, anchor='center')
 
         self.tree_slovicka.heading("česky", text="CZ\n ")
-        self.tree_slovicka.column("česky", minwidth=0, width=270, stretch=NO, anchor='center')
+        self.tree_slovicka.column("česky", minwidth=0, width=270, stretch=NO, anchor=W)
 
         #self.tree_slovicka.heading("nečesky", text="nečesky\n ")
         self.tree_slovicka.heading("nečesky", text=self.akt_j.upper() + "\n")
-        self.tree_slovicka.column("nečesky", minwidth=0, width=270, stretch=NO, anchor='center')
+        self.tree_slovicka.column("nečesky", minwidth=0, width=270, stretch=NO, anchor=W)
 
         self.tree_slovicka.heading("správně", text="SPRÁVNĚ\n ")
         self.tree_slovicka.column("správně", minwidth=0, width=65, stretch=NO, anchor='center')

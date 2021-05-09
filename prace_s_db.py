@@ -303,11 +303,11 @@ def  uloz_test_studenta(data):
                         where slovicko_id = {slovo[0]} and osoba_id={id_studenta}''')
             if  cursor.fetchone()[0] > 0: #slovíčko už je v tabulce testovana_slovicka --> UPDATE pocet_spravne, pocet_spatne
                 cursor.execute(f'''UPDATE testovana_slovicka 
-                                    SET pocet_spravne = pocet_spravne + {slovo[1]} 
+                                    SET pocet_spravne = {slovo[1]} 
                                     where slovicko_id = {slovo[0]} and osoba_id={id_studenta}
                                 ''')
                 cursor.execute(f'''UPDATE testovana_slovicka 
-                                    SET pocet_spatne = pocet_spatne + {slovo[2]} 
+                                    SET pocet_spatne = {slovo[2]} 
                                     where slovicko_id = {slovo[0]} and osoba_id={id_studenta}
                                 ''')
             else: # slovíčko ještě není v tabulce testovana_slovicka
