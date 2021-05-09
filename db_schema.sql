@@ -38,7 +38,9 @@ CREATE TABLE VYSLEDKY (
 CREATE TABLE TESTOVANA_SLOVICKA (
 	osoba_id integer,
 	slovicko_id integer,
-	testovat boolean
+	pocet_spravne integer DEFAULT 0,
+	pocet_spatne integer DEFAULT 0
+
 );
 
 CREATE TABLE JAZYKY (

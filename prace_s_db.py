@@ -91,7 +91,9 @@ def uloz_lekci(jazyk, ucebnice, lekce, cislo):
     conn.commit()
     
 
-
+# ********************************************************************************
+#  pomocné funkce na převod
+# ********************************************************************************
 def select_to_seznam(data):
     """
     pomocna funkce na prevod select s 1 sloupcem --> seznam
@@ -101,6 +103,21 @@ def select_to_seznam(data):
     for polozka in data:
         seznam.append(polozka[0])
     return seznam
+
+def seznam_tuple2senam_seznamu(seznam, hodnota_none):
+    """
+    pomocna funkce na prevod seznamu s tuplemi --> seznam seznamů
+    hodnota_none  ... to, čím nahradím honodtu NONE(NULL) co vrátila db
+    """
+    seznam_novy=[]
+    for i_tuple in seznam:
+        s = []
+        for ii in i_tuple:
+            if ii==None:
+                ii=hodnota_none # nahradí hodnoty None, co přišlo výsledek select z db
+            s.append(ii)
+        seznam_novy.append(s)
+    return seznam_novy
 
 def seznam_studentu():    
     """
@@ -200,38 +217,34 @@ def pridej_slovicka(seznam_slovicek):
     cursor.execute(f'''SELECT count(*) from slovicka where lekce_id = {id_lekce}''')
     return cursor.fetchone()[0]
 
-def slovicka_lekce(lekce):
+def slovicka_lekce(lekce, student):
+    """
+    - vrati seznam slovicek lekce vcetne poctu spravnych/spatnych odpovedi od daneho studenta
+    VSTUP: lekce - retezec
+            student - retezec
+    VYSTUP: seznam slovicek [(id,cesky,preklad, spravne, spatne),(id,cesky,preklad, spravne, spatne),.... ]
+    """
     conn, cursor = pripojeni_db()
     cursor.execute(f'''SELECT id from lekce where nazev = "{lekce}"''')     
     id_lekce = cursor.fetchone()[0]
-    cursor.execute(f''' SELECT id, cz,preklad from slovicka where lekce_id = {id_lekce}''')
-    return cursor.fetchall()
+
+    cursor.execute(f'''SELECT id from osoby where jmeno = "{student}"''')     
+    id_studenta = cursor.fetchone()[0]
     
-
-
+    cursor.execute(f''' SELECT s.id,s.cz, s.preklad,pocet_spravne, pocet_spatne from slovicka s
+                            LEFT JOIN (select ts.pocet_spravne, ts.pocet_spatne, ts.slovicko_id 
+                                        from testovana_slovicka ts where ts.osoba_id={id_studenta})                         
+                            ON slovicko_id = s.id 
+                        where s.lekce_id = {id_lekce} ''')
+                    
+    return seznam_tuple2senam_seznamu(cursor.fetchall(),0)
 
 
 # vypíše nápovědu ke konkrétní funkci
 # help(jazyky_studenta)
 # help(seznam_studentu)
 
-
-
-
-#print("začínáme")
-#moje_slovicka = ["první", ["ahoj", "oneeeee"], ["nazdar", "twoooo"], ["čau", "treeeeee"]]
-#pridej_slovicka(moje_slovicka)
-
-#print(slovicka_lekce(12))
-
-#print(seznam_ucebnic("Aj"))
-#print(seznam_lekci("Project 2"))
-#print()
-
-
-#zkušební kód
-
-        
+#zkušební kód       
 """        
 conn, cursor = pripojeni_db()
 cursor.execute(f'''SELECT count(*) from slovicka where lekce_id =100''')
