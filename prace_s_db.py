@@ -333,6 +333,7 @@ cursor.execute(f'''SELECT count(*) from slovicka where lekce_id =100''')
 print(cursor.fetchone()[0])
 """
 
-
+"""
 d = ["Lenka","Greeting colors numbers",8,[1,1,3],[12,2,0], [11,3,0]]
 uloz_test_studenta(d)
+"""
