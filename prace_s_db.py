@@ -240,6 +240,21 @@ def slovicka_lekce(lekce, student):
     return seznam_tuple2senam_seznamu(cursor.fetchall(),0)
 
 
+def nastaveni_studenta(student):
+    """
+    - vrací nastavení studenta
+    VSTUP: student - retezec
+    VYSTUP: (pocet_testovanych_slovicek, pocet_spravne_kdy uz netestovat)
+    """
+    conn, cursor = pripojeni_db()
+    cursor.execute(f'''SELECT pocet_test_slovicek, pocet_spravne_netestovat
+        from osoby where jmeno = "{student}"''')  
+    return cursor.fetchone()
+
+    
+
+
+#print(nastaveni_studenta("Lenka"))
 # vypíše nápovědu ke konkrétní funkci
 # help(jazyky_studenta)
 # help(seznam_studentu)

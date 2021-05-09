@@ -41,5 +41,6 @@ def vypis_slovicka(self,seznam_slovicek):
             
             self.tree_slovicka.insert("", "end", text=pozice, values=(zaznam[1], zaznam[2], zaznam[3], zaznam[4]))
             pozice += 1
+        
 
 

@@ -233,6 +233,7 @@ class slovnikGUI(tk.Frame):
         try:
             self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
             v_sl.vypis_slovicka(self,prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student))
+            #print(prace_s_db.nastaveni_studenta(self.akt_student))
         except:
             tk.messagebox.showwarning("ERROR", "Vyber lekci.")
 
