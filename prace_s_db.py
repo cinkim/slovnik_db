@@ -242,6 +242,32 @@ def slovicka_lekce(lekce, student):
     return seznam_tuple2senam_seznamu(cursor.fetchall(),0)
 
 
+def nacti_vysledky(student, ucebnice):
+    """
+    - vrati seznam výsledků studenta pro vybranou učebnici
+    VSTUP: student - retezec
+            ucebnice - retezec
+    VYSTUP: seznam vysledku [[datum,lekce,hodnoceni],[datum,lekce,hodnoceni],.... ]
+    """
+    conn, cursor = pripojeni_db()
+    cursor.execute(f'''SELECT id from osoby where jmeno = "{student}"''')     
+    id_student = cursor.fetchone()[0]
+    cursor.execute(f'''SELECT id from ucebnice where nazev = "{ucebnice}"''')     
+    id_ucebnice = cursor.fetchone()[0]
+    
+    seznam_vysledku = []
+    cursor.execute(f'''SELECT v.datum,l.nazev,v.uspesnost from vysledky v
+                        join lekce l on l.id=v.lekce_id
+                        where osoba_id = {id_student} 
+                        and lekce_id in (select id from lekce where ucebnice_id ={id_ucebnice})
+                        order by v.datum
+                        ''')
+    
+    return cursor.fetchall()
+
+    
+
+
 def nastaveni_studenta(student):
     """
     - vrací nastavení studenta
@@ -307,6 +333,7 @@ cursor.execute(f'''SELECT count(*) from slovicka where lekce_id =100''')
 print(cursor.fetchone()[0])
 """
 
-
+"""
 d = ["Lenka","Greeting colors numbers",8,[1,1,3],[12,2,0], [11,3,0]]
 uloz_test_studenta(d)
+"""

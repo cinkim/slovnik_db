@@ -9,6 +9,7 @@ import new_student as ns
 import prace_s_db
 import nastaveni
 import testovani
+import vysledky as vys
 import pridat_sl as sl
 import vypsat_sl as v_sl
 import pridat_uc as uc
@@ -162,10 +163,24 @@ class slovnikGUI(tk.Frame):
         self.mezera1 = tk.Label(self.pole_nastaveni, text="")
         self.mezera1.grid(row=3, column=2, sticky=W)
 
+        self.button_Nastaveni = tk.Button(self.pole_nastaveni, text="Výsledky studenta", command=self.vysledky_stud, fg="blue", font="Arial 8", width=20)
+        self.button_Nastaveni.grid(row=4, column=2, sticky=W)
+
     """_______________________ nastaveni.py ___________________________________________________________________"""
     # vše k pravému nastavení + testování
     def nastaveni_stud(self):
         nastaveni.nastav_studenta(self)
+        return
+
+    def vysledky_stud(self):
+        # vypíše výsledky studenta v rámci jedné učebnice
+        
+        try:
+            self.akt_ucebnice = self.seznam_ucebnic[self.ucebnice_ListBox.curselection()[0]]
+            data = prace_s_db.nacti_vysledky(self.akt_student, self.akt_ucebnice)
+            vys.vypis_vysledky(self, data)
+        except:
+            tk.messagebox.showwarning("ERROR", "Vyber učebnici.")
         return
     
 
