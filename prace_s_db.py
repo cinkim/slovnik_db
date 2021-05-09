@@ -287,7 +287,7 @@ def  uloz_test_studenta(data):
     conn, cursor = pripojeni_db()
     cursor.execute(f'''SELECT id from osoby where jmeno = "{data[0]}"''')     
     id_studenta = cursor.fetchone()[0]
-    cursor.execute(f'''SELECT id from lekce where jmeno = "{data[1]}"''')     
+    cursor.execute(f'''SELECT id from lekce where nazev = "{data[1]}"''')     
     lekce_id = cursor.fetchone()[0]
     hodnoceni = data[2]
     # ze seznamu odstraní první hodnoty, aby zbyl čistý seznam se slovíčky a údaji
@@ -333,7 +333,6 @@ cursor.execute(f'''SELECT count(*) from slovicka where lekce_id =100''')
 print(cursor.fetchone()[0])
 """
 
-"""
+
 d = ["Lenka","Greeting colors numbers",8,[1,1,3],[12,2,0], [11,3,0]]
 uloz_test_studenta(d)
-"""

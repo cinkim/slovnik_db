@@ -141,10 +141,7 @@ class slovnikGUI(tk.Frame):
 
         self.button_pridat_lekci = tk.Button(self.Lekce, text="Přidat lekci", command=self.pridat_lekci, fg="blue", font="Arial 8", width=20)
         self.button_pridat_lekci.grid(row=4, column=0, sticky=W)
-        """
-        self.button_smazat_lekci = tk.Button(self.Lekce, text="Smazat lekci", command=self.smazat_lekci, fg="blue", font="Arial 8", width=20)
-        self.button_smazat_lekci.grid(row=5, column=0, sticky=W)
-        """
+
         self.button_pridat_slovicka = tk.Button(self.Lekce, text="Přidat slovíčka", command=self.pridat_slovicka, fg="blue", font="Arial 8", width=20)
         self.button_pridat_slovicka.grid(row=4, column=1, sticky=W)
 
