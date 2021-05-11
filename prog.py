@@ -1,5 +1,5 @@
 # hlani program
-
+import random
 import tkinter as tk
 from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W
 from tkinter import LEFT, NO, DISABLED, NORMAL, YES, VERTICAL, ACTIVE
@@ -8,7 +8,7 @@ import tkinter.messagebox
 import new_student as ns
 import prace_s_db
 import nastaveni
-import testovani
+import testovani as ts
 import vysledky as vys
 import pridat_sl as sl
 import vypsat_sl as v_sl
@@ -26,6 +26,14 @@ class slovnik:
         self.akt_jazyk = ""
         self.seznam_ucebnic = []
         self.nova_sl = []
+        self.k_testovani = []
+        self.pocet_k_testu = 20
+        self.pocet_spravnych = 3
+        self.testuj = []
+        self.netestuj = []
+        self.aktualni_slovo = 0
+        self.vysledky_db = []
+        self.vysledky = []
         
     """_____________ načtení všech studentů po startu aplikace ______________"""
     def nacti_studenty(self):
@@ -147,6 +155,9 @@ class slovnikGUI(tk.Frame):
 
         self.button_pridat_slovicka = tk.Button(self.Lekce, text="Vypsat slovíčka", command=self.vypsat_slovicka, fg="blue", font="Arial 8", width=20)
         self.button_pridat_slovicka.grid(row=5, column=0, sticky=W)
+
+        self.button_Test = tk.Button(self.Lekce, text="Testovat", command=self.Test, fg="blue", font="Arial 8", width=20)
+        self.button_Test.grid(row=5, column=1, sticky=W)
               
     """_________________ vytvoří pravé pole pro další volby - nastavení/testování/historie ____________________________"""
     def create_ovl_sekce(self):
@@ -180,6 +191,39 @@ class slovnikGUI(tk.Frame):
             tk.messagebox.showwarning("ERROR", "Vyber učebnici.")
         return
     
+
+    """_______________________Testování______________________________________"""
+    # vše k oknu testování
+
+    def Test(self):
+        try:
+            self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
+            self.slovnik.k_testovani = prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student) 
+            random.shuffle(self.slovnik.k_testovani)
+            prvek = 0
+            for poradi in self.slovnik.k_testovani:
+                if prvek < self.slovnik.pocet_k_testu:
+                    self.slovnik.testuj.append(poradi)
+                    prvek +=1
+                else:
+                    self.slovnik.netestuj.append(poradi)
+
+            self.slovnik.k_testovani = self.slovnik.netestuj
+            self.slovnik.netestuj = []
+            ts.tes(self)
+        except IndexError:
+            tk.messagebox.showwarning("ERROR", "Nejdříve vyber lekci.")
+            return
+
+
+    def Testuj(self):
+        ts.smaz(self)
+        ts.spust_test(self)
+
+
+    def vyhodnot(self, event):
+        ts.vyhodnoceni(self)
+
 
     """_______________________ pridat_uc.py _________________________________________________________________________"""
     # vše k učebnici
@@ -247,7 +291,7 @@ class slovnikGUI(tk.Frame):
             v_sl.vypis_slovicka(self,prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student))
             #print(prace_s_db.nastaveni_studenta(self.akt_student))
         except:
-            tk.messagebox.showwarning("ERROR", "Vyber lekci.")
+            tk.messagebox.showwarning("ERROR", "Chyba db.")
 
 
     """_____________________________ new_student.py ______________________________________________________________"""
@@ -280,9 +324,9 @@ class slovnikGUI(tk.Frame):
         try:
             if event !="":  # funkci spouštím z akce ListBoxu - <on click>     
                 self.akt_student = self.slovnik.seznam_studentu[self.studenti_ListBox.curselection()[0]]
-                print(self.akt_student)
             self.words.destroy()
             self.ucebnice.destroy()
+            # self.Lekce.destroy()
         except IndexError:
             tk.messagebox.showwarning("ERROR", "Vyber studenta.")
             return
