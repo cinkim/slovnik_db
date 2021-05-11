@@ -12,7 +12,7 @@ def vypis_slovicka(self,seznam_slovicek):
          
         self.tree_slovicka = ttk.Treeview(self.slovicka, column=("česky", "nečesky", "správně", "špatně"), height=20, selectmode='browse')
         self.tree_slovicka['show'] = 'headings' # schová první sloupec s identifikátorem
-        self.tree_slovicka.grid(row=13, columnspan=3)
+        self.tree_slovicka.grid(row=1, columnspan=3)
         
         self.tree_slovicka.heading("#0", text="#\n ")
         self.tree_slovicka.column("#0", width=0, stretch=NO, anchor='center')
@@ -31,10 +31,10 @@ def vypis_slovicka(self,seznam_slovicek):
         self.tree_slovicka.column("špatně", minwidth=0, width=65, stretch=NO, anchor='center')
 
         self.mez = tk.Label(self.slovicka, text="", height=1)
-        self.mez.grid(row=17, column=0)
+        self.mez.grid(row=2, column=0)
 
         self.Konec = tk.Button(self.slovicka, width=20, text="Konec", fg="red", command=self.slovicka.destroy)
-        self.Konec.grid(row=19, column=0, sticky=W)
+        self.Konec.grid(row=3, column=0, sticky=W)
 
         pozice = 0
         for zaznam in seznam_slovicek:
