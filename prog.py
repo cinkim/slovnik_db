@@ -194,35 +194,25 @@ class slovnikGUI(tk.Frame):
 
     """_______________________Testování______________________________________"""
     # vše k oknu testování
-
+    
     def Test(self):
-        try:
-            self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
-            self.slovnik.k_testovani = prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student) 
-            random.shuffle(self.slovnik.k_testovani)
-            prvek = 0
-            for poradi in self.slovnik.k_testovani:
-                if prvek < self.slovnik.pocet_k_testu:
-                    self.slovnik.testuj.append(poradi)
-                    prvek +=1
-                else:
-                    self.slovnik.netestuj.append(poradi)
+        ts.tes(self)
+       
 
-            self.slovnik.k_testovani = self.slovnik.netestuj
-            self.slovnik.netestuj = []
-            ts.tes(self)
-        except IndexError:
-            tk.messagebox.showwarning("ERROR", "Nejdříve vyber lekci.")
-            return
-
-
+   
     def Testuj(self):
-        ts.smaz(self)
-        ts.spust_test(self)
+        if self.slovnik.aktualni_slovo == self.slovnik.pocet_k_testu:
+            tk.messagebox.showwarning("ERROR", "Aktuální test již skončil.")
+        else:
+            ts.spust_test(self)
 
 
     def vyhodnot(self, event):
-        ts.vyhodnoceni(self)
+        
+        if self.slovnik.aktualni_slovo == self.slovnik.pocet_k_testu:
+            return
+        else:
+            ts.vyhodnoceni(self)
 
 
     """_______________________ pridat_uc.py _________________________________________________________________________"""
