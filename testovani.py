@@ -2,7 +2,8 @@ import tkinter as tk
 from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W
 from tkinter import LEFT, NO, DISABLED, NORMAL, YES, VERTICAL
 import tkinter.messagebox
-
+import random
+import prace_s_db
 import prace_s_db as db
 
 def tes(self):
@@ -54,7 +55,7 @@ def tes(self):
     self.text4 = tk.Text(self.top_test, font="Arial 14", width=20)
     self.text4.grid(row=6, column=3)
 
-    self.mez = tk.Label(self.top_test, text="", height=1)
+    self.mez = tk.Label(self.top_test, text="")
     self.mez.grid(row=7, column=0)
 
     self.spustit = tk.Button(self.top_test, text="Spustit Test", command=self.Testuj, fg="blue", font="Ariel 8", width=20)
@@ -62,63 +63,95 @@ def tes(self):
 
     self.Konec = tk.Button(self.top_test, text="Konec", command=self.top_test.destroy, fg="red", font="Arial 8", width=20)
     self.Konec.grid(row=9, column=0, sticky=W)
+    
 
 
 def spust_test(self):
-    self.slovicko = self.slovnik.k_testovani[self.slovnik.aktualni_slovo]
+    try:
+        self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
+        self.slovnik.k_testovani = prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student) 
+        random.shuffle(self.slovnik.k_testovani)
+        prvek = 0
+        for poradi in self.slovnik.k_testovani:
+            if prvek < self.slovnik.pocet_k_testu:
+                self.slovnik.testuj.append(poradi)
+                prvek +=1
+            else:
+                self.slovnik.netestuj.append(poradi)
+        self.slovnik.k_testovani = self.slovnik.netestuj
+        self.slovnik.netestuj = []
+    except IndexError:
+        tk.messagebox.showwarning("ERROR", "Nejdříve vyber lekci.")
+        return
+
+    self.slovicko = self.slovnik.testuj[self.slovnik.aktualni_slovo]
     self.cz = self.slovicko[1]
     self.ceskytext.set(self.cz)
-    self.slovnik.aktualni_slovo+=1
+    
     self.preklad.focus_set()
     self.preklad.config(state=NORMAL)
     return
 
+
 def vyhodnoceni(self):
-    spravne = self.slovicko[3]
-    spatne = self.slovicko[4]
-    vys = []
-    vys_do_vypisu = []
-    if self.slovicko[2].lower() == self.preklad.get().lower():
-        self.ok = True       
-        spravne +=1
-        vys.append(self.slovicko[0])
-        vys.append(self.slovicko[1])
-        vys.append(self.slovicko[2])
-        vys.append(spravne)
-        vys.append(self.slovicko[4])
+    try:
+        spravne = self.slovicko[3]
+        spatne = self.slovicko[4]
+        vys = []
+        vys_do_vypisu = []
+        if self.slovicko[2].lower() == self.preklad.get().lower():
+            self.ok = True       
+            spravne +=1
+            vys.append(self.slovicko[0])
+            vys.append(self.slovicko[1])
+            vys.append(self.slovicko[2])
+            vys.append(spravne)
+            vys.append(self.slovicko[4])
 
-        vys_do_vypisu.append(self.slovicko[1])
-        vys_do_vypisu.append(self.preklad.get())
-        vys_do_vypisu.append(self.slovicko[2])
-        vys_do_vypisu.append("Dobře")
+            vys_do_vypisu.append(self.slovicko[1])
+            vys_do_vypisu.append(self.preklad.get())
+            vys_do_vypisu.append(self.slovicko[2])
+            vys_do_vypisu.append("Dobře")
 
-        self.slovnik.vysledky_db.append(vys)
-        self.slovnik.vysledky.append(vys_do_vypisu)
-        self.pr.set("")
-        ukaz(self)
-        spust_test(self)
-    else:
-        self.ok = False
-        spatne +=1
-        vys.append(self.slovicko[0])
-        vys.append(self.slovicko[1])
-        vys.append(self.slovicko[2])
-        vys.append(self.slovicko[3])
-        vys.append(spatne)
+            self.slovnik.vysledky_db.append(vys)
+            self.slovnik.vysledky.append(vys_do_vypisu)
+            self.pr.set("")
+            ukaz(self)
+            self.slovnik.aktualni_slovo+=1
+            if self.slovnik.aktualni_slovo == self.slovnik.pocet_k_testu:
+                self.ceskytext.set("")
+                return
+            spust_test(self)
+        else:
+            self.ok = False
+            spatne +=1
+            vys.append(self.slovicko[0])
+            vys.append(self.slovicko[1])
+            vys.append(self.slovicko[2])
+            vys.append(self.slovicko[3])
+            vys.append(spatne)
 
-        vys_do_vypisu.append(self.slovicko[1])
-        vys_do_vypisu.append(self.preklad.get())
-        vys_do_vypisu.append(self.slovicko[2])
-        vys_do_vypisu.append("Špatně")
+            vys_do_vypisu.append(self.slovicko[1])
+            vys_do_vypisu.append(self.preklad.get())
+            vys_do_vypisu.append(self.slovicko[2])
+            vys_do_vypisu.append("Špatně")
 
-        self.slovnik.vysledky_db.append(vys)
-        self.slovnik.vysledky.append(vys_do_vypisu)
-        self.pr.set("")
-        ukaz(self)
-        spust_test(self)
-        
+            self.slovnik.vysledky_db.append(vys)
+            self.slovnik.vysledky.append(vys_do_vypisu)
+            self.pr.set("")
+            ukaz(self)
+            self.slovnik.aktualni_slovo+=1
+            if self.slovnik.aktualni_slovo == self.slovnik.pocet_k_testu:
+                self.ceskytext.set("")
+                return
+            spust_test(self)
+    except IndexError:
+        print("konečně")
+        return
+
 def ukaz(self):
     smaz(self)
+    
     try:
         for vysledek in self.slovnik.vysledky.reverse():
             if vysledek[3] == "Dobře":
@@ -127,15 +160,19 @@ def ukaz(self):
                 self.text3.config(state=NORMAL)
                 self.text4.config(state=NORMAL)
 
-                self.text1.insert(tk.END,vysledek[0])
+                self.text1.tag_config("cerna", foreground="black", justify=CENTER)
+                self.text1.insert(tk.END,vysledek[0], "cerna")
                 self.text1.insert(tk.END, "\n")
-                self.text2.insert(tk.END,vysledek[1])
+
+                self.text2.tag_config("cerna", foreground="black", justify=CENTER)
+                self.text2.insert(tk.END,vysledek[1], "cerna")
                 self.text2.insert(tk.END, "\n")
 
-                self.text3.insert(tk.END,vysledek[2])
+                self.text3.tag_config("cerna", foreground="black", justify=CENTER)
+                self.text3.insert(tk.END,vysledek[2], "cerna")
                 self.text3.insert(tk.END, "\n")
 
-                self.text4.tag_config("modre", foreground="blue")
+                self.text4.tag_config("modre", foreground="blue", justify=CENTER)
                 self.text4.insert(tk.END,vysledek[3], "modre")
                 self.text4.insert(tk.END, "\n")
 
@@ -150,16 +187,19 @@ def ukaz(self):
                 self.text3.config(state=NORMAL)
                 self.text4.config(state=NORMAL)
 
-                self.text1.insert(tk.END,vysledek[0])
+                self.text1.tag_config("cerna", foreground="black",justify=CENTER)
+                self.text1.insert(tk.END,vysledek[0], "cerna")
                 self.text1.insert(tk.END, "\n")
 
-                self.text2.insert(tk.END,vysledek[1])
+                self.text2.tag_config("cerna", foreground="black",justify=CENTER)
+                self.text2.insert(tk.END,vysledek[1], "cerna")
                 self.text2.insert(tk.END, "\n")
 
-                self.text3.insert(tk.END,vysledek[2])
+                self.text3.tag_config("cerna", foreground="black",justify=CENTER)
+                self.text3.insert(tk.END,vysledek[2], "cerna")
                 self.text3.insert(tk.END, "\n")
 
-                self.text4.tag_config("cervena", foreground="red")
+                self.text4.tag_config("cervena", foreground="red", justify=CENTER)
                 self.text4.insert(tk.END,vysledek[3], "cervena")
                 self.text4.insert(tk.END, "\n")
 
@@ -167,6 +207,8 @@ def ukaz(self):
                 self.text2.config(state=DISABLED)
                 self.text3.config(state=DISABLED)
                 self.text4.config(state=DISABLED)
+
+
     except TypeError:
         for vysledek in self.slovnik.vysledky:
             if vysledek[3] == "Dobře":
@@ -175,15 +217,19 @@ def ukaz(self):
                 self.text3.config(state=NORMAL)
                 self.text4.config(state=NORMAL)
 
-                self.text1.insert(tk.END,vysledek[0])
+                self.text1.tag_config("cerna", foreground="black",justify=CENTER)
+                self.text1.insert(tk.END,vysledek[0], "cerna")
                 self.text1.insert(tk.END, "\n")
-                self.text2.insert(tk.END,vysledek[1])
+
+                self.text2.tag_config("cerna", foreground="black",justify=CENTER)
+                self.text2.insert(tk.END,vysledek[1], "cerna")
                 self.text2.insert(tk.END, "\n")
 
-                self.text3.insert(tk.END,vysledek[2])
+                self.text3.tag_config("cerna", foreground="black",justify=CENTER)
+                self.text3.insert(tk.END,vysledek[2], "cerna")
                 self.text3.insert(tk.END, "\n")
 
-                self.text4.tag_config("modre", foreground="blue")
+                self.text4.tag_config("modre", foreground="blue", justify=CENTER)
                 self.text4.insert(tk.END,vysledek[3], "modre")
                 self.text4.insert(tk.END, "\n")
 
@@ -191,6 +237,7 @@ def ukaz(self):
                 self.text2.config(state=DISABLED)
                 self.text3.config(state=DISABLED)
                 self.text4.config(state=DISABLED)
+   
 
             else:
                 self.text1.config(state=NORMAL)
@@ -198,16 +245,19 @@ def ukaz(self):
                 self.text3.config(state=NORMAL)
                 self.text4.config(state=NORMAL)
 
-                self.text1.insert(tk.END,vysledek[0])
+                self.text1.tag_config("cerna", foreground="black",justify=CENTER)
+                self.text1.insert(tk.END,vysledek[0], "cerna")
                 self.text1.insert(tk.END, "\n")
 
-                self.text2.insert(tk.END,vysledek[1])
+                self.text2.tag_config("cerna", foreground="black",justify=CENTER)
+                self.text2.insert(tk.END,vysledek[1], "cerna")
                 self.text2.insert(tk.END, "\n")
 
-                self.text3.insert(tk.END,vysledek[2])
+                self.text3.tag_config("cerna", foreground="black",justify=CENTER)
+                self.text3.insert(tk.END,vysledek[2], "cerna")
                 self.text3.insert(tk.END, "\n")
 
-                self.text4.tag_config("cervena", foreground="red")
+                self.text4.tag_config("cervena", foreground="red", justify=CENTER)
                 self.text4.insert(tk.END,vysledek[3], "cervena")
                 self.text4.insert(tk.END, "\n")
 
@@ -215,6 +265,7 @@ def ukaz(self):
                 self.text2.config(state=DISABLED)
                 self.text3.config(state=DISABLED)
                 self.text4.config(state=DISABLED)
+
 
 
 
@@ -233,5 +284,6 @@ def smaz(self):
     self.text2.config(state=DISABLED)
     self.text3.config(state=DISABLED)
     self.text4.config(state=DISABLED)
+    return
 
 
