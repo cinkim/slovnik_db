@@ -6,6 +6,7 @@ import random
 import prace_s_db
 import prace_s_db as db
 
+
 def tes(self):
     self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
     self.top_test = tk.Toplevel()
@@ -42,6 +43,10 @@ def tes(self):
     self.preklad.grid(row=3, column=1)
     self.preklad.config(state=NORMAL)
 
+    self.uspech = StringVar()
+    self.akt_uspech = tk.Label(self.top_test, textvariable=self.uspech, width=25, font="Arial 12")
+    self.akt_uspech.grid(row=3, column=2)
+
     self.M_tes = tk.Label(self.top_test, text="")
     self.M_tes.grid(row=4, column=0)
 
@@ -75,7 +80,7 @@ def tes(self):
     self.spustit = tk.Button(self.top_test, text="Spustit Test", command=self.Testuj, fg="blue", font="Ariel 8", width=20)
     self.spustit.grid(row=8, column=0, sticky=W)
 
-    self.Konec = tk.Button(self.top_test, text="Konec", command=self.top_test.destroy, fg="red", font="Arial 8", width=20)
+    self.Konec = tk.Button(self.top_test, text="Konec", command=self.ukonci_top_test, fg="red", font="Arial 8", width=20)
     self.Konec.grid(row=9, column=0, sticky=W)
 
     
@@ -85,9 +90,12 @@ def tes(self):
 
 
 def spust_test(self):
+
     try:
         self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
-        self.slovnik.k_testovani = prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student) 
+        self.slovnik.k_testovani = prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student)
+        self.slovnik.k_testovani = self.slovnik.k_testovani * self.slovnik.pocet_kol_testu
+        random.shuffle(self.slovnik.k_testovani)
         random.shuffle(self.slovnik.k_testovani)
         prvek = 0
         for poradi in self.slovnik.k_testovani:
@@ -113,6 +121,7 @@ def spust_test(self):
 
 def vyhodnoceni(self):
     try:
+        self.slovnik.pocet_sl_pro_procenta +=1
         spravne = self.slovicko[3]
         spatne = self.slovicko[4]
         vys = []
@@ -120,6 +129,7 @@ def vyhodnoceni(self):
         if self.slovicko[2].lower() == self.preklad.get().lower():
             self.ok = True       
             spravne +=1
+            self.slovnik.pocet_spravnych_pro_procenta+=1
             vys.append(self.slovicko[0])
             vys.append(self.slovicko[1])
             vys.append(self.slovicko[2])
@@ -169,7 +179,12 @@ def vyhodnoceni(self):
 
 def ukaz(self):
     smaz(self)
-    
+
+    mezivypocet = self.slovnik.pocet_sl_pro_procenta/100
+    proc = self.slovnik.pocet_spravnych_pro_procenta/mezivypocet
+    proc = str(round(proc, 2))
+
+
     try:
         for vysledek in self.slovnik.vysledky.reverse():
             if vysledek[3] == "Dobře":
@@ -177,6 +192,8 @@ def ukaz(self):
                 self.text2.config(state=NORMAL)
                 self.text3.config(state=NORMAL)
                 self.text4.config(state=NORMAL)
+
+                self.uspech.set("Aktuální úspěšnost: " + proc + " %")
 
                 self.text1.tag_config("cerna", foreground="black", justify=CENTER)
                 self.text1.insert(tk.END,vysledek[0], "cerna")
@@ -204,6 +221,8 @@ def ukaz(self):
                 self.text2.config(state=NORMAL)
                 self.text3.config(state=NORMAL)
                 self.text4.config(state=NORMAL)
+
+                self.uspech.set("Aktuální úspěšnost: " + proc + " %")
 
                 self.text1.tag_config("cerna", foreground="black",justify=CENTER)
                 self.text1.insert(tk.END,vysledek[0], "cerna")
@@ -235,6 +254,8 @@ def ukaz(self):
                 self.text3.config(state=NORMAL)
                 self.text4.config(state=NORMAL)
 
+                self.uspech.set("Aktuální úspěšnost: " + proc + " %")
+
                 self.text1.tag_config("cerna", foreground="black",justify=CENTER)
                 self.text1.insert(tk.END,vysledek[0], "cerna")
                 self.text1.insert(tk.END, "\n")
@@ -262,6 +283,8 @@ def ukaz(self):
                 self.text2.config(state=NORMAL)
                 self.text3.config(state=NORMAL)
                 self.text4.config(state=NORMAL)
+
+                self.uspech.set("Aktuální úspěšnost: " + proc + " %")
 
                 self.text1.tag_config("cerna", foreground="black",justify=CENTER)
                 self.text1.insert(tk.END,vysledek[0], "cerna")

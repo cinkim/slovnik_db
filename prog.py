@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W
 from tkinter import LEFT, NO, DISABLED, NORMAL, YES, VERTICAL, ACTIVE
 import tkinter.messagebox
-
+from time import sleep
 import new_student as ns
 import prace_s_db
 import nastaveni
@@ -20,21 +20,25 @@ import import_slovicek as im
 class slovnik:
 
     def __init__(self):
-        self.seznam_studentu = []
-        self.nacti_studenty()
-        self.jazyky_studenta = []
-        self.akt_jazyk = ""
-        self.seznam_ucebnic = []
-        self.nova_sl = []
-        self.k_testovani = []
-        self.pocet_k_testu = 20
-        self.pocet_spravnych = 3
-        self.testuj = []
-        self.netestuj = []
-        self.aktualni_slovo = 0
-        self.vysledky_db = []
-        self.vysledky = []
-        
+        self.seznam_studentu = [] # vrácený seznam studentů z db
+        self.nacti_studenty() # načte z db seznam studentů
+        self.jazyky_studenta = [] # seznam jazyků aktuálního studenta
+        self.akt_jazyk = "" # aktuální jazyk k testování zvoleného studenta
+        self.seznam_ucebnic = [] # seznam učebnic studenta/jazyku
+        self.nova_sl = [] # nová slovíčka k uložení do db
+        self.k_testovani = [] # načtená slovíčka z db zvolené lekce
+        self.pocet_k_testu = 20 # počet slovíček v rámci jednoho testu
+        self.pocet_spravnych = 3 # počet správných odpovědí pro vyřazení slovíčka
+        self.testuj = [] # vybraná slova k testování 
+        self.netestuj = []# vyřazená slova z testování
+        self.aktualni_slovo = 0 # aktuálně testované slovo
+        self.vysledky_db = [] # vysledky spravnych sloviček pro uložení do db
+        self.vysledky = [] # průběžné výsledky do výpisu na obrazovku
+        self.pocet_kol_testu = 1 # počet kol testování se stejnými slovíčky
+        self.pocet_sl_pro_procenta = 0
+        self.pocet_spravnych_pro_procenta = 0
+
+
     """_____________ načtení všech studentů po startu aplikace ______________"""
     def nacti_studenty(self):
         try:
@@ -214,6 +218,10 @@ class slovnikGUI(tk.Frame):
         else:
             ts.vyhodnoceni(self)
 
+    def ukonci_top_test(self):
+        # print("ukládám")
+        # sleep(1)
+        self.top_test.destroy()
 
     """_______________________ pridat_uc.py _________________________________________________________________________"""
     # vše k učebnici
