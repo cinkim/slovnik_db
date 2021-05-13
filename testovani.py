@@ -10,6 +10,20 @@ def tes(self):
     self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
     self.top_test = tk.Toplevel()
     self.top_test.title("Testování lekce: "+ self.akt_Lekce)
+    self.top_test.grid_columnconfigure(0, weight=4)
+    self.top_test.grid_columnconfigure(1, weight=4)
+    self.top_test.grid_columnconfigure(2, weight=4)
+    self.top_test.grid_columnconfigure(3, weight=4)
+
+    self.top_test.grid_rowconfigure(1, weight=0)
+    self.top_test.grid_rowconfigure(2, weight=1)
+    self.top_test.grid_rowconfigure(3, weight=0)
+    self.top_test.grid_rowconfigure(4, weight=1)
+    self.top_test.grid_rowconfigure(5, weight=0)
+    self.top_test.grid_rowconfigure(6, weight=1)
+    self.top_test.grid_rowconfigure(7, weight=1)
+    self.top_test.grid_rowconfigure(8, weight=0)
+    self.top_test.grid_rowconfigure(9, weight=0)
 
     self.testovani = tk.Label(self.top_test, text="Student: " + self.akt_student + "\nJazyk : " + self.akt_j + "\nUčebnice :" + self.akt_ucebnice + "\nLekce:" + self.akt_Lekce, font="Ariel 14", bg="red")
     self.testovani.grid(row=1, columnspan=4, sticky=W+E)
@@ -35,7 +49,7 @@ def tes(self):
     self.M_tes.grid(row=5, column=0)
 
     self.M_tes = tk.Label(self.top_test, text="Tvoje odpověď")
-    self.M_tes.grid(row=5, column=1)
+    self.M_tes.grid(row=5, column=1, )
 
     self.M_tes = tk.Label(self.top_test, text="Správná odpověď")
     self.M_tes.grid(row=5, column=2)
@@ -43,16 +57,16 @@ def tes(self):
     self.M_tes = tk.Label(self.top_test, text="Hodnocení")
     self.M_tes.grid(row=5, column=3)
 
-    self.text1 = tk.Text(self.top_test, font="Arial 10", width=33, height=15)
+    self.text1 = tk.Text(self.top_test, font="Arial 10", width=33, height=20)
     self.text1.grid(row=6, column=0)
 
-    self.text2 = tk.Text(self.top_test, font="Arial 10", width=33, height=15)
+    self.text2 = tk.Text(self.top_test, font="Arial 10", width=33, height=20)
     self.text2.grid(row=6, column=1)
 
-    self.text3 = tk.Text(self.top_test, font="Arial 10", width=33, height=15)
+    self.text3 = tk.Text(self.top_test, font="Arial 10", width=33, height=20)
     self.text3.grid(row=6, column=2)
 
-    self.text4 = tk.Text(self.top_test, font="Arial 10", width=33, height=15)
+    self.text4 = tk.Text(self.top_test, font="Arial 10", width=33, height=20)
     self.text4.grid(row=6, column=3)
 
     self.mez = tk.Label(self.top_test, text="")
@@ -63,6 +77,10 @@ def tes(self):
 
     self.Konec = tk.Button(self.top_test, text="Konec", command=self.top_test.destroy, fg="red", font="Arial 8", width=20)
     self.Konec.grid(row=9, column=0, sticky=W)
+
+    
+
+    
     
 
 
