@@ -43,16 +43,16 @@ def tes(self):
     self.M_tes = tk.Label(self.top_test, text="Hodnocení")
     self.M_tes.grid(row=5, column=3)
 
-    self.text1 = tk.Text(self.top_test, font="Arial 14", width=20)
+    self.text1 = tk.Text(self.top_test, font="Arial 10", width=33, height=15)
     self.text1.grid(row=6, column=0)
 
-    self.text2 = tk.Text(self.top_test, font="Arial 14", width=20)
+    self.text2 = tk.Text(self.top_test, font="Arial 10", width=33, height=15)
     self.text2.grid(row=6, column=1)
 
-    self.text3 = tk.Text(self.top_test, font="Arial 14", width=20)
+    self.text3 = tk.Text(self.top_test, font="Arial 10", width=33, height=15)
     self.text3.grid(row=6, column=2)
 
-    self.text4 = tk.Text(self.top_test, font="Arial 14", width=20)
+    self.text4 = tk.Text(self.top_test, font="Arial 10", width=33, height=15)
     self.text4.grid(row=6, column=3)
 
     self.mez = tk.Label(self.top_test, text="")
