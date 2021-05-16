@@ -200,14 +200,21 @@ class slovnikGUI(tk.Frame):
     # vše k oknu testování
     
     def Test(self):
-        ts.tes(self)
-       
+        try:
+            ts.tes(self)
+        except IndexError:
+            tk.messagebox.showwarning("ERROR", "Nejdříve vyber lekci.")
+        return
 
    
     def Testuj(self):
         if self.slovnik.aktualni_slovo == self.slovnik.pocet_k_testu:
             tk.messagebox.showwarning("ERROR", "Aktuální test již skončil.")
+            self.slovnik.aktualni_slovo = 0
+            self.slovnik.vysledky = []
         else:
+            self.slovnik.vysledky = []
+            self.slovnik.aktualni_slovo = 0
             ts.spust_test(self)
 
 
