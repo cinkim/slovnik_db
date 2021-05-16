@@ -3,7 +3,10 @@ CREATE TABLE OSOBY (
 	jmeno text,
 	akt_jazyk_id integer,
 	pocet_test_slovicek integer DEFAULT 20,
-	pocet_spravne_netestovat integer DEFAULT 3
+	pocet_spravne_netestovat integer DEFAULT 3,
+	pocet_opakovani_testu integer DEFAULT 2,
+	typ_prekladu integer DEFAULT 3,
+	testovat_jen_spatne integer DEFAULT 2		
 	
 );
 

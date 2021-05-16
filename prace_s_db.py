@@ -272,12 +272,30 @@ def nastaveni_studenta(student):
     """
     - vrací nastavení studenta
     VSTUP: student - retezec
-    VYSTUP: (pocet_testovanych_slovicek, pocet_spravne_kdy_uz_netestovat)
+    VYSTUP: (pocet_testovanych_slovicek, pocet_spravne_kdy_uz_netestovat,pocet_opakovani_testu,typ_prekladu, testovat_jen_spatne)
     """
     conn, cursor = pripojeni_db()
-    cursor.execute(f'''SELECT pocet_test_slovicek, pocet_spravne_netestovat
+    cursor.execute(f'''SELECT pocet_test_slovicek, pocet_spravne_netestovat, pocet_opakovani_testu,
+    typ_prekladu, testovat_jen_spatne
         from osoby where jmeno = "{student}"''')  
-    return cursor.fetchone()
+    return list(cursor.fetchone())
+
+def uloz_nastaveni_studenta(data_studenta):
+    """
+    - ulozi nastaveni studenta
+    VSTUP: ["student", pocet_testovanych_slovicek, pocet_spravne_kdy_uz_netestovat,pocet_opakovani_testu,typ_prekladu, testovat_jen_spatne]
+    """
+    conn, cursor = pripojeni_db()
+
+    cursor.execute(f'''update osoby set pocet_test_slovicek = {data_studenta[1]},
+    pocet_spravne_netestovat = {data_studenta[2]},
+    pocet_opakovani_testu = {data_studenta[3]},
+    typ_prekladu = {data_studenta[4]}, 
+    testovat_jen_spatne = {data_studenta[5]}
+    where jmeno = "{data_studenta[0]}" ''') 
+    conn.commit()
+    return
+
 
 def  uloz_test_studenta(data):
     """
@@ -320,6 +338,23 @@ def  uloz_test_studenta(data):
                                 )''')
     conn.commit()  
 
+def reset_slovicek(student,lekce):
+    """
+    - resetuje hodnoty pocet_spravne, pocet_spatne pro danou lekci a studenta
+    VSTUP: student,lekce - retezce
+    """
+    conn, cursor = pripojeni_db()
+    cursor.execute(f'''SELECT id from osoby where jmeno = "{student}"''')     
+    id_studenta = cursor.fetchone()[0]
+    cursor.execute(f'''SELECT id from lekce where nazev = "{lekce}"''')     
+    id_lekce = cursor.fetchone()[0]
+    cursor.execute(f'''DELETE from testovana_slovicka 
+                    where osoba_id={id_studenta} 
+                    and slovicko_id in(select id from slovicka where lekce_id={id_lekce}) ''')
+    conn.commit()  
+
+
+#reset_slovicek("Lenka","Greeting colors numbers")
 
 #print(nastaveni_studenta("Lenka"))
 # vypíše nápovědu ke konkrétní funkci
@@ -327,13 +362,18 @@ def  uloz_test_studenta(data):
 # help(seznam_studentu)
 
 #zkušební kód       
-"""        
-conn, cursor = pripojeni_db()
+ 
+#conn, cursor = pripojeni_db()
+"""
+uloz_nastaveni_studenta(["Lenka",2,3,2,3,2])
+
+print(nastaveni_studenta("Lenka"))
+
 cursor.execute(f'''SELECT count(*) from slovicka where lekce_id =100''')
 print(cursor.fetchone()[0])
 """
 
 """
-d = ["Lenka","Greeting colors numbers",8,[1,1,3],[12,2,0], [11,3,0]]
+d = ["Lenka","Greeting colors numbers",8,[1,1,3],[12,3,2], [11,3,0]]
 uloz_test_studenta(d)
 """
