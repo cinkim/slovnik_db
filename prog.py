@@ -37,7 +37,8 @@ class slovnik:
         self.pocet_kol_testu = 1 # počet kol testování se stejnými slovíčky
         self.pocet_sl_pro_procenta = 0
         self.pocet_spravnych_pro_procenta = 0
-
+        self.typ_prekladu = 3 # "směr" překladu: 1=cz/cizí, 2=cizí/cz, 3=míchat
+        self.testovat_jen_spatne = 2  # Testovat jen ze slovíček se špatnou odpovědí>3,   1=ano, 2=ne
 
     """_____________ načtení všech studentů po startu aplikace ______________"""
     def nacti_studenty(self):
@@ -181,9 +182,13 @@ class slovnikGUI(tk.Frame):
     """_______________________ nastaveni.py ___________________________________________________________________"""
     # vše k pravému nastavení + testování
     def nastaveni_stud(self):
-        nastaveni.nastav_studenta(self)
+        nastaveni.nastaveni_studenta(self)
         return
 
+    def uloz_nastaveni_stud(self):
+        nastaveni.uloz_nastaveni_studenta(self)
+        return
+    """_______________________ vysledky.py ___________________________________________________________________"""
     def vysledky_stud(self):
         # vypíše výsledky studenta v rámci jedné učebnice
         
@@ -341,8 +346,28 @@ class slovnikGUI(tk.Frame):
         self.create_widgets_jazyk()
         self.create_ovl_sekce()
         self.uzivatel["text"] = "Aktuální uživatel je "+ str(self.akt_student)
+        self.nacti_nastaveni_studenta()
         return
-
+    
+    def nacti_nastaveni_studenta(self):
+        
+        """
+        nastavi aktuální hodnoty do promennych:
+        self.pocet_k_testu 
+        self.pocet_spravnych
+        self.pocet_kol_testu
+        self.typ_prekladu
+        self.testovat_jen_spatne
+        """
+        
+        nastav_studenta = prace_s_db.nastaveni_studenta(self.akt_student)
+        self.pocet_k_testu = nastav_studenta[0]
+        self.pocet_spravnych = nastav_studenta[1]
+        self.pocet_kol_testu = nastav_studenta[2]
+        self.typ_prekladu = nastav_studenta[3]
+        self.testovat_jen_spatne = nastav_studenta[4]
+        return
+    
 
     """____________________ načtení učebnice _________________________________________________________"""
     # načte učebnice podle zvoleného jazyka
