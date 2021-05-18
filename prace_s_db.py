@@ -296,6 +296,24 @@ def uloz_nastaveni_studenta(data_studenta):
     conn.commit()
     return
 
+def uloz_dalsi_jazyk_studentovi(student,jazyk):
+    """
+    - seznam vsech jazyku v db;
+    VSTUP: "student"
+    VYSTUP: uloženo v db
+    """
+    conn, cursor = pripojeni_db()
+    cursor.execute(f'''SELECT id from osoby where jmeno = "{student}"''')     
+    id_studenta = cursor.fetchone()[0]  
+    cursor.execute(f'''SELECT id from jazyky where nazev = "{jazyk}"''')     
+    id_jazyk = cursor.fetchone()[0]    
+    cursor.execute(f'''SELECT count(*) from osoby_jazyky where osoba_id = {id_studenta} and jazyk_id = {id_jazyk}''')     
+    pocet = cursor.fetchone()[0]  
+    if pocet == 0: # v db student ještě nemá zvolený jazyk
+        cursor.execute(f'''INSERT INTO osoby_jazyky VALUES({id_studenta},{id_jazyk},NULL)''')     
+    conn.commit()
+    return
+
 
 def  uloz_test_studenta(data):
     """
@@ -376,4 +394,9 @@ print(cursor.fetchone()[0])
 """
 d = ["Lenka","Greeting colors numbers",8,[1,1,3],[12,3,2], [11,3,0]]
 uloz_test_studenta(d)
+"""
+
+"""
+uloz_dalsi_jazyk_studentovi("Lenka", "Fr")
+print(jazyky_studenta("Lenka"))
 """

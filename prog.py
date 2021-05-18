@@ -188,6 +188,11 @@ class slovnikGUI(tk.Frame):
     def uloz_nastaveni_stud(self):
         nastaveni.uloz_nastaveni_studenta(self)
         return
+
+    def pridej_jazyk(self, student, jazyk):
+        nastaveni.pridat_jazyk(self, student, jazyk)
+        return
+    
     """_______________________ vysledky.py ___________________________________________________________________"""
     def vysledky_stud(self):
         # vypíše výsledky studenta v rámci jedné učebnice
