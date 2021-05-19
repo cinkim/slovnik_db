@@ -22,19 +22,19 @@ def nastaveni_studenta(self):
     self.pocet_slovicek_popis.grid(row=2, column=0, columnspan=2,sticky=W)
     self.pocet_slovicek_Entry = tk.Entry(self.nastaveni, width=10, justify="center")
     self.pocet_slovicek_Entry.grid(row=2, column=2, sticky=W)
-    self.pocet_slovicek_Entry.insert(0,self.pocet_k_testu)
+    self.pocet_slovicek_Entry.insert(0,self.slovnik.pocet_k_testu)
 
     self.pocet_opakovani_popis = tk.Label(self.nastaveni, text="Počet opakování stejného testu     (1-5): ")
     self.pocet_opakovani_popis.grid(row=3, column=0, columnspan=2,sticky=W)
     self.pocet_opakovani_Entry = tk.Entry(self.nastaveni, width=10, justify="center")
     self.pocet_opakovani_Entry.grid(row=3, column=2, sticky=W)
-    self.pocet_opakovani_Entry.insert(0,self.pocet_kol_testu)
+    self.pocet_opakovani_Entry.insert(0,self.slovnik.pocet_kol_testu)
 
     self.pocet_spravne_popis = tk.Label(self.nastaveni, text="Počet správných odpovědí pro vyřazení slovíčka z testu     (0-10): ")
     self.pocet_spravne_popis.grid(row=4, column=0, columnspan=3, sticky=W)
     self.pocet_spravne_Entry = tk.Entry(self.nastaveni, width=10, justify="center")
     self.pocet_spravne_Entry.grid(row=4, column=3, sticky=W)
-    self.pocet_spravne_Entry.insert(0,self.pocet_spravnych)
+    self.pocet_spravne_Entry.insert(0,self.slovnik.pocet_spravnych)
 
     self.mezera = tk.Label(self.nastaveni, text="")
     self.mezera.grid(row=5, column=0, columnspan=3, sticky=W)
@@ -54,7 +54,7 @@ def nastaveni_studenta(self):
     self.var_preklad = StringVar()   
     for text, hodnota in typy:      # indicatoron=0, 
         preklad_Radio = tk.Radiobutton(self.nastaveni_preklad, text=text, variable=self.var_preklad, value=hodnota)            
-        if hodnota == str(self.typ_prekladu):
+        if hodnota == str(self.slovnik.typ_prekladu):
             preklad_Radio.select()        
         preklad_Radio.grid(row=pozice, sticky=W) 
         pozice = pozice + 1
@@ -71,7 +71,7 @@ def nastaveni_studenta(self):
     self.var_spatne = StringVar()
     for text, hodnota in a_n:      # indicatoron=0, 
         self.test_spatna_Radio = tk.Radiobutton(self.nastaveni_test_spatna, text=text, variable=self.var_spatne, value=hodnota)      
-        if hodnota == str(self.testovat_jen_spatne): # označí jako nastavenou hodnotu z db
+        if hodnota == str(self.slovnik.testovat_jen_spatne): # označí jako nastavenou hodnotu z db
             self.test_spatna_Radio.select()       
         self.test_spatna_Radio.grid(row=pozice, sticky=W) 
         pozice = pozice + 1

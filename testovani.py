@@ -62,16 +62,16 @@ def tes(self):
     self.M_tes = tk.Label(self.top_test, text="Hodnocení")
     self.M_tes.grid(row=5, column=3)
 
-    self.text1 = tk.Text(self.top_test, font="Arial 10", width=33, height=20)
+    self.text1 = tk.Text(self.top_test, font="Arial 10", width=33, height=2)
     self.text1.grid(row=6, column=0)
 
-    self.text2 = tk.Text(self.top_test, font="Arial 10", width=33, height=20)
+    self.text2 = tk.Text(self.top_test, font="Arial 10", width=33, height=2)
     self.text2.grid(row=6, column=1)
 
-    self.text3 = tk.Text(self.top_test, font="Arial 10", width=33, height=20)
+    self.text3 = tk.Text(self.top_test, font="Arial 10", width=33, height=2)
     self.text3.grid(row=6, column=2)
 
-    self.text4 = tk.Text(self.top_test, font="Arial 10", width=33, height=20)
+    self.text4 = tk.Text(self.top_test, font="Arial 10", width=33, height=2)
     self.text4.grid(row=6, column=3)
 
     self.mez = tk.Label(self.top_test, text="")
@@ -83,30 +83,7 @@ def tes(self):
     self.Konec = tk.Button(self.top_test, text="Konec", command=self.ukonci_top_test, fg="red", font="Arial 8", width=20)
     self.Konec.grid(row=9, column=0, sticky=W)
 
-    
-
-def v1(self):
-    self.slovnik.k_testovani = prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student)
-    self.slovnik.k_testovani = self.slovnik.k_testovani * self.slovnik.pocet_kol_testu
-    random.shuffle(self.slovnik.k_testovani)
-    random.shuffle(self.slovnik.k_testovani)
-
-def v2(self):
-    self.slovnik.k_testovani = prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student)
-    self.slovnik.k_testovani = self.slovnik.k_testovani * self.slovnik.pocet_kol_testu
-    random.shuffle(self.slovnik.k_testovani)
-    random.shuffle(self.slovnik.k_testovani)
-
-def v3(self):
-    self.slovnik.k_testovani = prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student)
-    self.slovnik.k_testovani = self.slovnik.k_testovani * self.slovnik.pocet_kol_testu
-    random.shuffle(self.slovnik.k_testovani)
-    random.shuffle(self.slovnik.k_testovani)
-    
-
-
-def spust_test(self):
-
+def nacti(self):
     try:
         self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
         
@@ -114,16 +91,21 @@ def spust_test(self):
         tk.messagebox.showwarning("ERROR", "Nejdříve vyber lekci.")
         return
 
-    v1(self)
-    """
-    if self.slovnik.nastaveni[3] == 1:
+    if self.slovnik.typ_prekladu == 1:
         v1(self)
-    elif self.slovnik.nastaveni[3] == 2: 
+    elif self.slovnik.typ_prekladu == 2:
         v2(self)
-    elif self.slovnik.nastaveni[3] == 3: 
-        v3(self)
-    """  
+    elif self.slovnik.typ_prekladu == 3:
+        v1(self)
+    else:
+        tk.messagebox.showwarning("ERROR", "Chyba v nastavení.")
+        return
+
     
+def v1(self): # cz/cizí
+    self.slovnik.k_testovani = prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student)
+    random.shuffle(self.slovnik.k_testovani)
+    random.shuffle(self.slovnik.k_testovani)
     prvek = 0
     for poradi in self.slovnik.k_testovani:
         if (prvek < self.slovnik.pocet_k_testu) and (poradi[3] < self.slovnik.pocet_spravnych):
@@ -133,141 +115,42 @@ def spust_test(self):
             self.slovnik.netestuj.append(poradi)
     self.slovnik.k_testovani = self.slovnik.netestuj
     self.slovnik.netestuj = []
+    self.slovnik.testuj = self.slovnik.testuj
+    self.slovnik.testuj = self.slovnik.testuj * self.slovnik.pocet_kol_testu
+    random.shuffle(self.slovnik.testuj)
+
+def v2(self): # cizí/cz
+    self.slovnik.k_testovani = prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student)
+    random.shuffle(self.slovnik.k_testovani)
+    random.shuffle(self.slovnik.k_testovani)
+
+def v3(self): # mix
+    self.slovnik.k_testovani = prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student)
+    random.shuffle(self.slovnik.k_testovani)
+    random.shuffle(self.slovnik.k_testovani)
+    
+
+
+def spust_test(self): 
+          
     self.slovicko = self.slovnik.testuj[self.slovnik.aktualni_slovo]
     self.cz = self.slovicko[1]
     self.ceskytext.set(self.cz)
     
     self.preklad.focus_set()
     self.preklad.config(state=NORMAL)
-
     return
-def uloz_do_db(self):
-    self.slovnik.vysledky_pro_ulozeni_do_db.append(self.akt_student)
-    self.slovnik.vysledky_pro_ulozeni_do_db.append(self.akt_Lekce)
-    self.slovnik.vysledky_pro_ulozeni_do_db.append(self.proc)
-    sl = []
-    for qq in self.slovnik.vysledky_db:
-        sl.append(qq[0])
-        sl.append(qq[3])
-        sl.append(qq[4])
-        self.slovnik.vysledky_pro_ulozeni_do_db.append(sl)
-        sl = []
-    db.uloz_test_studenta(self.slovnik.vysledky_pro_ulozeni_do_db)
+
+
 
 def vyhodnoceni(self):
-    try:
-        self.slovnik.pocet_sl_pro_procenta +=1
-        spravne = self.slovicko[3]
-        spatne = self.slovicko[4]
-        vys = []
-        vys_do_vypisu = []
-        if self.slovicko[2].lower() == self.preklad.get().lower():
-            self.ok = True       
-            spravne +=1
-            self.slovnik.pocet_spravnych_pro_procenta+=1
-            vys.append(self.slovicko[0])
-            vys.append(self.slovicko[1])
-            vys.append(self.slovicko[2])
-            vys.append(spravne)
-            vys.append(self.slovicko[4])
-
-            vys_do_vypisu.append(self.slovicko[1])
-            vys_do_vypisu.append(self.preklad.get())
-            vys_do_vypisu.append(self.slovicko[2])
-            vys_do_vypisu.append("Dobře")
-
-            self.slovnik.vysledky_db.append(vys)
-            self.slovnik.vysledky.append(vys_do_vypisu)
-            self.pr.set("")
-            ukaz(self)
-            self.slovnik.aktualni_slovo+=1
-            if self.slovnik.aktualni_slovo == self.slovnik.pocet_k_testu:
-                self.ceskytext.set("")
-                uloz_do_db(self)
-                return
-            spust_test(self)
-        else:
-            self.ok = False
-            spatne +=1
-            vys.append(self.slovicko[0])
-            vys.append(self.slovicko[1])
-            vys.append(self.slovicko[2])
-            vys.append(self.slovicko[3])
-            vys.append(spatne)
-
-            vys_do_vypisu.append(self.slovicko[1])
-            vys_do_vypisu.append(self.preklad.get())
-            vys_do_vypisu.append(self.slovicko[2])
-            vys_do_vypisu.append("Špatně")
-
-            self.slovnik.vysledky_db.append(vys)
-  
-            self.slovnik.vysledky.append(vys_do_vypisu)
-
-            self.pr.set("")
-            ukaz(self)
-            self.slovnik.aktualni_slovo+=1
-            if self.slovnik.aktualni_slovo == self.slovnik.pocet_k_testu:
-                self.ceskytext.set("")
-                uloz_do_db(self)
-                return
-            spust_test(self)
-    except TypeError:
-        self.slovnik.pocet_sl_pro_procenta +=1
-        spravne = self.slovicko[3]
-        spatne = self.slovicko[4]
-        vys = []
-        vys_do_vypisu = []
-        if self.slovicko[2].lower() == self.preklad.get().lower():
-            self.ok = True       
-            spravne +=1
-            self.slovnik.pocet_spravnych_pro_procenta+=1
-            vys.append(self.slovicko[0])
-            vys.append(self.slovicko[1])
-            vys.append(self.slovicko[2])
-            vys.append(spravne)
-            vys.append(self.slovicko[4])
-
-            vys_do_vypisu.append(self.slovicko[1])
-            vys_do_vypisu.append(self.preklad.get())
-            vys_do_vypisu.append(self.slovicko[2])
-            vys_do_vypisu.append("Dobře")
-
-            self.slovnik.vysledky_db.append(vys)
-            self.slovnik.vysledky.append(vys_do_vypisu)
-            self.pr.set("")
-            ukaz(self)
-            self.slovnik.aktualni_slovo+=1
-            if self.slovnik.aktualni_slovo == self.slovnik.pocet_k_testu:
-                self.ceskytext.set("")
-                uloz_do_db(self)
-                return
-            spust_test(self)
-        else:
-            self.ok = False
-            spatne +=1
-            vys.append(self.slovicko[0])
-            vys.append(self.slovicko[1])
-            vys.append(self.slovicko[2])
-            vys.append(self.slovicko[3])
-            vys.append(spatne)
-
-            vys_do_vypisu.append(self.slovicko[1])
-            vys_do_vypisu.append(self.preklad.get())
-            vys_do_vypisu.append(self.slovicko[2])
-            vys_do_vypisu.append("Špatně")
-
-            self.slovnik.vysledky_db.append(vys)
-            self.slovnik.vysledky.append(vys_do_vypisu)
-            self.pr.set("")
-            ukaz(self)
-            self.slovnik.aktualni_slovo+=1
-            if self.slovnik.aktualni_slovo == self.slovnik.pocet_k_testu:
-                self.ceskytext.set("")
-                uloz_do_db(self)
-                return
-            
-            spust_test(self)
+    if self.slovnik.typ_prekladu == 1:
+        vyhodnoceni_v1(self)
+    elif self.slovnik.typ_prekladu == 2:
+        vyhodnoceni_v2(self)
+    elif self.slovnik.typ_prekladu == 3:
+        vyhodnoceni_v3(self)
+    
 
 
 def ukaz(self):
@@ -333,9 +216,6 @@ def ukaz(self):
     self.text4.config(state=DISABLED)
 
 
-
-
-
 def smaz(self):
     self.text1.config(state=NORMAL)
     self.text2.config(state=NORMAL)
@@ -352,5 +232,145 @@ def smaz(self):
     self.text3.config(state=DISABLED)
     self.text4.config(state=DISABLED)
     return
+
+
+def uloz_do_db(self):
+    self.slovnik.vysledky_pro_ulozeni_do_db.append(self.akt_student)
+    self.slovnik.vysledky_pro_ulozeni_do_db.append(self.akt_Lekce)
+    self.slovnik.vysledky_pro_ulozeni_do_db.append(self.proc)
+    sl = []
+    for qq in self.slovnik.vysledky_db:
+        sl.append(qq[0])
+        sl.append(qq[3])
+        sl.append(qq[4])
+        self.slovnik.vysledky_pro_ulozeni_do_db.append(sl)
+        sl = []
+    print(self.slovnik.vysledky_pro_ulozeni_do_db)
+    db.uloz_test_studenta(self.slovnik.vysledky_pro_ulozeni_do_db)
+    self.slovnik.vysledky_pro_ulozeni_do_db = []
+
+def vyhodnoceni_v1(self):
+    try:
+        self.slovnik.pocet_sl_pro_procenta +=1
+        spravne = self.slovicko[3]
+        spatne = self.slovicko[4]
+        vys = []
+        vys_do_vypisu = []
+        if self.slovicko[2].lower() == self.preklad.get().lower():
+            self.ok = True       
+            spravne +=1
+            self.slovnik.pocet_spravnych_pro_procenta+=1
+            vys.append(self.slovicko[0])
+            vys.append(self.slovicko[1])
+            vys.append(self.slovicko[2])
+            vys.append(spravne)
+            vys.append(self.slovicko[4])
+
+            vys_do_vypisu.append(self.slovicko[1])
+            vys_do_vypisu.append(self.preklad.get())
+            vys_do_vypisu.append(self.slovicko[2])
+            vys_do_vypisu.append("Dobře")
+
+            self.slovnik.vysledky_db.append(vys)
+            self.slovnik.vysledky.append(vys_do_vypisu)
+            self.pr.set("")
+            ukaz(self)
+            self.slovnik.aktualni_slovo+=1
+            if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
+                self.ceskytext.set("")
+                uloz_do_db(self)
+                return
+            spust_test(self)
+        else:
+            self.ok = False
+            spatne +=1
+            vys.append(self.slovicko[0])
+            vys.append(self.slovicko[1])
+            vys.append(self.slovicko[2])
+            vys.append(self.slovicko[3])
+            vys.append(spatne)
+
+            vys_do_vypisu.append(self.slovicko[1])
+            vys_do_vypisu.append(self.preklad.get())
+            vys_do_vypisu.append(self.slovicko[2])
+            vys_do_vypisu.append("Špatně")
+
+            self.slovnik.vysledky_db.append(vys)
+  
+            self.slovnik.vysledky.append(vys_do_vypisu)
+
+            self.pr.set("")
+            ukaz(self)
+            self.slovnik.aktualni_slovo+=1
+            if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
+                self.ceskytext.set("")
+                uloz_do_db(self)
+                return
+            spust_test(self)
+    except TypeError:
+        self.slovnik.pocet_sl_pro_procenta +=1
+        spravne = self.slovicko[3]
+        spatne = self.slovicko[4]
+        vys = []
+        vys_do_vypisu = []
+        if self.slovicko[2].lower() == self.preklad.get().lower():
+            self.ok = True       
+            spravne +=1
+            self.slovnik.pocet_spravnych_pro_procenta+=1
+            vys.append(self.slovicko[0])
+            vys.append(self.slovicko[1])
+            vys.append(self.slovicko[2])
+            vys.append(spravne)
+            vys.append(self.slovicko[4])
+
+            vys_do_vypisu.append(self.slovicko[1])
+            vys_do_vypisu.append(self.preklad.get())
+            vys_do_vypisu.append(self.slovicko[2])
+            vys_do_vypisu.append("Dobře")
+
+            self.slovnik.vysledky_db.append(vys)
+            self.slovnik.vysledky.append(vys_do_vypisu)
+            self.pr.set("")
+            ukaz(self)
+            self.slovnik.aktualni_slovo+=1
+            if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
+                self.ceskytext.set("")
+                uloz_do_db(self)
+                return
+            spust_test(self)
+        else:
+            self.ok = False
+            spatne +=1
+            vys.append(self.slovicko[0])
+            vys.append(self.slovicko[1])
+            vys.append(self.slovicko[2])
+            vys.append(self.slovicko[3])
+            vys.append(spatne)
+
+            vys_do_vypisu.append(self.slovicko[1])
+            vys_do_vypisu.append(self.preklad.get())
+            vys_do_vypisu.append(self.slovicko[2])
+            vys_do_vypisu.append("Špatně")
+
+            self.slovnik.vysledky_db.append(vys)
+            self.slovnik.vysledky.append(vys_do_vypisu)
+            self.pr.set("")
+            ukaz(self)
+            self.slovnik.aktualni_slovo+=1
+            if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
+                self.ceskytext.set("")
+                uloz_do_db(self)
+                return
+            
+            spust_test(self)
+
+
+def vyhodnoceni_v2(self):
+    print("Dodělat")
+
+def vyhodnoceni_v3(self):
+    print("Dodělat")
+
+
 
 

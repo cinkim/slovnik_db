@@ -26,19 +26,28 @@ class slovnik:
         self.akt_jazyk = "" # aktuální jazyk k testování zvoleného studenta
         self.seznam_ucebnic = [] # seznam učebnic studenta/jazyku
         self.nova_sl = [] # nová slovíčka k uložení do db
-        self.k_testovani = [] # načtená slovíčka z db zvolené lekce
-        self.pocet_k_testu = 20 # počet slovíček v rámci jednoho testu
-        self.pocet_spravnych = 3 # počet správných odpovědí pro vyřazení slovíčka
+
+        self.k_testovani = [] # načtená všechna slovíčka z db zvolené lekce
         self.testuj = [] # vybraná slova k testování 
         self.netestuj = []# vyřazená slova z testování
         self.aktualni_slovo = 0 # aktuálně testované slovo
+
+        self.vysledky_pro_ulozeni_do_db = [] # konečný řetězec pro uložení výsledku do db
+
+        self.pocet_k_testu = None # počet slovíček v rámci jednoho testu
+        self.pocet_spravnych = None # počet správných odpovědí pro vyřazení slovíčka
+        self.pocet_kol_testu = None # počet kol testování se stejnými slovíčky
+        self.typ_prekladu = None # "směr" překladu: 1=cz/cizí, 2=cizí/cz, 3=míchat
+        self.testovat_jen_spatne = None  # Testovat jen ze slovíček se špatnou odpovědí>3,   1=ano, 2=ne
+        
+        
         self.vysledky_db = [] # vysledky spravnych sloviček pro uložení do db
         self.vysledky = [] # průběžné výsledky do výpisu na obrazovku
-        self.pocet_kol_testu = 1 # počet kol testování se stejnými slovíčky
-        self.pocet_sl_pro_procenta = 0
-        self.pocet_spravnych_pro_procenta = 0
-        self.typ_prekladu = 3 # "směr" překladu: 1=cz/cizí, 2=cizí/cz, 3=míchat
-        self.testovat_jen_spatne = 2  # Testovat jen ze slovíček se špatnou odpovědí>3,   1=ano, 2=ne
+        
+        self.pocet_sl_pro_procenta = 0 # mezivýpočet pro procentuelní vyhodnocení testu
+        self.pocet_spravnych_pro_procenta = 0 # mezivýpočet pro procentuelní vyhodnocení testu
+    
+        
 
     """_____________ načtení všech studentů po startu aplikace ______________"""
     def nacti_studenty(self):
@@ -48,6 +57,7 @@ class slovnik:
             self.seznam_studentu = []
         else:
             self.seznam_studentu = prace_s_db.seznam_studentu()
+
 
 class slovnikGUI(tk.Frame):
 
@@ -209,7 +219,7 @@ class slovnikGUI(tk.Frame):
     """_______________________Testování______________________________________"""
     # vše k oknu testování
     
-    def Test(self):
+    def Test(self): # otevře okno pro testování
         try:
             ts.tes(self)
         except IndexError:
@@ -217,20 +227,34 @@ class slovnikGUI(tk.Frame):
         return
 
    
-    def Testuj(self):
-        if self.slovnik.aktualni_slovo == self.slovnik.pocet_k_testu:
-            tk.messagebox.showwarning("ERROR", "Aktuální test již skončil.")
-            self.slovnik.aktualni_slovo = 0
-            self.slovnik.vysledky = []
-        else:
+    def Testuj(self): # spustí se po kliknutí na tlačítko Testuj
+        if self.slovnik.aktualni_slovo == 0:
             self.slovnik.vysledky = []
             self.slovnik.aktualni_slovo = 0
+            ts.nacti(self)
             ts.spust_test(self)
+        elif self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
+            if tk.messagebox.askyesno("???", "Testovat znuvu?") == True:
+                self.slovnik.k_testovani = []
+                self.slovnik.testuj = []
+                self.slovnik.netestuj = []
+                self.slovnik.aktualni_slovo = 0
+                self.slovnik.vysledky_pro_ulozeni_do_db = []
+                self.slovnik.vysledky_db = []
+                self.slovnik.vysledky = []
+                self.slovnik.pocet_sl_pro_procenta = 0
+                self.slovnik.pocet_spravnych_pro_procenta = 0
+                ts.nacti(self)
+                ts.spust_test(self)
+            else:
+                self.top_test.destroy()
+        else:
+            pass
+            
 
 
-    def vyhodnot(self, event):
-        
-        if self.slovnik.aktualni_slovo == self.slovnik.pocet_k_testu:
+    def vyhodnot(self, event):    
+        if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
             return
         else:
             ts.vyhodnoceni(self)
@@ -366,11 +390,11 @@ class slovnikGUI(tk.Frame):
         """
         
         nastav_studenta = prace_s_db.nastaveni_studenta(self.akt_student)
-        self.pocet_k_testu = nastav_studenta[0]
-        self.pocet_spravnych = nastav_studenta[1]
-        self.pocet_kol_testu = nastav_studenta[2]
-        self.typ_prekladu = nastav_studenta[3]
-        self.testovat_jen_spatne = nastav_studenta[4]
+        self.slovnik.pocet_k_testu = nastav_studenta[0]
+        self.slovnik.pocet_spravnych = nastav_studenta[1]
+        self.slovnik.pocet_kol_testu = nastav_studenta[2]
+        self.slovnik.typ_prekladu = nastav_studenta[3]
+        self.slovnik.testovat_jen_spatne = nastav_studenta[4]
         return
     
 
