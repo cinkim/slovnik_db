@@ -117,7 +117,7 @@ def v1(self): # cz/cizí
     self.slovnik.netestuj = []
     self.slovnik.testuj = self.slovnik.testuj
     self.slovnik.testuj = self.slovnik.testuj * self.slovnik.pocet_kol_testu
-    random.shuffle(self.slovnik.testuj)
+
 
 def v2(self): # cizí/cz
     self.slovnik.k_testovani = prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student)
@@ -142,7 +142,7 @@ def spust_test(self):
     return
 
 
-
+"""
 def vyhodnoceni(self):
     if self.slovnik.typ_prekladu == 1:
         vyhodnoceni_v1(self)
@@ -150,7 +150,7 @@ def vyhodnoceni(self):
         vyhodnoceni_v2(self)
     elif self.slovnik.typ_prekladu == 3:
         vyhodnoceni_v3(self)
-    
+"""   
 
 
 def ukaz(self):
@@ -245,7 +245,6 @@ def uloz_do_db(self):
         sl.append(qq[4])
         self.slovnik.vysledky_pro_ulozeni_do_db.append(sl)
         sl = []
-    print(self.slovnik.vysledky_pro_ulozeni_do_db)
     db.uloz_test_studenta(self.slovnik.vysledky_pro_ulozeni_do_db)
     self.slovnik.vysledky_pro_ulozeni_do_db = []
 
