@@ -4,6 +4,7 @@ from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W, NO
 #from tkinter import messagebox
 
 def vypis_slovicka(self,seznam_slovicek):
+        
         self.slovicka = tk.Toplevel()
         self.slovicka.title("Slovíčka lekce: " + self.akt_Lekce)
 
@@ -29,6 +30,16 @@ def vypis_slovicka(self,seznam_slovicek):
 
         self.tree_slovicka.heading("špatně", text="ŠPATNĚ\n ")
         self.tree_slovicka.column("špatně", minwidth=0, width=65, stretch=NO, anchor='center')
+                
+        self.tree_slovicka.bind("<ButtonRelease-1>", lambda x:precti(self.tree_slovicka.item(self.tree_slovicka.focus())["values"][1], self.akt_jazyk.get() ) )
+        self.tree_slovicka.bind("<Up>", lambda x:precti(self.tree_slovicka.item(self.tree_slovicka.focus())["values"][1], self.akt_jazyk.get() ) )
+        self.tree_slovicka.bind("<Down>", lambda x:precti(self.tree_slovicka.item(self.tree_slovicka.focus())["values"][1], self.akt_jazyk.get() ) )
+        
+        
+        #self.tree_slovicka.bind("<Double-1>", lambda x:info(self.tree_slovicka.focus()["text"]-1))
+        self.tree_slovicka.bind("<Double-1>", lambda x:info(self.tree_slovicka.item(self.tree_slovicka.focus())["text"]-1))
+
+        
 
         self.mez = tk.Label(self.slovicka, text="", height=1)
         self.mez.grid(row=2, column=0)
@@ -41,6 +52,26 @@ def vypis_slovicka(self,seznam_slovicek):
             
             self.tree_slovicka.insert("", "end", text=pozice, values=(zaznam[1], zaznam[2], zaznam[3], zaznam[4]))
             pozice += 1
-        
 
+def info(text):
+    print(text)
+    
+    
+def precti(slovicko, jazyk):    
+    import pyttsx3
+    #https://stackoverflow.com/questions/65977155/change-pyttsx3-language
+    #https://betterprogramming.pub/an-introduction-to-pyttsx3-a-text-to-speech-converter-for-python-4a7e1ce825c3
+
+    
+    
+    if jazyk == "Aj":
+        print(slovicko)
+        engine = pyttsx3.init()
+        engine.say(slovicko)
+        engine.runAndWait()
+
+
+
+
+    
 

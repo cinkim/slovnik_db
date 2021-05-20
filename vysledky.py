@@ -33,9 +33,20 @@ def vypis_vysledky(self,seznam_vysledku):
         self.Konec.grid(row=19, column=0, sticky=W)
 
         pozice = 0
+        
         for zaznam in seznam_vysledku:
-            self.tree_vysledky.insert("", "end", text=pozice, values=(zaznam[0], zaznam[1], zaznam[2]))
+            
+
+            self.tree_vysledky.insert("", "end",  text=pozice, values=(zaznam[0], zaznam[1], zaznam[2]))
             pozice += 1
         
+        """
+        print(ttk.Style().theme_names())
+        ttk.Style().theme_use('clam')
+        ttk.Style().configure("Treeview", background="red",foreground="white")
+        self.tree_vysledky.insert('', 'end', text=pozice, values=(1,2,3), tags=('r',))
+        self.tree_vysledky.tag_configure('sp', background='red')
+        self.tree_vysledky.tag_configure('r',background='yellow')
+        """
 
 
