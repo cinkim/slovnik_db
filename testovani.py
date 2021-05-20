@@ -257,13 +257,14 @@ def vyhodnoceni_v1(self):
         vys_do_vypisu = []
         if self.slovicko[2].lower() == self.preklad.get().lower():
             self.ok = True       
-            spravne +=1
+            spravne = 1
+            spatne = 0
             self.slovnik.pocet_spravnych_pro_procenta+=1
             vys.append(self.slovicko[0])
             vys.append(self.slovicko[1])
             vys.append(self.slovicko[2])
             vys.append(spravne)
-            vys.append(self.slovicko[4])
+            vys.append(spatne)
 
             vys_do_vypisu.append(self.slovicko[1])
             vys_do_vypisu.append(self.preklad.get())
@@ -282,11 +283,12 @@ def vyhodnoceni_v1(self):
             spust_test(self)
         else:
             self.ok = False
-            spatne +=1
+            spatne = 1
+            spravne = 0
             vys.append(self.slovicko[0])
             vys.append(self.slovicko[1])
             vys.append(self.slovicko[2])
-            vys.append(self.slovicko[3])
+            vys.append(spravne)
             vys.append(spatne)
 
             vys_do_vypisu.append(self.slovicko[1])
@@ -314,13 +316,14 @@ def vyhodnoceni_v1(self):
         vys_do_vypisu = []
         if self.slovicko[2].lower() == self.preklad.get().lower():
             self.ok = True       
-            spravne +=1
+            spravne = 1
+            spatne = 0
             self.slovnik.pocet_spravnych_pro_procenta+=1
             vys.append(self.slovicko[0])
             vys.append(self.slovicko[1])
             vys.append(self.slovicko[2])
             vys.append(spravne)
-            vys.append(self.slovicko[4])
+            vys.append(spatne)
 
             vys_do_vypisu.append(self.slovicko[1])
             vys_do_vypisu.append(self.preklad.get())
@@ -339,11 +342,12 @@ def vyhodnoceni_v1(self):
             spust_test(self)
         else:
             self.ok = False
-            spatne +=1
+            spatne = 1
+            spravne = 0
             vys.append(self.slovicko[0])
             vys.append(self.slovicko[1])
             vys.append(self.slovicko[2])
-            vys.append(self.slovicko[3])
+            vys.append(spravne)
             vys.append(spatne)
 
             vys_do_vypisu.append(self.slovicko[1])
