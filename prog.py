@@ -248,6 +248,15 @@ class slovnikGUI(tk.Frame):
                 ts.nacti(self)
                 ts.spust_test(self)
             else:
+                self.slovnik.k_testovani = []
+                self.slovnik.testuj = []
+                self.slovnik.netestuj = []
+                self.slovnik.aktualni_slovo = 0
+                self.slovnik.vysledky_pro_ulozeni_do_db = []
+                self.slovnik.vysledky_db = []
+                self.slovnik.vysledky = []
+                self.slovnik.pocet_sl_pro_procenta = 0
+                self.slovnik.pocet_spravnych_pro_procenta = 0
                 self.top_test.destroy()
         else:
             pass
@@ -269,8 +278,15 @@ class slovnikGUI(tk.Frame):
                 return
 
     def ukonci_top_test(self):
-        # print("ukládám")
-        # sleep(1)
+        self.slovnik.k_testovani = []
+        self.slovnik.testuj = []
+        self.slovnik.netestuj = []
+        self.slovnik.aktualni_slovo = 0
+        self.slovnik.vysledky_pro_ulozeni_do_db = []
+        self.slovnik.vysledky_db = []
+        self.slovnik.vysledky = []
+        self.slovnik.pocet_sl_pro_procenta = 0
+        self.slovnik.pocet_spravnych_pro_procenta = 0
         self.top_test.destroy()
 
     """_______________________ pridat_uc.py _________________________________________________________________________"""
