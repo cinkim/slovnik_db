@@ -103,16 +103,19 @@ def nacti(self):
 
     
 def v1(self): # cz/cizí
-    self.slovnik.k_testovani = prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student)
+    self.slovnik.k_testovani = prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student) # načte všechny slovíčka lekce
     random.shuffle(self.slovnik.k_testovani)
-    random.shuffle(self.slovnik.k_testovani)
+    random.shuffle(self.slovnik.k_testovani) # 2x zamíchá seznam
     prvek = 0
-    for poradi in self.slovnik.k_testovani:
-        if (prvek < self.slovnik.pocet_k_testu) and (poradi[3] < self.slovnik.pocet_spravnych):
+    for poradi in self.slovnik.k_testovani: # projíždí seznam slovíček
+        if self.slovnik.testovat_jen_spatne == 1 and poradi[4] > 3 and prvek < self.slovnik.pocet_k_testu:
+            self.slovnik.testuj.append(poradi)
+            prvek +=1
+        elif (prvek < self.slovnik.pocet_k_testu) and (poradi[3] < self.slovnik.pocet_spravnych) and self.slovnik.testovat_jen_spatne == 2: 
             self.slovnik.testuj.append(poradi)
             prvek +=1
         else:
-            self.slovnik.netestuj.append(poradi)
+            pass
     self.slovnik.k_testovani = self.slovnik.netestuj
     self.slovnik.netestuj = []
     self.slovnik.testuj = self.slovnik.testuj
@@ -123,11 +126,43 @@ def v2(self): # cizí/cz
     self.slovnik.k_testovani = prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student)
     random.shuffle(self.slovnik.k_testovani)
     random.shuffle(self.slovnik.k_testovani)
+    """
+    prvek = 0
+    for poradi in self.slovnik.k_testovani: # projíždí seznam slovíček
+        if self.slovnik.testovat_jen_spatne == 1 and poradi[4] > 3 and prvek < self.slovnik.pocet_k_testu:
+            self.slovnik.testuj.append(poradi)
+            prvek +=1
+        elif (prvek < self.slovnik.pocet_k_testu) and (poradi[3] < self.slovnik.pocet_spravnych) and self.slovnik.testovat_jen_spatne == 2: 
+            self.slovnik.testuj.append(poradi)
+            prvek +=1
+        else:
+            pass
+    """
+    self.slovnik.k_testovani = self.slovnik.netestuj
+    self.slovnik.netestuj = []
+    self.slovnik.testuj = self.slovnik.testuj
+    self.slovnik.testuj = self.slovnik.testuj * self.slovnik.pocet_kol_testu
 
 def v3(self): # mix
     self.slovnik.k_testovani = prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student)
     random.shuffle(self.slovnik.k_testovani)
     random.shuffle(self.slovnik.k_testovani)
+    """
+    prvek = 0
+    for poradi in self.slovnik.k_testovani: # projíždí seznam slovíček
+        if self.slovnik.testovat_jen_spatne == 1 and poradi[4] > 3 and prvek < self.slovnik.pocet_k_testu:
+            self.slovnik.testuj.append(poradi)
+            prvek +=1
+        elif (prvek < self.slovnik.pocet_k_testu) and (poradi[3] < self.slovnik.pocet_spravnych) and self.slovnik.testovat_jen_spatne == 2: 
+            self.slovnik.testuj.append(poradi)
+            prvek +=1
+        else:
+            pass
+    """
+    self.slovnik.k_testovani = self.slovnik.netestuj
+    self.slovnik.netestuj = []
+    self.slovnik.testuj = self.slovnik.testuj
+    self.slovnik.testuj = self.slovnik.testuj * self.slovnik.pocet_kol_testu
     
 
 
@@ -141,16 +176,6 @@ def spust_test(self):
     self.preklad.config(state=NORMAL)
     return
 
-
-"""
-def vyhodnoceni(self):
-    if self.slovnik.typ_prekladu == 1:
-        vyhodnoceni_v1(self)
-    elif self.slovnik.typ_prekladu == 2:
-        vyhodnoceni_v2(self)
-    elif self.slovnik.typ_prekladu == 3:
-        vyhodnoceni_v3(self)
-"""   
 
 
 def ukaz(self):
