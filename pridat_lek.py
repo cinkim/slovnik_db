@@ -56,6 +56,7 @@ def ulozit_Lek(self):
                 tk.messagebox.showwarning("ERROR", "Vyplňte číslo a název lekce")
                 return
             try:
+                print(self.akt_j, self.akt_ucebnice, self.nova_lek.get(), int(self.nova_lek_cislo.get()))
                 db.uloz_lekci(self.akt_j, self.akt_ucebnice, self.nova_lek.get(), int(self.nova_lek_cislo.get()))
                 self.nacti_lekce()
                 self.cl.set("")
@@ -63,6 +64,10 @@ def ulozit_Lek(self):
                 return       
             except ValueError:
                 tk.messagebox.showwarning("ERROR", "Zadej správně číslo lekce.")
+                return
+
+            except TypeError:
+                tk.messagebox.showwarning("ERROR", "Klikni na učebnici, kam se budou ukládat lekce.")
                 return
     else:
         pass
