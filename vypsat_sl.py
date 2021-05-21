@@ -3,6 +3,9 @@ from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W, NO
 #import tkinter.messagebox
 #from tkinter import messagebox
 
+import pyttsx3
+
+
 def vypis_slovicka(self,seznam_slovicek):
         
         self.slovicka = tk.Toplevel()
@@ -57,13 +60,13 @@ def info(text):
     print(text)
     
     
-def precti(slovicko, jazyk):    
-    import pyttsx3
+def precti(slovicko, jazyk):        
     #https://stackoverflow.com/questions/65977155/change-pyttsx3-language
     #https://betterprogramming.pub/an-introduction-to-pyttsx3-a-text-to-speech-converter-for-python-4a7e1ce825c3
-
-    
-    
+    engine = pyttsx3.init()
+    newVoiceRate = 80
+    engine.setProperty('rate',newVoiceRate)
+        
     if jazyk == "Aj":
         print(slovicko)
         engine = pyttsx3.init()
