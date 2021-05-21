@@ -119,7 +119,11 @@ def v1(self): # cz/cizí
     self.slovnik.k_testovani = self.slovnik.netestuj
     self.slovnik.netestuj = []
     self.slovnik.testuj = self.slovnik.testuj
-    self.slovnik.testuj = self.slovnik.testuj * self.slovnik.pocet_kol_testu
+    if self.slovnik.testuj == []:
+        tk.messagebox.showwarning("ERROR", "S tímto nastavením již není co testovat\nzměňte nastavení studenta, nebo zvolte jinou lekci.")
+        return
+    else:
+        self.slovnik.testuj = self.slovnik.testuj * self.slovnik.pocet_kol_testu
 
 
 def v2(self): # cizí/cz
@@ -167,14 +171,15 @@ def v3(self): # mix
 
 
 def spust_test(self): 
-          
-    self.slovicko = self.slovnik.testuj[self.slovnik.aktualni_slovo]
-    self.cz = self.slovicko[1]
-    self.ceskytext.set(self.cz)
-    
-    self.preklad.focus_set()
-    self.preklad.config(state=NORMAL)
-    return
+    try:     
+        self.slovicko = self.slovnik.testuj[self.slovnik.aktualni_slovo]
+        self.cz = self.slovicko[1]
+        self.ceskytext.set(self.cz)
+        
+        self.preklad.focus_set()
+        self.preklad.config(state=NORMAL)
+    except IndexError:
+        return
 
 
 
