@@ -39,6 +39,7 @@ class slovnik:
         self.pocet_kol_testu = None # počet kol testování se stejnými slovíčky
         self.typ_prekladu = None # "směr" překladu: 1=cz/cizí, 2=cizí/cz, 3=míchat
         self.testovat_jen_spatne = None  # Testovat jen ze slovíček se špatnou odpovědí>3,   1=ano, 2=ne
+        self.rychlost_cteni = 80 # Nastavení rychlosti pro čení Aj slovíček
         
         
         self.vysledky_db = [] # vysledky spravnych sloviček pro uložení do db
@@ -412,6 +413,7 @@ class slovnikGUI(tk.Frame):
         self.pocet_kol_testu
         self.typ_prekladu
         self.testovat_jen_spatne
+        self.rychlost_cteni
         """
         
         nastav_studenta = prace_s_db.nastaveni_studenta(self.akt_student)
@@ -420,6 +422,7 @@ class slovnikGUI(tk.Frame):
         self.slovnik.pocet_kol_testu = nastav_studenta[2]
         self.slovnik.typ_prekladu = nastav_studenta[3]
         self.slovnik.testovat_jen_spatne = nastav_studenta[4]
+        # self.slovnik.rychlost_cteni = nastav_studenta[5]
         return
     
 
