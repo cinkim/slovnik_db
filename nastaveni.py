@@ -24,7 +24,7 @@ def nastaveni_studenta(self):
     self.pocet_slovicek_Entry.grid(row=2, column=2, sticky=W)
     self.pocet_slovicek_Entry.insert(0,self.slovnik.pocet_k_testu)
 
-    self.pocet_opakovani_popis = tk.Label(self.nastaveni, text="Počet opakování stejného testu     (1-5): ")
+    self.pocet_opakovani_popis = tk.Label(self.nastaveni, text="Počet opakování v rámci testu     (1-5): ")
     self.pocet_opakovani_popis.grid(row=3, column=0, columnspan=2,sticky=W)
     self.pocet_opakovani_Entry = tk.Entry(self.nastaveni, width=10, justify="center")
     self.pocet_opakovani_Entry.grid(row=3, column=2, sticky=W)
@@ -104,6 +104,29 @@ def nastaveni_studenta(self):
         command=lambda: self.pridej_jazyk(self.akt_student,nestudovane(self.akt_student)[self.dalsi_jazyk_Combo.current()]), font="Arial 8", width=20)
         self.pridat_jazyk_Button.grid(row=1, column=2, sticky=W)
 
+
+
+    """________________________ nastavení rychlosti čtení___________________"""
+    
+    self.nastaveni_cteni = tk.LabelFrame(self.nastaveni, text="Rychlost čtení: ", font="Arial 8")
+    self.nastaveni_cteni.grid(row=17, column=3, columnspan=2,rowspan=5, sticky=W)
+    
+    pozice = 1 # pozice řádky v rámci skupiny RadioButtonu
+    rychlost = [("Pomalu","75"),
+            ("Středně","110"),
+            ("Rychle","150"),
+
+            ]
+    self.var_rychlost = tk.IntVar()
+    for text, hodnota in rychlost:      # indicatoron=0, 
+        self.rychlost_Radio = tk.Radiobutton(self.nastaveni_cteni, text=text, variable=self.var_rychlost, value=hodnota)      
+        if hodnota == str(self.slovnik.rychlost_cteni): # označí jako nastavenou hodnotu z db
+            self.rychlost_Radio.select()       
+        self.rychlost_Radio.grid(row=pozice, sticky=W) 
+        pozice = pozice + 1
+    
+
+
     """______________________________________________________ tlačítka _________________________________________________________"""
 
     self.ulozit_nastaveni = tk.Button(self.top_student, text="Uložit nastavení", command=self.uloz_nastaveni_stud, fg="blue", font="Arial 8", width=20)
@@ -163,7 +186,7 @@ def uloz_nastaveni_studenta(self):
         pass
     else:
         chyba = True
-        text_chyby = text_chyby + "\n" + "Počet opakování stejného testu"
+        text_chyby = text_chyby + "\n" + "Počet opakování v rámci jednoho testu"
 
 
     if chyba:
@@ -175,7 +198,8 @@ def uloz_nastaveni_studenta(self):
         self.pocet_spravne_Entry.get(),
         self.pocet_opakovani_Entry.get(),
         self.var_preklad.get(),  
-        self.var_spatne.get() 
+        self.var_spatne.get(),
+        self.var_rychlost.get() 
         ])
-    
+    self.nacti_nastaveni_studenta()
     
