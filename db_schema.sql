@@ -6,7 +6,8 @@ CREATE TABLE OSOBY (
 	pocet_spravne_netestovat integer DEFAULT 3,
 	pocet_opakovani_testu integer DEFAULT 2,
 	typ_prekladu integer DEFAULT 3,
-	testovat_jen_spatne integer DEFAULT 2		
+	testovat_jen_spatne integer DEFAULT 2,
+	rychlost_reci integer DEFAULT 110		
 	
 );
 
@@ -35,7 +36,8 @@ CREATE TABLE VYSLEDKY (
 	osoba_id integer,
 	lekce_id integer,
 	uspesnost integer,
-	datum datetime
+	datum datetime,
+	testovano_slov varchar DEFAULT ''
 );
 
 CREATE TABLE TESTOVANA_SLOVICKA (

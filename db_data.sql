@@ -2,7 +2,6 @@ insert into jazyky values(null,'Aj','');
 insert into jazyky values(null,'Nj','');
 insert into jazyky values(null,'Fr','');
 insert into jazyky values(null,'Es','');
-insert into jazyky values(null,'AJ','');
 insert into jazyky values(null,'It','');
 insert into jazyky values(null,'Ru','');
 

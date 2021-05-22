@@ -247,7 +247,7 @@ def nacti_vysledky(student, ucebnice):
     - vrati seznam výsledků studenta pro vybranou učebnici
     VSTUP: student - retezec
             ucebnice - retezec
-    VYSTUP: seznam vysledku [[datum,lekce,hodnoceni],[datum,lekce,hodnoceni],.... ]
+    VYSTUP: seznam vysledku [[datum,lekce,hodnoceni,testovano_slov],[datum,lekce,hodnoceni],.... ]
     """
     conn, cursor = pripojeni_db()
     cursor.execute(f'''SELECT id from osoby where jmeno = "{student}"''')     
@@ -256,7 +256,7 @@ def nacti_vysledky(student, ucebnice):
     id_ucebnice = cursor.fetchone()[0]
     
     seznam_vysledku = []
-    cursor.execute(f'''SELECT v.datum,l.nazev,v.uspesnost from vysledky v
+    cursor.execute(f'''SELECT v.datum,l.nazev,v.uspesnost,v.testovano_slov from vysledky v
                         join lekce l on l.id=v.lekce_id
                         where osoba_id = {id_student} 
                         and lekce_id in (select id from lekce where ucebnice_id ={id_ucebnice})
@@ -272,18 +272,18 @@ def nastaveni_studenta(student):
     """
     - vrací nastavení studenta
     VSTUP: student - retezec
-    VYSTUP: (pocet_testovanych_slovicek, pocet_spravne_kdy_uz_netestovat,pocet_opakovani_testu,typ_prekladu, testovat_jen_spatne)
+    VYSTUP: (pocet_testovanych_slovicek, pocet_spravne_kdy_uz_netestovat,pocet_opakovani_testu,typ_prekladu, testovat_jen_spatne, rychlost_reci)
     """
     conn, cursor = pripojeni_db()
     cursor.execute(f'''SELECT pocet_test_slovicek, pocet_spravne_netestovat, pocet_opakovani_testu,
-    typ_prekladu, testovat_jen_spatne
+    typ_prekladu, testovat_jen_spatne, rychlost_reci
         from osoby where jmeno = "{student}"''')  
     return list(cursor.fetchone())
 
 def uloz_nastaveni_studenta(data_studenta):
     """
     - ulozi nastaveni studenta
-    VSTUP: ["student", pocet_testovanych_slovicek, pocet_spravne_kdy_uz_netestovat,pocet_opakovani_testu,typ_prekladu, testovat_jen_spatne]
+    VSTUP: ["student", pocet_testovanych_slovicek, pocet_spravne_kdy_uz_netestovat,pocet_opakovani_testu,typ_prekladu, testovat_jen_spatne, rychlost_cteni]
     """
     conn, cursor = pripojeni_db()
 
@@ -291,7 +291,8 @@ def uloz_nastaveni_studenta(data_studenta):
     pocet_spravne_netestovat = {data_studenta[2]},
     pocet_opakovani_testu = {data_studenta[3]},
     typ_prekladu = {data_studenta[4]}, 
-    testovat_jen_spatne = {data_studenta[5]}
+    testovat_jen_spatne = {data_studenta[5]},
+    rychlost_reci = {data_studenta[6]}
     where jmeno = "{data_studenta[0]}" ''') 
     conn.commit()
     return
@@ -330,6 +331,7 @@ def  uloz_test_studenta(data):
     data.pop(2)
     data.pop(1)
     data.pop(0)
+    pocet_slov = str(len(data))
     # ukládání informací ke slovíčkám - správné/špatné odpovědi
     for slovo in data: 
         if slovo[1] == 0 and slovo[2] == 0: #slovo nebylo testováno(přišlo s nulovými počty)
@@ -352,7 +354,7 @@ def  uloz_test_studenta(data):
     now = datetime.datetime.now()
     akt_datum = str(now.year)+ "_" + str(now.month) + "_" + str(now.day) + " " + str(now.hour) + ":" + str(now.minute)
     cursor.execute(f'''INSERT INTO vysledky  
-                                VALUES(null,{id_studenta},{lekce_id},{hodnoceni},datetime("{now}")
+                                VALUES(null,{id_studenta},{lekce_id},{hodnoceni},datetime("{now}"), '{pocet_slov}'
                                 )''')
     conn.commit()  
 
