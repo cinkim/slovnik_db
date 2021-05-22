@@ -10,7 +10,7 @@ def vypis_vysledky(self,seznam_vysledku):
         self.nadpis = tk.Label(self.vysledky, text="Jazyk: " + self.akt_j + "\nUčebnice:" + self.akt_ucebnice, font="Ariel 14", bg="red")
         self.nadpis.grid(row=0, columnspan=3, sticky=W+E)
         
-        self.tree_vysledky = ttk.Treeview(self.vysledky, column=("datum", "lekce", "hodnoceni"), height=20, selectmode='browse')
+        self.tree_vysledky = ttk.Treeview(self.vysledky, column=("datum", "lekce", "hodnoceni", "testovano"), height=20, selectmode='browse')
         self.tree_vysledky['show'] = 'headings' # schová první sloupec s identifikátorem
         self.tree_vysledky.grid(row=13, columnspan=3)
         
@@ -26,6 +26,9 @@ def vypis_vysledky(self,seznam_vysledku):
         self.tree_vysledky.heading("hodnoceni", text="Hodnocení %\n ")
         self.tree_vysledky.column("hodnoceni", minwidth=0, width=100, stretch=NO, anchor='center')
 
+        self.tree_vysledky.heading("testovano", text="Počet slov ")
+        self.tree_vysledky.column("testovano", minwidth=0, width=120, stretch=NO, anchor='center')
+
         self.mez = tk.Label(self.vysledky, text="", height=1)
         self.mez.grid(row=17, column=0)
 
@@ -37,7 +40,7 @@ def vypis_vysledky(self,seznam_vysledku):
         for zaznam in seznam_vysledku:
             
 
-            self.tree_vysledky.insert("", "end",  text=pozice, values=(zaznam[0], zaznam[1], zaznam[2]))
+            self.tree_vysledky.insert("", "end",  text=pozice, values=(zaznam[0], zaznam[1], zaznam[2], zaznam[3]))
             pozice += 1
         
         """
