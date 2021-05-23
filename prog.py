@@ -39,7 +39,7 @@ class slovnik:
         self.pocet_kol_testu = None # počet kol testování se stejnými slovíčky
         self.typ_prekladu = None # "směr" překladu: 1=cz/cizí, 2=cizí/cz, 3=míchat
         self.testovat_jen_spatne = None  # Testovat jen ze slovíček se špatnou odpovědí>3,   1=ano, 2=ne
-        self.rychlost_cteni = 80 # Nastavení rychlosti pro čení Aj slovíček
+        self.rychlost_cteni = None # Nastavení rychlosti pro čení Aj slovíček, hodnoty 75/110/150
         
         
         self.vysledky_db = [] # vysledky spravnych sloviček pro uložení do db
@@ -212,7 +212,9 @@ class slovnikGUI(tk.Frame):
             self.akt_ucebnice = self.seznam_ucebnic[self.ucebnice_ListBox.curselection()[0]]
             data = prace_s_db.nacti_vysledky(self.akt_student, self.akt_ucebnice)
             vys.vypis_vysledky(self, data)
-        except:
+        except AttributeError:
+            tk.messagebox.showwarning("ERROR", "Vyber jazyk a učebnici.")
+        except IndexError:
             tk.messagebox.showwarning("ERROR", "Vyber učebnici.")
         return
     
@@ -355,8 +357,8 @@ class slovnikGUI(tk.Frame):
             self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
             v_sl.vypis_slovicka(self,prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student))
             #print(prace_s_db.nastaveni_studenta(self.akt_student))
-        except:
-            tk.messagebox.showwarning("ERROR", "Chyba db.")
+        except IndexError:
+            tk.messagebox.showwarning("ERROR", "Vyber lekci.")
 
 
     """_____________________________ new_student.py ______________________________________________________________"""
@@ -422,7 +424,7 @@ class slovnikGUI(tk.Frame):
         self.slovnik.pocet_kol_testu = nastav_studenta[2]
         self.slovnik.typ_prekladu = nastav_studenta[3]
         self.slovnik.testovat_jen_spatne = nastav_studenta[4]
-        # self.slovnik.rychlost_cteni = nastav_studenta[5]
+        self.slovnik.rychlost_cteni = nastav_studenta[5]
         return
     
 
