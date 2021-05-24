@@ -1,10 +1,13 @@
 # hlani program
-import random
+
 import tkinter as tk
-from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W
-from tkinter import LEFT, NO, DISABLED, NORMAL, YES, VERTICAL, ACTIVE
+from tkinter import ttk, StringVar,  N, E, W
+from tkinter import NO, VERTICAL
 import tkinter.messagebox
-from time import sleep
+from tkinter import messagebox
+
+import os
+
 import new_student as ns
 import prace_s_db
 import nastaveni
@@ -189,6 +192,25 @@ class slovnikGUI(tk.Frame):
 
         self.button_Nastaveni = tk.Button(self.pole_nastaveni, text="Výsledky studenta", command=self.vysledky_stud, fg="blue", font="Arial 8", width=20)
         self.button_Nastaveni.grid(row=4, column=2, sticky=W)
+
+        self.mezera1 = tk.Label(self.pole_nastaveni, text="")
+        self.mezera1.grid(row=5, column=2, sticky=W)
+
+        self.button_tov_nastaveni = tk.Button(self.pole_nastaveni, text="Obnovit\ntovární nastavení", command=self.tovarni_nastaveni, fg="red", font="Arial 8", width=20)
+        self.button_tov_nastaveni.grid(row=6, column=2, sticky=W)
+
+
+    """_______________________ Tovární nastavení______________________________"""
+    def tovarni_nastaveni(self):
+        if messagebox.askyesno("POZOR", "Program se uvede do prvotního spuštění\nBudou smazána tato data!!!\n-registrovaní studenti\n-přidané učebnice\n-přidané lekce\n-přidaná slovíčka\n-výsledky testů") == True:
+            os.remove("db_slovnik.sqlite")
+            tk.messagebox.showwarning("???", "Nastaveno prvotní zobrazení\nSPUSŤE PROGRAM ZNOVU")
+            self.parent.destroy()
+
+        else:
+            pass
+
+
 
     """_______________________ nastaveni.py ___________________________________________________________________"""
     # vše k pravému nastavení + testování
