@@ -1,7 +1,5 @@
 import tkinter as tk
 from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W, NO
-#import tkinter.messagebox
-#from tkinter import messagebox
 
 import pyttsx3
 
