@@ -1,8 +1,8 @@
 
 import tkinter as tk
-from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W
-from tkinter import LEFT, NO, DISABLED, NORMAL
-import tkinter.messagebox
+from tkinter import StringVar, NORMAL, W
+from tkinter import NORMAL
+
 
 import prace_s_db
 
