@@ -1,7 +1,6 @@
 import tkinter as tk
-from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W, NO
-#import tkinter.messagebox
-#from tkinter import messagebox
+from tkinter import ttk, E, W, NO
+
 
 def vypis_vysledky(self,seznam_vysledku):
         self.vysledky = tk.Toplevel()

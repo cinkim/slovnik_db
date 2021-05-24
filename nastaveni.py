@@ -1,8 +1,6 @@
 import tkinter as tk
-from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W
-from tkinter import LEFT, NO, DISABLED, NORMAL, YES
-import tkinter.messagebox
-#from typing_extensions import IntVar
+from tkinter import ttk, StringVar, N,E, W
+
 import prace_s_db
 
 def nastaveni_studenta(self):
