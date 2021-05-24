@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
-import tkinter.messagebox
+
 
 import pandas as pd
 import pathlib
@@ -20,13 +20,11 @@ def import_sl(self):
     except ValueError:
         tk.messagebox.showwarning("ERROR", "Nepodporovaný typ souboru\naplikace podporuje pouze soubory typu\ncsv, txt, xls")
         return
+    except FileNotFoundError:
+        return
     seznam_slov = seznam_slov.values.tolist()
     akt_prostredi = [self.akt_Lekce]
     export = akt_prostredi + seznam_slov
     pocet = prace_s_db.pridej_slovicka(export)
     tk.messagebox.showwarning("ULOŽENO", "V databáti je uloženo " + str(pocet) + "\nslovíček pro tuto lekci.")
     
-
-
-
-
