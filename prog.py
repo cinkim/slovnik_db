@@ -270,15 +270,8 @@ class slovnikGUI(tk.Frame):
         if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
             return
         else:
-            if self.slovnik.typ_prekladu == 1:
-                ts.vyhodnoceni_v1(self)
-            elif self.slovnik.typ_prekladu == 2:
-                ts.vyhodnoceni_v2(self)
-            elif self.slovnik.typ_prekladu == 3:
-                ts.vyhodnoceni_v3(self)
-            else:
-                tk.messagebox.showwarning("ERROR", "Chyba v nastavení.")
-                return
+            ts.vyhodnoceni(self)
+
 
     def ukonci_top_test(self):
         self.slovnik.k_testovani = []
