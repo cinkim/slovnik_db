@@ -5,6 +5,7 @@ import tkinter.messagebox
 import random
 import prace_s_db
 import prace_s_db as db
+from random import randrange
 
 
 def tes(self):
@@ -96,7 +97,7 @@ def nacti(self):
     elif self.slovnik.typ_prekladu == 2:
         v2(self)
     elif self.slovnik.typ_prekladu == 3:
-        v1(self)
+        v3(self)
     else:
         tk.messagebox.showwarning("ERROR", "Chyba v nastavení.")
         return
@@ -166,36 +167,50 @@ def v2(self): # cizí/cz
         self.slovnik.testuj = self.slovnik.testuj * self.slovnik.pocet_kol_testu
         random.shuffle(self.slovnik.testuj)
 
+def nahoda(self):
+    cislo = randrange(2)
+    return cislo
 
 def v3(self): # mix
     self.slovnik.k_testovani = prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student)
     random.shuffle(self.slovnik.k_testovani)
     random.shuffle(self.slovnik.k_testovani)
-
+    
     prvek = 0
     poradi1 = ""
     poradi2 = ""
     for poradi in self.slovnik.k_testovani: # projíždí seznam slovíček
-        if self.slovnik.testovat_jen_spatne == 1 and poradi[4] > 3 and prvek < self.slovnik.pocet_k_testu:
-            poradi1 = poradi[1]
-            poradi2 = poradi[2]
-            poradi[1] = poradi2
-            poradi[2] = poradi1
-            poradi1 = ""
-            poradi2 = ""
-            self.slovnik.testuj.append(poradi)
-            prvek +=1
-        elif (prvek < self.slovnik.pocet_k_testu) and (poradi[3] < self.slovnik.pocet_spravnych) and self.slovnik.testovat_jen_spatne == 2:
-            poradi1 = poradi[1]
-            poradi2 = poradi[2]
-            poradi[1] = poradi2
-            poradi[2] = poradi1
-            poradi1 = ""
-            poradi2 = ""
-            self.slovnik.testuj.append(poradi)
-            prvek +=1
+        typ = nahoda(self)
+        if typ == 0:
+            if self.slovnik.testovat_jen_spatne == 1 and poradi[4] > 3 and prvek < self.slovnik.pocet_k_testu:
+                poradi1 = poradi[1]
+                poradi2 = poradi[2]
+                poradi[1] = poradi2
+                poradi[2] = poradi1
+                poradi1 = ""
+                poradi2 = ""
+                self.slovnik.testuj.append(poradi)
+                prvek +=1
+            elif (prvek < self.slovnik.pocet_k_testu) and (poradi[3] < self.slovnik.pocet_spravnych) and self.slovnik.testovat_jen_spatne == 2:
+                poradi1 = poradi[1]
+                poradi2 = poradi[2]
+                poradi[1] = poradi2
+                poradi[2] = poradi1
+                poradi1 = ""
+                poradi2 = ""
+                self.slovnik.testuj.append(poradi)
+                prvek +=1
+            else:
+                pass
         else:
-            pass
+            if self.slovnik.testovat_jen_spatne == 1 and poradi[4] > 3 and prvek < self.slovnik.pocet_k_testu:
+                self.slovnik.testuj.append(poradi)
+                prvek +=1
+            elif (prvek < self.slovnik.pocet_k_testu) and (poradi[3] < self.slovnik.pocet_spravnych) and self.slovnik.testovat_jen_spatne == 2: 
+                self.slovnik.testuj.append(poradi)
+                prvek +=1
+            else:
+                pass
     self.slovnik.k_testovani = self.slovnik.netestuj
     self.slovnik.netestuj = []
     self.slovnik.testuj = self.slovnik.testuj
@@ -317,7 +332,7 @@ def uloz_do_db(self):
     db.uloz_test_studenta(self.slovnik.vysledky_pro_ulozeni_do_db)
     self.slovnik.vysledky_pro_ulozeni_do_db = []
 
-def vyhodnoceni_v1(self):
+def vyhodnoceni(self):
     try:
         self.slovnik.pocet_sl_pro_procenta +=1
         spravne = self.slovicko[3]
@@ -436,12 +451,6 @@ def vyhodnoceni_v1(self):
             
             spust_test(self)
 
-
-def vyhodnoceni_v2(self):
-    print("Dodělat")
-
-def vyhodnoceni_v3(self):
-    print("Dodělat")
 
 
 
