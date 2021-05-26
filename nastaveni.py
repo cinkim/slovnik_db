@@ -6,7 +6,10 @@ import prace_s_db
 def nastaveni_studenta(self):
     # načte z db nastavení daného studenta
     self.nacti_nastaveni_studenta()
-    
+    try:
+        self.top_student.destroy()
+    except AttributeError:
+        pass
     self.top_student = tk.Toplevel()
     self.top_student.title("Nastavení studenta")  
     
@@ -151,6 +154,10 @@ def nastaveni_studenta(self):
     """_________________________________________________________________________________________________________________________"""
 
 def reset_nacti_ucebnice(jazyk, student):
+    try:
+            reset_lekce_Combo.destroy()
+    except NameError:
+        pass
     reset_ucebnice = StringVar()
     reset_ucebnice_Combo=ttk.Combobox(reset_nastaveni, textvariable=reset_ucebnice,  width=20)
     reset_ucebnice_Combo['values'] = prace_s_db.seznam_ucebnic(jazyk)
@@ -159,6 +166,7 @@ def reset_nacti_ucebnice(jazyk, student):
 
 def reset_nacti_lekce(ucebnice,student):
     reset_lekce = StringVar()
+    global reset_lekce_Combo
     reset_lekce_Combo=ttk.Combobox(reset_nastaveni, textvariable=reset_lekce,  width=30)
     nazvy_lekci=[]
     for lekce in prace_s_db.seznam_lekci(ucebnice):
