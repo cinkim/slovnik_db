@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, StringVar, N,E, W
-
+from tkinter import messagebox
 import prace_s_db
 
 def nastaveni_studenta(self):
@@ -102,10 +102,29 @@ def nastaveni_studenta(self):
         command=lambda: self.pridej_jazyk(self.akt_student,nestudovane(self.akt_student)[self.dalsi_jazyk_Combo.current()]), font="Arial 8", width=20)
         self.pridat_jazyk_Button.grid(row=1, column=2, sticky=W)
 
-
-
-    """________________________ nastavení rychlosti čtení___________________"""
+    """________________________ resetování slovíček - počtů odpovědí ___________________"""
     
+    self.mezera3 = tk.Label(self.nastaveni, text="")
+    self.mezera3.grid(row=1 , column=0, columnspan=3, sticky=W)
+    
+    global reset_nastaveni
+    reset_nastaveni = tk.LabelFrame(self.nastaveni, text="Vynulovat odpovědi u slovíček: ", font="Arial 8", width=600)
+    self.t1 = tk.Label(reset_nastaveni, text="Jazyk:", width=10)
+    self.t1.grid(row=0 , column=1, sticky=W)
+    self.t2 = tk.Label(reset_nastaveni, text="Učebnice:", width=20)
+    self.t2.grid(row=0 , column=2,sticky=W)
+    self.t3 = tk.Label(reset_nastaveni, text="Lekce:", width=25)
+    self.t3.grid(row=0 , column=3, sticky=W)
+
+    reset_nastaveni.grid(row=23, column=0, columnspan=5,rowspan=5, sticky=W)
+    reset_jazyk = StringVar()
+    reset_jazyk_Combo=ttk.Combobox(reset_nastaveni, textvariable=reset_jazyk,  width=10)
+    reset_jazyk_Combo['values'] = self.jazyky_studenta
+    reset_jazyk_Combo.grid(row=1, column=1)
+    reset_jazyk_Combo.bind("<<ComboboxSelected>>",lambda x:reset_nacti_ucebnice(reset_jazyk.get(),self.akt_student))
+    
+    """________________________ nastavení rychlosti čtení___________________"""
+   
     self.nastaveni_cteni = tk.LabelFrame(self.nastaveni, text="Rychlost čtení: ", font="Arial 8")
     self.nastaveni_cteni.grid(row=17, column=3, columnspan=2,rowspan=5, sticky=W)
     
@@ -113,7 +132,6 @@ def nastaveni_studenta(self):
     rychlost = [("Pomalu","75"),
             ("Středně","110"),
             ("Rychle","150"),
-
             ]
     self.var_rychlost = tk.IntVar()
     for text, hodnota in rychlost:      # indicatoron=0, 
@@ -123,8 +141,6 @@ def nastaveni_studenta(self):
         self.rychlost_Radio.grid(row=pozice, sticky=W) 
         pozice = pozice + 1
     
-
-
     """______________________________________________________ tlačítka _________________________________________________________"""
 
     self.ulozit_nastaveni = tk.Button(self.top_student, text="Uložit nastavení", command=self.uloz_nastaveni_stud, fg="blue", font="Arial 8", width=20)
@@ -133,6 +149,34 @@ def nastaveni_studenta(self):
     self.ulozit_Konec = tk.Button(self.top_student, text="Konec", command=self.top_student.destroy, fg="red", font="Arial 8", width=20)
     self.ulozit_Konec.grid(row=1, column=5, sticky=W+E)
     """_________________________________________________________________________________________________________________________"""
+
+def reset_nacti_ucebnice(jazyk, student):
+    reset_ucebnice = StringVar()
+    reset_ucebnice_Combo=ttk.Combobox(reset_nastaveni, textvariable=reset_ucebnice,  width=20)
+    reset_ucebnice_Combo['values'] = prace_s_db.seznam_ucebnic(jazyk)
+    reset_ucebnice_Combo.grid(row=1, column=2)
+    reset_ucebnice_Combo.bind("<<ComboboxSelected>>",lambda x:reset_nacti_lekce(reset_ucebnice.get(),student))
+
+def reset_nacti_lekce(ucebnice,student):
+    reset_lekce = StringVar()
+    reset_lekce_Combo=ttk.Combobox(reset_nastaveni, textvariable=reset_lekce,  width=30)
+    nazvy_lekci=[]
+    for lekce in prace_s_db.seznam_lekci(ucebnice):
+        nazvy_lekci.append(lekce[1])
+    reset_lekce_Combo['values'] = nazvy_lekci
+    reset_lekce_Combo.grid(row=1, column=3)
+    reset_lekce_Combo.bind("<<ComboboxSelected>>",lambda x:reset_poctu_odpovedi(reset_lekce.get(),student))
+
+def reset_poctu_odpovedi(lekce,student):
+    resetovat_Button = tk.Button(reset_nastaveni, text="Vynuluj počty odpovědí", 
+        command=lambda: resetovat(lekce, student), fg="blue", font="Arial 8", width=70)
+    resetovat_Button.grid(row=2, column=0, columnspan=4, sticky=W)
+
+def resetovat(lekce, student):
+    if messagebox.askyesno("Reset???", "Opravdu vynulovat počty u lekce - " + lekce+"?") == True:
+        prace_s_db.reset_slovicek(student,lekce)
+    else:
+        pass
 
 
 def studovane(student):
@@ -161,10 +205,9 @@ def pridat_jazyk(self,student, jazyk):
         self.pridat_jazyk_Button.destroy()
         self.nove_jazyky_label.destroy()
     self.nacti_studenta()
+    self.jazyky_studenta=prace_s_db.jazyky_studenta(self.akt_student)
     
 def uloz_nastaveni_studenta(self):
-
-
     # kontrola zadaných hodnot
     chyba = False
     text_chyby = "CHYBNĚ ZADÁNO:"
