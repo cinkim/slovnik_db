@@ -53,9 +53,7 @@ def ulozit_novou_ucebnici(self):
     else:
         pass
 
-def smazat_uc(self):
-    print("Doprogramovat")
-    return
+
 
 
 

@@ -5,6 +5,7 @@ import random
 import prace_s_db
 import prace_s_db as db
 from random import randrange
+import vysledky_testu as vt
 
 
 def tes(self):
@@ -362,6 +363,9 @@ def vyhodnoceni(self):
             if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
                 self.ceskytext.set("")
                 uloz_do_db(self)
+                tk.messagebox.showwarning("HOTOVO", "Právě si došel na konec testu.")
+                vt.zobraz_vysledky_testu(self)
+                vt.nacti_vysledky(self, self.slovnik.vysledky)
                 return
             spust_test(self)
         else:
@@ -389,6 +393,9 @@ def vyhodnoceni(self):
             if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
                 self.ceskytext.set("")
                 uloz_do_db(self)
+                tk.messagebox.showwarning("HOTOVO", "Právě si došel na konec testu.")
+                vt.zobraz_vysledky_testu(self)
+                vt.nacti_vysledky(self, self.slovnik.vysledky)
                 return
             spust_test(self)
     except TypeError:
@@ -421,6 +428,9 @@ def vyhodnoceni(self):
             if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
                 self.ceskytext.set("")
                 uloz_do_db(self)
+                tk.messagebox.showwarning("HOTOVO", "Právě si došel na konec testu.")
+                vt.zobraz_vysledky_testu(self)
+                vt.nacti_vysledky(self, self.slovnik.vysledky)
                 return
             spust_test(self)
         else:
@@ -446,6 +456,9 @@ def vyhodnoceni(self):
             if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
                 self.ceskytext.set("")
                 uloz_do_db(self)
+                tk.messagebox.showwarning("HOTOVO", "Právě si došel na konec testu.")
+                vt.zobraz_vysledky_testu(self)
+                vt.nacti_vysledky(self, self.slovnik.vysledky)
                 return
             
             spust_test(self)
