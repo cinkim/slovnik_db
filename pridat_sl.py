@@ -92,6 +92,7 @@ def nacti_lekci(self):
 
 
 def dalsi(self):
+        self.slovnik.nova_sl.reverse()
         self.s = []
         if self.w2.get() == "":
             tk.messagebox.showwarning("ERROR", "Vyplň slovíčka pro uložení.")
@@ -107,6 +108,7 @@ def dalsi(self):
             self.w1.set("")
             self.w2.set("") 
             self.wc.focus_set()
+            self.slovnik.nova_sl.reverse()
 
 
 def vypsat_manualni_slovicka(self):
