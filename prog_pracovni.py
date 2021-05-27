@@ -3,7 +3,6 @@ import sqlite3
 from os import path
 import prace_s_db as d
 
-#db = "db_slovnik"
 
 #pokud db neexistuje - založí se schéma, vloží základní data
 if path.exists("db_slovnik.sqlite") == False:
