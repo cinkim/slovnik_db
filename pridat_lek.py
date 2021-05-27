@@ -38,8 +38,6 @@ def nova_lekce(self):
     self.Konec.grid(row=4, column=0,  sticky=W)
 
 
-def smazat_Lek(self):
-    print("Doprogramovat")
 
 def ulozit_Lek(self):
     id_l = self.nova_lek_cislo.get()
@@ -55,7 +53,7 @@ def ulozit_Lek(self):
                 tk.messagebox.showwarning("ERROR", "Vyplňte číslo a název lekce")
                 return
             try:
-                print(self.akt_j, self.akt_ucebnice, self.nova_lek.get(), int(self.nova_lek_cislo.get()))
+                # print(self.akt_j, self.akt_ucebnice, self.nova_lek.get(), int(self.nova_lek_cislo.get()))
                 db.uloz_lekci(self.akt_j, self.akt_ucebnice, self.nova_lek.get(), int(self.nova_lek_cislo.get()))
                 self.nacti_lekce()
                 self.cl.set("")
