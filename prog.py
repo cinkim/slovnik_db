@@ -1,4 +1,4 @@
-# hlani program
+# hlavni program
 
 import tkinter as tk
 from tkinter import ttk, StringVar,  N, E, W
@@ -18,7 +18,6 @@ import vypsat_sl as v_sl
 import pridat_uc as uc
 import pridat_lek as lek
 import import_slovicek as im
-
 
 class slovnik:
 
