@@ -200,7 +200,7 @@ insert into slovicka values(null,'brýle','glasses',7);
 insert into slovicka values(null,'boty(vysoké)','boots',8);
 insert into slovicka values(null,'èepice s kšiltem','cap',8);
 insert into slovicka values(null,'èepice, klobouk, pøilba','hat',8);
-insert into slovicka values(null,'svìtøík','jumper',8);
+insert into slovicka values(null,'svetøík','jumper',8);
 insert into slovicka values(null,'bota','shoe',8);
 insert into slovicka values(null,'suknì','skirt',8);
 insert into slovicka values(null,'krátký','short',8);
