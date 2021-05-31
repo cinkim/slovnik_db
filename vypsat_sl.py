@@ -61,12 +61,11 @@ def info(text):
 def precti(slovicko, jazyk, rychlost):        
     #https://stackoverflow.com/questions/65977155/change-pyttsx3-language
     #https://betterprogramming.pub/an-introduction-to-pyttsx3-a-text-to-speech-converter-for-python-4a7e1ce825c3
-    engine = pyttsx3.init()
-    newVoiceRate = rychlost
-    engine.setProperty('rate',newVoiceRate)
         
     if jazyk == "Aj":
+        newVoiceRate = rychlost
         engine = pyttsx3.init()
+        engine.setProperty('rate',newVoiceRate)
         engine.say(slovicko)
         engine.runAndWait()
 
