@@ -60,45 +60,48 @@ def vytvor_top_okno_novy_student(self):
 
 
 def ulozit_noveho_studenta(self):
-    vystup = []
-    new = self.new_st.get()
-    if new == "":
-        tk.messagebox.showwarning("ERROR", "Zadej jméno studenta.")
-        return
-    if new in self.slovnik.seznam_studentu:
-        tk.messagebox.showwarning("ERROR", "Uživatel již existuje\nzvolte jiné jméno.")
-        return
-    Aj = self.var_Aj.get()
-    Nj = self.var_Nj.get()
-    Fr = self.var_Fr.get()
-    Es = self.var_Es.get()
-    It = self.var_It.get()
-    Ru = self.var_Ru.get()
-    if Aj+Nj+Fr+Es+It+Ru == 0:
-        tk.messagebox.showwarning("ERROR", "Zvolte alespoň jeden studijní jazyk.")
-        return
-    vystup.append(new)
-    if Aj == 1:
-        vystup.append("Aj")
-    if Nj == 1:
-        vystup.append("Nj")
-    if Fr == 1:
-        vystup.append("Fr")
-    if Es == 1:
-        vystup.append("Es")
-    if It == 1:
-        vystup.append("It")
-    if Ru == 1:
-        vystup.append("Ru")
+    if self.slovnik.seznam_studentu == 3:
+        tk.messagebox.showwarning("ERROR", "Dalšího studenta již nelze přidat\nnutno zakoupit verzi SlovnikPRO.")
+    else:
+        vystup = []
+        new = self.new_st.get()
+        if new == "":
+            tk.messagebox.showwarning("ERROR", "Zadej jméno studenta.")
+            return
+        if new in self.slovnik.seznam_studentu:
+            tk.messagebox.showwarning("ERROR", "Uživatel již existuje\nzvolte jiné jméno.")
+            return
+        Aj = self.var_Aj.get()
+        Nj = self.var_Nj.get()
+        Fr = self.var_Fr.get()
+        Es = self.var_Es.get()
+        It = self.var_It.get()
+        Ru = self.var_Ru.get()
+        if Aj+Nj+Fr+Es+It+Ru == 0:
+            tk.messagebox.showwarning("ERROR", "Zvolte alespoň jeden studijní jazyk.")
+            return
+        vystup.append(new)
+        if Aj == 1:
+            vystup.append("Aj")
+        if Nj == 1:
+            vystup.append("Nj")
+        if Fr == 1:
+            vystup.append("Fr")
+        if Es == 1:
+            vystup.append("Es")
+        if It == 1:
+            vystup.append("It")
+        if Ru == 1:
+            vystup.append("Ru")
 
-    prace_s_db.pridat_studenta(vystup)
+        prace_s_db.pridat_studenta(vystup)
 
-    self.newst.set("")
-    self.var_Aj.set(0)
-    self.var_Nj.set(0)
-    self.var_Fr.set(0)
-    self.var_Es.set(0)
-    self.var_It.set(0)
-    self.var_Ru.set(0)
+        self.newst.set("")
+        self.var_Aj.set(0)
+        self.var_Nj.set(0)
+        self.var_Fr.set(0)
+        self.var_Es.set(0)
+        self.var_It.set(0)
+        self.var_Ru.set(0)
     
 
