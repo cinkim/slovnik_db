@@ -60,7 +60,7 @@ def vytvor_top_okno_novy_student(self):
 
 
 def ulozit_noveho_studenta(self):
-    if self.slovnik.seznam_studentu == 3:
+    if len(self.slovnik.seznam_studentu) == 3:
         tk.messagebox.showwarning("ERROR", "Dalšího studenta již nelze přidat\nnutno zakoupit verzi SlovnikPRO.")
     else:
         vystup = []
