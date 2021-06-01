@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W, NO
 
 import pyttsx3
+from pyttsx3.drivers import sapi5
 
 
 def vypis_slovicka(self,seznam_slovicek):
@@ -35,12 +36,6 @@ def vypis_slovicka(self,seznam_slovicek):
         self.tree_slovicka.bind("<ButtonRelease-1>", lambda x:precti(self.tree_slovicka.item(self.tree_slovicka.focus())["values"][1], self.akt_jazyk.get(), self.slovnik.rychlost_cteni ) )
         self.tree_slovicka.bind("<Up>", lambda x:precti(self.tree_slovicka.item(self.tree_slovicka.focus())["values"][1], self.akt_jazyk.get(), self.slovnik.rychlost_cteni ) )
         self.tree_slovicka.bind("<Down>", lambda x:precti(self.tree_slovicka.item(self.tree_slovicka.focus())["values"][1], self.akt_jazyk.get(), self.slovnik.rychlost_cteni ) )
-        
-        """
-        #self.tree_slovicka.bind("<Double-1>", lambda x:info(self.tree_slovicka.focus()["text"]-1))
-        self.tree_slovicka.bind("<Double-1>", lambda x:info(self.tree_slovicka.item(self.tree_slovicka.focus())["text"]-1))
-        """
-        
 
         self.mez = tk.Label(self.slovicka, text="", height=1)
         self.mez.grid(row=2, column=0)
@@ -53,25 +48,17 @@ def vypis_slovicka(self,seznam_slovicek):
             
             self.tree_slovicka.insert("", "end", text=pozice, values=(zaznam[1], zaznam[2], zaznam[3], zaznam[4]))
             pozice += 1
-"""
-def info(text):
-    print(text)
-"""  
+
     
 def precti(slovicko, jazyk, rychlost):        
     #https://stackoverflow.com/questions/65977155/change-pyttsx3-language
     #https://betterprogramming.pub/an-introduction-to-pyttsx3-a-text-to-speech-converter-for-python-4a7e1ce825c3
-    engine = pyttsx3.init()
-    newVoiceRate = rychlost
-    engine.setProperty('rate',newVoiceRate)
-        
+      
     if jazyk == "Aj":
         engine = pyttsx3.init()
+        newVoiceRate = rychlost
+        engine.setProperty('rate',newVoiceRate)
         engine.say(slovicko)
         engine.runAndWait()
 
-
-
-
-    
-
+        
