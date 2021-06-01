@@ -230,12 +230,14 @@ class slovnikGUI(tk.Frame):
         # vypíše výsledky studenta v rámci jedné učebnice
         
         try:
-            self.akt_ucebnice = self.seznam_ucebnic[self.ucebnice_ListBox.curselection()[0]]
+            # self.akt_ucebnice = self.seznam_ucebnic[self.ucebnice_ListBox.curselection()[0]]
             data = prace_s_db.nacti_vysledky(self.akt_student, self.akt_ucebnice)
             vys.vypis_vysledky(self, data)
         except AttributeError:
             tk.messagebox.showwarning("ERROR", "Vyber jazyk a učebnici.")
         except IndexError:
+            tk.messagebox.showwarning("ERROR", "Vyber učebnici.")
+        except TypeError:
             tk.messagebox.showwarning("ERROR", "Vyber učebnici.")
         return
     
