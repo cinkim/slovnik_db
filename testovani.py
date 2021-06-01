@@ -366,7 +366,7 @@ def vyhodnoceni(self):
             self.slovnik.aktualni_slovo+=1
             if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
                 self.ceskytext.set("")
-                # uloz_do_db(self)
+                uloz_do_db(self)
                 ulozit_test(self, self.slovnik.vysledky)
                 tk.messagebox.showwarning("HOTOVO", "Právě si došel na konec testu.")
                 vt.zobraz_vysledky_testu(self)
@@ -397,7 +397,7 @@ def vyhodnoceni(self):
             self.slovnik.aktualni_slovo+=1
             if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
                 self.ceskytext.set("")
-                # uloz_do_db(self)
+                uloz_do_db(self)
                 ulozit_test(self, self.slovnik.vysledky)
                 tk.messagebox.showwarning("HOTOVO", "Právě si došel na konec testu.")
                 vt.zobraz_vysledky_testu(self)
@@ -433,7 +433,7 @@ def vyhodnoceni(self):
             self.slovnik.aktualni_slovo+=1
             if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
                 self.ceskytext.set("")
-                # uloz_do_db(self)
+                uloz_do_db(self)
                 ulozit_test(self, self.slovnik.vysledky)
                 tk.messagebox.showwarning("HOTOVO", "Právě si došel na konec testu.")
                 vt.zobraz_vysledky_testu(self)
@@ -462,7 +462,7 @@ def vyhodnoceni(self):
             self.slovnik.aktualni_slovo+=1
             if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
                 self.ceskytext.set("")
-                # uloz_do_db(self)
+                uloz_do_db(self)
                 ulozit_test(self, self.slovnik.vysledky)
                 tk.messagebox.showwarning("HOTOVO", "Právě si došel na konec testu.")
                 vt.zobraz_vysledky_testu(self)
@@ -472,12 +472,18 @@ def vyhodnoceni(self):
             spust_test(self)
 
 def ulozit_test(self, vysledky):
-    now = datetime.datetime.now()
-    akt_datum = str(now.year)+ "_" + str(now.month) + "_" + str(now.day) + " " + str(now.hour) + ":" + str(now.minute)
-    cesta = "./vysledky/" + akt_datum + "_" + self.akt_student + "_" + self.akt_Lekce + ".txt"
-    with open(cesta, mode="w", encoding="utf-8") as soubor:
-        for ii in self.slovnik.vysledky:
-            ii = str(ii)
-            ii = ii.replace("[", "")
-            ii = ii.replace("]", "")
-            print(ii, file=soubor)
+    while True:
+        now = datetime.datetime.now()
+        akt_datum = str(now.year)+ "_" + str(now.month) + "_" + str(now.day) + " " + str(now.hour) + ":" + str(now.minute)
+        cesta = "Vysledky/" + akt_datum + "_" + self.akt_student + "_" + self.akt_Lekce + ".txt"
+        cesta = cesta.replace(":", "_")
+        try:
+            with open(cesta, mode="w", encoding="utf-8") as soubor:
+                for ii in self.slovnik.vysledky:
+                    ii = str(ii)
+                    ii = ii.replace("[", "")
+                    ii = ii.replace("]", "")
+                    print(ii, file=soubor)
+                return
+        except FileNotFoundError:
+            os.mkdir("Vysledky")
