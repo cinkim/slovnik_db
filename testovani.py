@@ -7,6 +7,10 @@ import prace_s_db as db
 from random import randrange
 import vysledky_testu as vt
 
+import datetime
+
+import os
+
 
 def tes(self):
     self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
@@ -362,7 +366,8 @@ def vyhodnoceni(self):
             self.slovnik.aktualni_slovo+=1
             if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
                 self.ceskytext.set("")
-                uloz_do_db(self)
+                # uloz_do_db(self)
+                ulozit_test(self, self.slovnik.vysledky)
                 tk.messagebox.showwarning("HOTOVO", "Právě si došel na konec testu.")
                 vt.zobraz_vysledky_testu(self)
                 vt.nacti_vysledky(self, self.slovnik.vysledky)
@@ -392,7 +397,8 @@ def vyhodnoceni(self):
             self.slovnik.aktualni_slovo+=1
             if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
                 self.ceskytext.set("")
-                uloz_do_db(self)
+                # uloz_do_db(self)
+                ulozit_test(self, self.slovnik.vysledky)
                 tk.messagebox.showwarning("HOTOVO", "Právě si došel na konec testu.")
                 vt.zobraz_vysledky_testu(self)
                 vt.nacti_vysledky(self, self.slovnik.vysledky)
@@ -427,7 +433,8 @@ def vyhodnoceni(self):
             self.slovnik.aktualni_slovo+=1
             if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
                 self.ceskytext.set("")
-                uloz_do_db(self)
+                # uloz_do_db(self)
+                ulozit_test(self, self.slovnik.vysledky)
                 tk.messagebox.showwarning("HOTOVO", "Právě si došel na konec testu.")
                 vt.zobraz_vysledky_testu(self)
                 vt.nacti_vysledky(self, self.slovnik.vysledky)
@@ -455,7 +462,8 @@ def vyhodnoceni(self):
             self.slovnik.aktualni_slovo+=1
             if self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
                 self.ceskytext.set("")
-                uloz_do_db(self)
+                # uloz_do_db(self)
+                ulozit_test(self, self.slovnik.vysledky)
                 tk.messagebox.showwarning("HOTOVO", "Právě si došel na konec testu.")
                 vt.zobraz_vysledky_testu(self)
                 vt.nacti_vysledky(self, self.slovnik.vysledky)
@@ -463,7 +471,13 @@ def vyhodnoceni(self):
             
             spust_test(self)
 
-
-
-
-
+def ulozit_test(self, vysledky):
+    now = datetime.datetime.now()
+    akt_datum = str(now.year)+ "_" + str(now.month) + "_" + str(now.day) + " " + str(now.hour) + ":" + str(now.minute)
+    cesta = "./vysledky/" + akt_datum + "_" + self.akt_student + "_" + self.akt_Lekce + ".txt"
+    with open(cesta, mode="w", encoding="utf-8") as soubor:
+        for ii in self.slovnik.vysledky:
+            ii = str(ii)
+            ii = ii.replace("[", "")
+            ii = ii.replace("]", "")
+            print(ii, file=soubor)
