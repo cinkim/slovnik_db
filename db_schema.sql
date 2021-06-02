@@ -59,3 +59,12 @@ CREATE TABLE OSOBY_JAZYKY (
 	jazyk_id integer,
 	akt_ucebnice_id integer
 );
+
+CREATE TABLE INFO (
+	nazev varchar,
+	verze integer,
+	platna_verze integer,
+	platnost_od datetime,
+	platnost_do datetime,
+	popis varchar
+);
