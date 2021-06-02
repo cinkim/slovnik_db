@@ -1,6 +1,6 @@
 
 import tkinter as tk
-from tkinter import StringVar, NORMAL, W
+from tkinter import StringVar, NORMAL, W, E
 from tkinter import NORMAL
 
 
@@ -14,12 +14,13 @@ def vytvor_top_okno_novy_student(self):
         self.new_st = tk.Entry(self.st, width=30, justify="center", textvariable=self.newst)
         self.new_st.grid(row=3, column=0, sticky=W)
         self.new_st.config(state=NORMAL)
+        self.new_st.focus_set()
 
         self.new_popis = tk.Label(self.st, text="Jméno studenta", width=20, font="Arial 8")
         self.new_popis.grid(row=3, column=1, sticky=W)
 
         self.jz = tk.Label(self.st, text="Označ studijní jazyky.", font="Arial 11")
-        self.jz.grid(row=4, column=0, sticky=W)
+        self.jz.grid(row=4, columnspan=2, sticky=W)
 
         self.var_Aj = tk.IntVar()
         self.radio_Aj = tk.Checkbutton(self.st, text="Aj", variable=self.var_Aj)
@@ -104,5 +105,6 @@ def ulozit_noveho_studenta(self):
         self.var_Es.set(0)
         self.var_It.set(0)
         self.var_Ru.set(0)
+        self.jiny.set("")
     
 
