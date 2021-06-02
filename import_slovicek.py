@@ -15,7 +15,7 @@ def import_sl(self):
             seznam_slov = pd.read_excel(file_path, engine = 'openpyxl')
 
         elif "csv" or "txt" in soubor_typ:
-            seznam_slov = pd.read_csv(file_path, delimiter=';', usecols=(0,1))
+            seznam_slov = pd.read_csv(file_path, delimiter='/', usecols=(0,1))
     
     except ValueError:
         tk.messagebox.showwarning("ERROR", "Nepodporovaný typ souboru\naplikace podporuje pouze soubory typu\ncsv, txt, xls")
