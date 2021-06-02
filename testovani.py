@@ -337,13 +337,25 @@ def uloz_do_db(self):
     self.slovnik.vysledky_pro_ulozeni_do_db = []
 
 def vyhodnoceni(self):
+    otazka = self.slovicko[2].lower()
+    odpoved = self.preklad.get().lower()
+    otazka_bez_mezer = otazka.replace(" ", "")
+    odpoved_bez_mezer = odpoved.replace(" ", "")
+
+    rozsekana_otazka = otazka.split(",")
+    
+    orezana_otazka = []
+    for slovo in rozsekana_otazka:
+        slovo = slovo.strip()
+        orezana_otazka.append(slovo)
+    
     try:
         self.slovnik.pocet_sl_pro_procenta +=1
         spravne = self.slovicko[3]
         spatne = self.slovicko[4]
         vys = []
         vys_do_vypisu = []
-        if self.slovicko[2].lower() == self.preklad.get().lower():
+        if (odpoved in orezana_otazka) or (otazka == odpoved) or (otazka_bez_mezer == odpoved_bez_mezer):
             self.ok = True       
             spravne = 1
             spatne = 0
@@ -410,7 +422,7 @@ def vyhodnoceni(self):
         spatne = self.slovicko[4]
         vys = []
         vys_do_vypisu = []
-        if self.slovicko[2].lower() == self.preklad.get().lower():
+        if (odpoved in orezana_otazka) or (otazka == odpoved) or (otazka_bez_mezer == odpoved_bez_mezer):
             self.ok = True       
             spravne = 1
             spatne = 0
