@@ -8,6 +8,8 @@ from tkinter import messagebox
 
 import os
 
+import win32com.client as win32
+
 import new_student as ns
 import prace_s_db
 import nastaveni
@@ -195,8 +197,28 @@ class slovnikGUI(tk.Frame):
         self.mezera1 = tk.Label(self.pole_nastaveni, text="")
         self.mezera1.grid(row=5, column=2, sticky=W)
 
+        self.email = tk.Button(self.pole_nastaveni, text="Poslat email vývojářům?", command=self.email_vyvojarum, fg="green", font="Arial 8", width=20)
+        self.email.grid(row=6, column=2, sticky=W)
+
+        self.mezera2 = tk.Label(self.pole_nastaveni, text="")
+        self.mezera2.grid(row=7, column=2, sticky=W)
+
         self.button_tov_nastaveni = tk.Button(self.pole_nastaveni, text="Obnovit\ntovární nastavení", command=self.tovarni_nastaveni, fg="red", font="Arial 8", width=20)
-        self.button_tov_nastaveni.grid(row=6, column=2, sticky=W)
+        self.button_tov_nastaveni.grid(row=8, column=2, sticky=W)
+
+
+    """__________________________email vývojářům________________"""
+    def email_vyvojarum(self):
+        try:
+            outlook = win32.Dispatch("outlook.application")
+            mail = outlook.CreateItem(0)
+            mail.subject = "Slovník - nahlásit problém/požadavek" # předmět
+            mail.To = "lucie.jimenez@gmail.com; lenka@konstant.cz; cinkim@seznam.cz"
+            mail.Display(False)
+            return
+        except:
+            tk.messagebox.showwarning("Error", "Je nutné mít nainstalovanou aplikaci MS Outlook\npokud aplikaci nechcete instalovat, použijte jeden z následujících kontaktů\n\nlucie.jimenez@gmail.com\nlenka@konstant.cz\ncinkim@seznam.cz")
+            print("ok")
 
 
     """_______________________ Tovární nastavení______________________________"""
