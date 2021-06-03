@@ -3,6 +3,7 @@ from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W, NO
 
 import pyttsx3
 from pyttsx3.drivers import sapi5
+from pyttsx3 import voice
 
 
 def vypis_slovicka(self,seznam_slovicek):
@@ -53,12 +54,22 @@ def vypis_slovicka(self,seznam_slovicek):
 def precti(slovicko, jazyk, rychlost):        
     #https://stackoverflow.com/questions/65977155/change-pyttsx3-language
     #https://betterprogramming.pub/an-introduction-to-pyttsx3-a-text-to-speech-converter-for-python-4a7e1ce825c3
-      
-    if jazyk == "Aj":
-        engine = pyttsx3.init()
-        newVoiceRate = rychlost
-        engine.setProperty('rate',newVoiceRate)
-        engine.say(slovicko)
-        engine.runAndWait()
+     
+    engine = pyttsx3.init()
+    voices = engine.getProperty('voices')
+    for voice in voices:
+        print(voice)
+        print(type(voice))
+        if voice.values() == "Microsoft Anna - English (United States)":
+            print(voice)
+
+        #engine.setProperty('voice', voice.id)
+
+
+    newVoiceRate = rychlost
+    engine.setProperty('rate',newVoiceRate)
+    engine.say(slovicko)
+    engine.runAndWait()
+
 
         
