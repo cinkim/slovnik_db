@@ -51,7 +51,7 @@ class slovnik:
         
         self.pocet_sl_pro_procenta = 0 # mezivýpočet pro procentuelní vyhodnocení testu
         self.pocet_spravnych_pro_procenta = 0 # mezivýpočet pro procentuelní vyhodnocení testu
-    
+        self.zbyva_k_testovani = 0
         
 
     """_____________ načtení všech studentů po startu aplikace ______________"""
@@ -91,7 +91,7 @@ class slovnikGUI(tk.Frame):
         self.studenti_ListBox.bind( "<ButtonRelease-1>", self.nacti_studenta)  # po kliknutí se načtou slovíčka z dané učebnice 
         self.studenti_ListBox.grid(row=2, column=0, sticky=W)
 
-        self.button_new_st = tk.Button(root, text="Nový student", command=self.vytvor_top_okno_novy_student, fg="blue", font="Arial 8", width=20)
+        self.button_new_st = tk.Button(root, text="Nový student", command=self.vytvor_top_okno_novy_student, font="Arial 8", width=20)
         self.button_new_st.grid(row=10, column=0, sticky=W)
 
         self.button_Konec = tk.Button(root, text="Konec", command=self.on_close, fg="red", font="Arial 8", width=20)
@@ -137,12 +137,9 @@ class slovnikGUI(tk.Frame):
         
         self.ucebnice_ListBox.grid(row=2, column=2, sticky=W)
 
-        self.button_pridat_ucebnici = tk.Button(self.ucebnice, text="Přidat učebnici", command=self.pridat_ucebnici, fg="blue", font="Arial 8", width=20)
+        self.button_pridat_ucebnici = tk.Button(self.ucebnice, text="Přidat učebnici", command=self.pridat_ucebnici, font="Arial 8", width=20)
         self.button_pridat_ucebnici.grid(row=8, column=2, sticky=W)
-        """
-        self.button_smazat_ucebnici = tk.Button(self.ucebnice, text="Smazat učebnici", command=self.smazat_ucebnici, fg="blue", font="Arial 8", width=20)
-        self.button_smazat_ucebnici.grid(row=9, column=2, sticky=W)
-        """
+
 
 
     """____________________vytvoří pole se seznamem lekcí podle zvoleného studenta/jazyka/učebnice ____________________"""
@@ -167,16 +164,16 @@ class slovnikGUI(tk.Frame):
         self.tree_Lekce.heading("nazev", text="Název lekce\n ")
         self.tree_Lekce.column("nazev", minwidth=0, width=200, stretch=NO, anchor='center')
 
-        self.button_pridat_lekci = tk.Button(self.Lekce, text="Přidat lekci", command=self.pridat_lekci, fg="blue", font="Arial 8", width=20)
+        self.button_pridat_lekci = tk.Button(self.Lekce, text="Přidat lekci", command=self.pridat_lekci, font="Arial 8", width=20)
         self.button_pridat_lekci.grid(row=4, column=0, sticky=W)
 
-        self.button_pridat_slovicka = tk.Button(self.Lekce, text="Přidat slovíčka", command=self.pridat_slovicka, fg="blue", font="Arial 8", width=20)
+        self.button_pridat_slovicka = tk.Button(self.Lekce, text="Přidat slovíčka", command=self.pridat_slovicka, font="Arial 8", width=20)
         self.button_pridat_slovicka.grid(row=4, column=1, sticky=W)
 
-        self.button_pridat_slovicka = tk.Button(self.Lekce, text="Vypsat slovíčka", command=self.vypsat_slovicka, fg="blue", font="Arial 8", width=20)
+        self.button_pridat_slovicka = tk.Button(self.Lekce, text="Vypsat slovíčka", command=self.vypsat_slovicka, font="Arial 8", width=20)
         self.button_pridat_slovicka.grid(row=5, column=0, sticky=W)
 
-        self.button_Test = tk.Button(self.Lekce, text="Testovat", command=self.Test, fg="blue", font="Arial 8", width=20)
+        self.button_Test = tk.Button(self.Lekce, text="Testovat", command=self.Test, font="Arial 8", width=20)
         self.button_Test.grid(row=5, column=1, sticky=W)
               
     """_________________ vytvoří pravé pole pro další volby - nastavení/testování/historie ____________________________"""
@@ -185,19 +182,19 @@ class slovnikGUI(tk.Frame):
         self.pole_nastaveni.grid(row=1, column=4, sticky=N)
         self.nastav = tk.Label(self.pole_nastaveni, text="", font="Arial 8")
 
-        self.button_Nastaveni = tk.Button(self.pole_nastaveni, text="Nastavení studenta", command=self.nastaveni_stud, fg="blue", font="Arial 8", width=20)
+        self.button_Nastaveni = tk.Button(self.pole_nastaveni, text="Nastavení studenta", command=self.nastaveni_stud, font="Arial 8", width=20)
         self.button_Nastaveni.grid(row=2, column=2, sticky=W)
 
         self.mezera1 = tk.Label(self.pole_nastaveni, text="")
         self.mezera1.grid(row=3, column=2, sticky=W)
 
-        self.button_Nastaveni = tk.Button(self.pole_nastaveni, text="Výsledky studenta", command=self.vysledky_stud, fg="blue", font="Arial 8", width=20)
+        self.button_Nastaveni = tk.Button(self.pole_nastaveni, text="Výsledky studenta", command=self.vysledky_stud, font="Arial 8", width=20)
         self.button_Nastaveni.grid(row=4, column=2, sticky=W)
 
         self.mezera1 = tk.Label(self.pole_nastaveni, text="")
         self.mezera1.grid(row=5, column=2, sticky=W)
 
-        self.email = tk.Button(self.pole_nastaveni, text="Poslat email vývojářům?", command=self.email_vyvojarum, fg="green", font="Arial 8", width=20)
+        self.email = tk.Button(self.pole_nastaveni, text="Poslat email vývojářům?", command=self.email_vyvojarum, font="Arial 8", width=20)
         self.email.grid(row=6, column=2, sticky=W)
 
         self.mezera2 = tk.Label(self.pole_nastaveni, text="")
@@ -338,8 +335,6 @@ class slovnikGUI(tk.Frame):
     def ulozit_ucebnice(self):
         uc.ulozit_novou_ucebnici(self) # uloží novou učebnici
             
-    def smazat_ucebnici(self):
-        uc.smazat_uc(self) # smaže učebnici
 
     """____________________________ pridat_lek.py ___________________________________________________________________"""
 
