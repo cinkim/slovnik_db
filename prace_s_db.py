@@ -153,6 +153,17 @@ def seznam_ucebnic(jazyk):
                         where j.nazev = '{jazyk}' order by j.nazev''')     
     return select_to_seznam(cursor.fetchall())
 
+def seznam_vsech_ucebnic():
+    """
+     - seznam vsech ucebnic daneho jazyku
+    VSTUP: jayzk - retezec
+    VYSTUP: seznam ucebnic - [ucebnice1, ucebnice2,...]
+    """
+    conn, cursor = pripojeni_db()
+    cursor.execute(f''' select u.nazev from ucebnice u
+	                        join jazyky j on u.jazyk_id = j.id
+                        order by j.nazev''')     
+    return select_to_seznam(cursor.fetchall())
 
 def seznam_lekci(ucebnice):
     """

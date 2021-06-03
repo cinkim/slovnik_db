@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import StringVar, E, W
+from tkinter import StringVar, E, W, NORMAL
 from tkinter import messagebox
 import prace_s_db as db
 
@@ -20,6 +20,8 @@ def nova_lekce(self):
     self.cl = StringVar()
     self.nova_lek_cislo = tk.Entry(self.lekce_nova, width=10, textvariable=self.cl)
     self.nova_lek_cislo.grid(row=2, column=1 )
+    self.nova_lek_cislo.config(state=NORMAL)
+    self.nova_lek_cislo.focus_set()
 
     self.popisek = tk.Label(self.lekce_nova, text="Název lekce:", font="Ariel 10")
     self.popisek.grid(row=2, column=2)

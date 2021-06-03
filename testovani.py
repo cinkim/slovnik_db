@@ -31,7 +31,7 @@ def tes(self):
     self.top_test.grid_rowconfigure(8, weight=0)
     self.top_test.grid_rowconfigure(9, weight=0)
 
-    self.testovani = tk.Label(self.top_test, text="Student: " + self.akt_student + "\nJazyk : " + self.akt_j + "\nUčebnice :" + self.akt_ucebnice + "\nLekce:" + self.akt_Lekce, font="Ariel 14", bg="red")
+    self.testovani = tk.Label(self.top_test, text="Student: " + self.akt_student + "\nJazyk : " + self.akt_j + "\nUčebnice :" + self.akt_ucebnice + "\nLekce:" + self.akt_Lekce, font="Ariel 14", bg="grey")
     self.testovani.grid(row=1, columnspan=4, sticky=W+E)
 
     self.M_tes = tk.Label(self.top_test, text="")
@@ -51,6 +51,10 @@ def tes(self):
     self.uspech = StringVar()
     self.akt_uspech = tk.Label(self.top_test, textvariable=self.uspech, width=25, font="Arial 12")
     self.akt_uspech.grid(row=3, column=2)
+
+    self.zbyva = StringVar()
+    self.zbyva_slovicek = tk.Label(self.top_test, textvariable=self.zbyva, width=25, font="Arial 12")
+    self.zbyva_slovicek.grid(row=3, column=3)
 
     self.M_tes = tk.Label(self.top_test, text="")
     self.M_tes.grid(row=4, column=0)
@@ -82,7 +86,7 @@ def tes(self):
     self.mez = tk.Label(self.top_test, text="")
     self.mez.grid(row=7, column=0)
 
-    self.spustit = tk.Button(self.top_test, text="Spustit Test", command=self.Testuj, fg="blue", font="Ariel 8", width=20)
+    self.spustit = tk.Button(self.top_test, text="Spustit Test", command=self.Testuj, font="Ariel 8", width=20)
     self.spustit.grid(row=8, column=0, sticky=W)
 
     self.Konec = tk.Button(self.top_test, text="Konec", command=self.ukonci_top_test, fg="red", font="Arial 8", width=20)
@@ -130,6 +134,7 @@ def v1(self): # cz/cizí
     else:
         self.slovnik.testuj = self.slovnik.testuj * self.slovnik.pocet_kol_testu
         random.shuffle(self.slovnik.testuj)
+        self.slovnik.zbyva_k_testovani = len(self.slovnik.testuj)
 
 
 def v2(self): # cizí/cz
@@ -170,6 +175,9 @@ def v2(self): # cizí/cz
     else:
         self.slovnik.testuj = self.slovnik.testuj * self.slovnik.pocet_kol_testu
         random.shuffle(self.slovnik.testuj)
+        self.slovnik.zbyva_k_testovani = len(self.slovnik.testuj)
+
+
 
 def nahoda(self):
     cislo = randrange(2)
@@ -224,6 +232,8 @@ def v3(self): # mix
     else:
         self.slovnik.testuj = self.slovnik.testuj * self.slovnik.pocet_kol_testu
         random.shuffle(self.slovnik.testuj)
+        self.slovnik.zbyva_k_testovani = len(self.slovnik.testuj)
+
 
     
 
@@ -259,6 +269,7 @@ def ukaz(self):
     for vysledek in mezi:
         if vysledek[3] == "Dobře":
             self.uspech.set("Aktuální úspěšnost: " + self.proc + " %")
+            self.zbyva.set("Do konce testu zbývá: " + str(self.slovnik.zbyva_k_testovani) + " slovíček.")
 
             self.text1.tag_config("cerna", foreground="black", justify=CENTER)
             self.text1.insert(tk.END,vysledek[0], "cerna")
@@ -280,6 +291,7 @@ def ukaz(self):
 
         else:
             self.uspech.set("Aktuální úspěšnost: " + self.proc + " %")
+            self.zbyva.set("Do konce testu zbývá: " + str(self.slovnik.zbyva_k_testovani) + " slovíček.")
 
             self.text1.tag_config("cerna", foreground="black",justify=CENTER)
             self.text1.insert(tk.END,vysledek[0], "cerna")
@@ -337,6 +349,7 @@ def uloz_do_db(self):
     self.slovnik.vysledky_pro_ulozeni_do_db = []
 
 def vyhodnoceni(self):
+    self.slovnik.zbyva_k_testovani -=1
     otazka = self.slovicko[2].lower()
     odpoved = self.preklad.get().lower()
     otazka_bez_mezer = otazka.replace(" ", "")

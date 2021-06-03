@@ -1,1 +1,5 @@
 .pracovni/
+.venv/
+__pycache__
+db_slovnik.sqlite
+Vysledky/

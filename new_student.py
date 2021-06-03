@@ -105,6 +105,5 @@ def ulozit_noveho_studenta(self):
         self.var_Es.set(0)
         self.var_It.set(0)
         self.var_Ru.set(0)
-        self.jiny.set("")
     
 
