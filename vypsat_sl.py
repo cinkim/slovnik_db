@@ -10,7 +10,7 @@ def vypis_slovicka(self,seznam_slovicek):
         self.slovicka = tk.Toplevel()
         self.slovicka.title("Slovíčka lekce: " + self.akt_Lekce)
 
-        self.nadpis = tk.Label(self.slovicka, text="Jazyk: " + self.akt_j + "\nUčebnice:" + self.akt_ucebnice + "\nLekce:" + self.akt_Lekce, font="Ariel 14", bg="red")
+        self.nadpis = tk.Label(self.slovicka, text="Jazyk: " + self.akt_j + "\nUčebnice:" + self.akt_ucebnice + "\nLekce:" + self.akt_Lekce, font="Ariel 14", bg="grey")
         self.nadpis.grid(row=0, columnspan=3, sticky=W+E)
          
         self.tree_slovicka = ttk.Treeview(self.slovicka, column=("česky", "nečesky", "správně", "špatně"), height=20, selectmode='browse')
