@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import StringVar, E, W
+from tkinter import StringVar, E, W, NORMAL
 from tkinter import messagebox
 import prace_s_db as db
 
@@ -19,6 +19,8 @@ def nova_ucebnice(self):
     self.uc = StringVar()
     self.nova_uc = tk.Entry(self.ucebnice_nova, width=25, textvariable=self.uc)
     self.nova_uc.grid(row=2, column=1, columnspan=2 )
+    self.nova_uc.config(state=NORMAL)
+    self.nova_uc.focus_set()
 
     self.Ulozit = tk.Button(self.ucebnice_nova, width=20, text="OK", fg="green", command=self.ulozit_ucebnice)
     self.Ulozit.grid(row=2, column=3, sticky=W)
@@ -32,9 +34,9 @@ def nova_ucebnice(self):
 
 
 def ulozit_novou_ucebnici(self):
-    seznam = db.seznam_ucebnic(self.akt_j)
+    seznam = db.seznam_vsech_ucebnic()
     if self.nova_uc.get() in seznam:
-        tk.messagebox.showwarning("???", "Učebnice již existuje")
+        tk.messagebox.showwarning("???", "Učebnice již existuje\npoužijte jiné pojmenování, postačí přidat za název jakýkoliv znak\nnapř: číslovku, přezdívku....")
         return
     if messagebox.askyesno("Uložit???", "Uložit učebnici?") == True:
         while True:
