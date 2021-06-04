@@ -5,6 +5,8 @@ import pyttsx3
 from pyttsx3.drivers import sapi5
 from pyttsx3 import voice
 
+import platform
+
 
 def vypis_slovicka(self,seznam_slovicek):
         
@@ -55,21 +57,51 @@ def precti(slovicko, jazyk, rychlost):
     #https://stackoverflow.com/questions/65977155/change-pyttsx3-language
     #https://betterprogramming.pub/an-introduction-to-pyttsx3-a-text-to-speech-converter-for-python-4a7e1ce825c3
      
-    engine = pyttsx3.init()
-    voices = engine.getProperty('voices')
-    for voice in voices:
-        print(voice)
-        print(type(voice))
-        if voice.values() == "Microsoft Anna - English (United States)":
-            print(voice)
+    win = platform.platform()
+    print(win)
+    engine = pyttsx3.init("sapi5")
+    try:
+        if "Windows-7" in win:
+            if jazyk == "Aj":
+                newVoiceRate = rychlost
+                engine.setProperty('rate',newVoiceRate)
+                engine.say(slovicko)
+                engine.runAndWait()
+            else:
+                tk.messagebox.showwarning("???", """Je nám líto, ale Windows-7 neumí více jazykových balíčků.
+                    \nBudete muset přejít na novější verzi operačního systému""")
+        else:
+            pass
+    except:
+        tk.messagebox.showwarning("???", "Pravděpodobně nemáte k dispozici žádný jazykový balíček.")
 
-        #engine.setProperty('voice', voice.id)
-
-
-    newVoiceRate = rychlost
-    engine.setProperty('rate',newVoiceRate)
-    engine.say(slovicko)
-    engine.runAndWait()
-
-
-        
+    try:
+        if "Windows-10" in win:
+            voices = engine.getProperty("voices")           
+            if jazyk == "Nj":
+                engine.setProperty('voices', voices[1].id)
+                engine.say(slovicko)
+                engine.runAndWait()
+            elif jazyk == "Fr":
+                engine.setProperty('voices', voices[2].id)
+                engine.say(slovicko)
+                engine.runAndWait()
+            elif jazyk == "Es":
+                engine.setProperty('voices', voices[3].id)
+                engine.say(slovicko)
+                engine.runAndWait()
+            elif jazyk == "It":
+                engine.setProperty('voices', voices[4].id)
+                engine.say(slovicko)
+                engine.runAndWait()
+            elif jazyk == "Ru":
+                engine.setProperty('voices', voices[5].id)
+                engine.say(slovicko)
+                engine.runAndWait()
+            else:
+                tk.messagebox.showwarning("???", """Tohle by se nemělo stát,\n
+                    kontaktujte vývojáře a popište, co jste udělali těsně před tím.\nDůležitá je informace, jaký jste měli zvolený jazyk.""")
+    except:
+        tk.messagebox.showwarning("ERROR", """Pravděpodobně nemáte k dispozici jazykový balíček.\nBudete ho muset nainstalovat\n
+                Jak na to najdete v Uživatelské příručce.""")
+                
