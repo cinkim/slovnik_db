@@ -77,8 +77,15 @@ def precti(slovicko, jazyk, rychlost):
 
     try:
         if "Windows-10" in win:
-            voices = engine.getProperty("voices")           
-            if jazyk == "Nj":
+            voices = engine.getProperty("voices")
+            for voice in voices:
+                print(voice)
+
+            if jazyk == "Aj":
+                engine.setProperty('voices', voices[0].id)
+                engine.say(slovicko)
+                engine.runAndWait()
+            elif jazyk == "Nj":
                 engine.setProperty('voices', voices[1].id)
                 engine.say(slovicko)
                 engine.runAndWait()
