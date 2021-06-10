@@ -58,6 +58,7 @@ def precti(slovicko, jazyk, rychlost):
     #https://betterprogramming.pub/an-introduction-to-pyttsx3-a-text-to-speech-converter-for-python-4a7e1ce825c3
 
     win = platform.platform()   # vytahne z pc verzi systému Windows
+    print(win)  # vypíše operační systém, po úpravě podmínek se řádka musí smazat
 
     newVoiceRate = rychlost     # nastaví rychlost čtení
 
@@ -86,7 +87,7 @@ def precti(slovicko, jazyk, rychlost):
     elif "Windows-10" in win:
         for voice in voices:     
             rec = voice.name # převede název jazykového balíčku na řetězec 
-            print(rec) # vypíše název jazykového balíčku
+            print(rec) # vypíše název jazykového balíčku, po úpravě podmínek se řádka musí smazat
 
             if ("United States" in rec) and (jazyk == "Aj"):  # upravit podmínku podle názvu jazykového balíčku
                 engine.setProperty(voice,newVoiceRate)
