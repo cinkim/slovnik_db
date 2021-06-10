@@ -99,7 +99,7 @@ def precti(slovicko, jazyk, rychlost):
                 engine.say(slovicko)
                 engine.runAndWait()
 
-            elif ("Russsian" in rec) and (jazyk == "Ru"):    # upravit podmínku podle názvu jazykového balíčku
+            elif ("Russian" in rec) and (jazyk == "Ru"):    # upravit podmínku podle názvu jazykového balíčku
                 engine.setProperty(voice,newVoiceRate)
                 engine.say(slovicko)
                 engine.runAndWait()
@@ -109,7 +109,7 @@ def precti(slovicko, jazyk, rychlost):
                 engine.say(slovicko)
                 engine.runAndWait()
 
-            elif ("Spaanish" in rec) and (jazyk == "Es"):    # upravit podmínku podle názvu jazykového balíčku
+            elif ("Spanish" in rec) and (jazyk == "Es"):    # upravit podmínku podle názvu jazykového balíčku
                 engine.setProperty(voice,newVoiceRate)
                 engine.say(slovicko)
                 engine.runAndWait()
