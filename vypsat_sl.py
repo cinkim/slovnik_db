@@ -58,7 +58,7 @@ def precti(slovicko, jazyk, rychlost):
     #https://betterprogramming.pub/an-introduction-to-pyttsx3-a-text-to-speech-converter-for-python-4a7e1ce825c3
 
     win = platform.platform()   # vytahne z pc verzi systému Windows
-    print(win)  # vypíše operační systém, po úpravě podmínek se řádka musí smazat
+    # print(win)  # vypíše operační systém, po úpravě podmínek se řádka musí smazat
 
     newVoiceRate = rychlost     # nastaví rychlost čtení
 
@@ -87,34 +87,34 @@ def precti(slovicko, jazyk, rychlost):
     elif "Windows-10" in win:
         for voice in voices:     
             rec = voice.name # převede název jazykového balíčku na řetězec 
-            print(rec) # vypíše název jazykového balíčku, po úpravě podmínek se řádka musí smazat
+            # print(rec) # vypíše název jazykového balíčku, po úpravě podmínek se řádka musí smazat
 
             if ("United States" in rec) and (jazyk == "Aj"):  # upravit podmínku podle názvu jazykového balíčku
                 engine.setProperty(voice,newVoiceRate)
                 engine.say(slovicko)
                 engine.runAndWait()
 
-            elif ("Nemecko" in rec) and (jazyk == "Nj"):  # upravit podmínku podle názvu jazykového balíčku
+            elif ("German" in rec) and (jazyk == "Nj"):  # upravit podmínku podle názvu jazykového balíčku
                 engine.setProperty(voice,newVoiceRate)
                 engine.say(slovicko)
                 engine.runAndWait()
 
-            elif ("Rusko" in rec) and (jazyk == "Ru"):    # upravit podmínku podle názvu jazykového balíčku
+            elif ("Russsian" in rec) and (jazyk == "Ru"):    # upravit podmínku podle názvu jazykového balíčku
                 engine.setProperty(voice,newVoiceRate)
                 engine.say(slovicko)
                 engine.runAndWait()
 
-            elif ("Francie" in rec) and (jazyk == "Fr"):  # upravit podmínku podle názvu jazykového balíčku
+            elif ("French" in rec) and (jazyk == "Fr"):  # upravit podmínku podle názvu jazykového balíčku
                 engine.setProperty(voice,newVoiceRate)
                 engine.say(slovicko)
                 engine.runAndWait()
 
-            elif ("Spanelsko" in rec) and (jazyk == "Es"):    # upravit podmínku podle názvu jazykového balíčku
+            elif ("Spaanish" in rec) and (jazyk == "Es"):    # upravit podmínku podle názvu jazykového balíčku
                 engine.setProperty(voice,newVoiceRate)
                 engine.say(slovicko)
                 engine.runAndWait()
 
-            elif ("Italie" in rec) and (jazyk == "It"):   # upravit podmínku podle názvu jazykového balíčku
+            elif ("Italy" in rec) and (jazyk == "It"):   # upravit podmínku podle názvu jazykového balíčku
                 engine.setProperty(voice,newVoiceRate)
                 engine.say(slovicko)
                 engine.runAndWait()
