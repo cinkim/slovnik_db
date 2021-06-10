@@ -57,41 +57,67 @@ def precti(slovicko, jazyk, rychlost):
     #https://stackoverflow.com/questions/65977155/change-pyttsx3-language
     #https://betterprogramming.pub/an-introduction-to-pyttsx3-a-text-to-speech-converter-for-python-4a7e1ce825c3
 
-    newVoiceRate = rychlost
+    win = platform.platform()   # vytahne z pc verzi systému Windows
+
+    newVoiceRate = rychlost     # nastaví rychlost čtení
 
     engine = pyttsx3.init("sapi5")
-    voices = engine.getProperty('voices')
+    voices = engine.getProperty('voices')   # vytahne ze systému jazykové balíčky
 
-    try:
-        for voice in voices:
-            rec = voice.name
-            if "United States" in rec:
+
+    if "Windows-7" in win:
+        if jazyk == "Aj":
+            engine.setProperty("rate",newVoiceRate)
+            engine.say(slovicko)
+            engine.runAndWait()
+        else:
+            tk.messagebox.showwarning("???", """Pro tuto verzi systému není k dispozici jazykový balíček,\n
+                pokud chcete využívat všechny funkce slovníku, musíte přejít na Windows-10.""")
+
+    elif "Windows-8" in win:
+        if jazyk == "Aj":
+            engine.setProperty("rate",newVoiceRate)
+            engine.say(slovicko)
+            engine.runAndWait()
+        else:
+            tk.messagebox.showwarning("???", """Pro tuto verzi systému není k dispozici jazykový balíček,\n
+                pokud chcete využívat všechny funkce slovníku, musíte přejít na Windows-10.""") 
+
+    elif "Windows-10" in win:
+        for voice in voices:     
+            rec = voice.name # převede název jazykového balíčku na řetězec 
+            print(rec) # vypíše název jazykového balíčku
+
+            if ("United States" in rec) and (jazyk == "Aj"):  # upravit podmínku podle názvu jazykového balíčku
                 engine.setProperty(voice,newVoiceRate)
                 engine.say(slovicko)
                 engine.runAndWait()
-            elif "Nemecko" in rec:
+
+            elif ("Nemecko" in rec) and (jazyk == "Nj"):  # upravit podmínku podle názvu jazykového balíčku
                 engine.setProperty(voice,newVoiceRate)
                 engine.say(slovicko)
                 engine.runAndWait()
-            elif "Rusko" in rec:
+
+            elif ("Rusko" in rec) and (jazyk == "Ru"):    # upravit podmínku podle názvu jazykového balíčku
                 engine.setProperty(voice,newVoiceRate)
                 engine.say(slovicko)
                 engine.runAndWait()
-            elif "Francie" in rec:
+
+            elif ("Francie" in rec) and (jazyk == "Fr"):  # upravit podmínku podle názvu jazykového balíčku
                 engine.setProperty(voice,newVoiceRate)
                 engine.say(slovicko)
                 engine.runAndWait()
-            elif "Spanelsko" in rec:
+
+            elif ("Spanelsko" in rec) and (jazyk == "Es"):    # upravit podmínku podle názvu jazykového balíčku
                 engine.setProperty(voice,newVoiceRate)
                 engine.say(slovicko)
                 engine.runAndWait()
-            elif "Italie" in rec:
+
+            elif ("Italie" in rec) and (jazyk == "It"):   # upravit podmínku podle názvu jazykového balíčku
                 engine.setProperty(voice,newVoiceRate)
                 engine.say(slovicko)
                 engine.runAndWait()
+    else:
+        tk.messagebox.showwarning("???", """Pro tuto verzi systému není k dispozici jazykový balíček,\n
+                pokud chcete využívat všechny funkce slovníku, musíte přejít na Windows-10.""") 
               
-    except:
-        tk.messagebox.showwarning("???", "Pravděpodobně nemáte k dispozici jazykový balíček.")
-
-
-                
