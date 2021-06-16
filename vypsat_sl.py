@@ -9,7 +9,8 @@ from pyttsx3 import voice
 import platform
 
 from gtts import gTTS
-from io import BytesIO
+
+from urllib.request import urlopen
 
 
 def vypis_slovicka(self,seznam_slovicek):
@@ -89,46 +90,133 @@ def precti(slovicko, jazyk, rychlost):
                 pokud chcete využívat všechny funkce slovníku, musíte přejít na Windows-10.""") 
 
     elif "Windows-10" in win:
-        for voice in voices:     
-            rec = voice.name # převede název jazykového balíčku na řetězec 
-            # print(rec) # vypíše název jazykového balíčku, po úpravě podmínek se řádka musí smazat
+        if internet_on():
+            for voice in voices:     
+                rec = voice.name # převede název jazykového balíčku na řetězec 
+                # print(rec) # vypíše název jazykového balíčku, po úpravě podmínek se řádka musí smazat
 
-            if ("United States" in rec) and (jazyk == "Aj"):  # upravit podmínku podle názvu jazykového balíčku
-                tts = gTTS(slovicko, lang='en', tld="co.uk")
-                tts.save(slovicko + '.mp3')
-                os.startfile(slovicko + ".mp3")
-                break
+                if ("United States" in rec) and (jazyk == "Aj"):  # upravit podmínku podle názvu jazykového balíčku
+                    tts = gTTS(slovicko, lang='en', tld="co.uk")
+                    nazev_souboru = slovicko.replace("?", "")
+                    nazev_souboru = slovicko.replace("/", "")
+                    nazev_souboru = slovicko.replace("%", "")
+                    nazev_souboru = slovicko.replace("*", "")
+                    nazev_souboru = slovicko.replace(":", "")
+                    nazev_souboru = slovicko.replace('"', "")
+                    nazev_souboru = slovicko.replace("<", "")
+                    nazev_souboru = slovicko.replace(">", "")
+                    nazev_souboru = slovicko.replace(".", "")
+                    nazev_souboru = slovicko.replace(",", "")
+                    nazev_souboru = slovicko.replace(";", "")
+                    nazev_souboru = slovicko.replace("=", "")
+                    tts.save(nazev_souboru + '.mp3')
+                    os.startfile(nazev_souboru + ".mp3")
+                    break
 
-            elif ("German" in rec) and (jazyk == "Nj"):  # upravit podmínku podle názvu jazykového balíčku
-                tts = gTTS(slovicko, lang='de')
-                tts.save(slovicko + '.mp3')
-                os.startfile(slovicko + ".mp3")
-                break
+                elif ("German" in rec) and (jazyk == "Nj"):  # upravit podmínku podle názvu jazykového balíčku
+                    tts = gTTS(slovicko, lang='de')
+                    tts = gTTS(slovicko, lang='en', tld="co.uk")
+                    nazev_souboru = slovicko.replace("?", "")
+                    nazev_souboru = slovicko.replace("/", "")
+                    nazev_souboru = slovicko.replace("%", "")
+                    nazev_souboru = slovicko.replace("*", "")
+                    nazev_souboru = slovicko.replace(":", "")
+                    nazev_souboru = slovicko.replace('"', "")
+                    nazev_souboru = slovicko.replace("<", "")
+                    nazev_souboru = slovicko.replace(">", "")
+                    nazev_souboru = slovicko.replace(".", "")
+                    nazev_souboru = slovicko.replace(",", "")
+                    nazev_souboru = slovicko.replace(";", "")
+                    nazev_souboru = slovicko.replace("=", "")
+                    tts.save(nazev_souboru + '.mp3')
+                    os.startfile(nazev_souboru + ".mp3")
+                    break
 
-            elif ("Russian" in rec) and (jazyk == "Ru"):    # upravit podmínku podle názvu jazykového balíčku
-                tts = gTTS(slovicko, lang='ru')
-                tts.save(slovicko + '.mp3')
-                os.startfile(slovicko + ".mp3")
-                break
+                elif ("Russian" in rec) and (jazyk == "Ru"):    # upravit podmínku podle názvu jazykového balíčku
+                    tts = gTTS(slovicko, lang='en', tld="co.uk")
+                    nazev_souboru = slovicko.replace("?", "")
+                    nazev_souboru = slovicko.replace("/", "")
+                    nazev_souboru = slovicko.replace("%", "")
+                    nazev_souboru = slovicko.replace("*", "")
+                    nazev_souboru = slovicko.replace(":", "")
+                    nazev_souboru = slovicko.replace('"', "")
+                    nazev_souboru = slovicko.replace("<", "")
+                    nazev_souboru = slovicko.replace(">", "")
+                    nazev_souboru = slovicko.replace(".", "")
+                    nazev_souboru = slovicko.replace(",", "")
+                    nazev_souboru = slovicko.replace(";", "")
+                    nazev_souboru = slovicko.replace("=", "")
+                    tts.save(nazev_souboru + '.mp3')
+                    os.startfile(nazev_souboru + ".mp3")
+                    break
 
-            elif ("French" in rec) and (jazyk == "Fr"):  # upravit podmínku podle názvu jazykového balíčku
-                tts = gTTS(slovicko, lang='fr', tld="fr")
-                tts.save(slovicko + '.mp3')
-                os.startfile(slovicko + ".mp3")
-                break
+                elif ("French" in rec) and (jazyk == "Fr"):  # upravit podmínku podle názvu jazykového balíčku
+                    tts = gTTS(slovicko, lang='en', tld="co.uk")
+                    nazev_souboru = slovicko.replace("?", "")
+                    nazev_souboru = slovicko.replace("/", "")
+                    nazev_souboru = slovicko.replace("%", "")
+                    nazev_souboru = slovicko.replace("*", "")
+                    nazev_souboru = slovicko.replace(":", "")
+                    nazev_souboru = slovicko.replace('"', "")
+                    nazev_souboru = slovicko.replace("<", "")
+                    nazev_souboru = slovicko.replace(">", "")
+                    nazev_souboru = slovicko.replace(".", "")
+                    nazev_souboru = slovicko.replace(",", "")
+                    nazev_souboru = slovicko.replace(";", "")
+                    nazev_souboru = slovicko.replace("=", "")
+                    tts.save(nazev_souboru + '.mp3')
+                    os.startfile(nazev_souboru + ".mp3")
+                    break
 
-            elif ("Spanish" in rec) and (jazyk == "Es"):    # upravit podmínku podle názvu jazykového balíčku
-                tts = gTTS(slovicko, lang='es', tld="com.mx")
-                tts.save(slovicko + '.mp3')
-                os.startfile(slovicko + ".mp3")
-                break
+                elif ("Spanish" in rec) and (jazyk == "Es"):    # upravit podmínku podle názvu jazykového balíčku
+                    tts = gTTS(slovicko, lang='en', tld="co.uk")
+                    nazev_souboru = slovicko.replace("?", "")
+                    nazev_souboru = slovicko.replace("/", "")
+                    nazev_souboru = slovicko.replace("%", "")
+                    nazev_souboru = slovicko.replace("*", "")
+                    nazev_souboru = slovicko.replace(":", "")
+                    nazev_souboru = slovicko.replace('"', "")
+                    nazev_souboru = slovicko.replace("<", "")
+                    nazev_souboru = slovicko.replace(">", "")
+                    nazev_souboru = slovicko.replace(".", "")
+                    nazev_souboru = slovicko.replace(",", "")
+                    nazev_souboru = slovicko.replace(";", "")
+                    nazev_souboru = slovicko.replace("=", "")
+                    tts.save(nazev_souboru + '.mp3')
+                    os.startfile(nazev_souboru + ".mp3")
+                    break
 
-            elif ("Italy" in rec) and (jazyk == "It"):   # upravit podmínku podle názvu jazykového balíčku
-                tts = gTTS(slovicko, lang='it')
-                tts.save(slovicko + '.mp3')
-                os.startfile(slovicko + ".mp3")
-                break
+                elif ("Italy" in rec) and (jazyk == "It"):   # upravit podmínku podle názvu jazykového balíčku
+                    tts = gTTS(slovicko, lang='en', tld="co.uk")
+                    nazev_souboru = slovicko.replace("?", "")
+                    nazev_souboru = slovicko.replace("/", "")
+                    nazev_souboru = slovicko.replace("%", "")
+                    nazev_souboru = slovicko.replace("*", "")
+                    nazev_souboru = slovicko.replace(":", "")
+                    nazev_souboru = slovicko.replace('"', "")
+                    nazev_souboru = slovicko.replace("<", "")
+                    nazev_souboru = slovicko.replace(">", "")
+                    nazev_souboru = slovicko.replace(".", "")
+                    nazev_souboru = slovicko.replace(",", "")
+                    nazev_souboru = slovicko.replace(";", "")
+                    nazev_souboru = slovicko.replace("=", "")
+                    tts.save(nazev_souboru + '.mp3')
+                    os.startfile(nazev_souboru + ".mp3")
+                    break
+        else:
+            tk.messagebox.showwarning("ERROR", "Není k dispozici internetové přípojení") 
     else:
         tk.messagebox.showwarning("???", """Pro tuto verzi systému není k dispozici jazykový balíček,\n
                 pokud chcete využívat všechny funkce slovníku, musíte přejít na Windows-10.""") 
+
+
+
+def internet_on():
+    try:
+        with open("ip.txt", mode="r", encoding="UTF-8") as ip:
+            ip = ip.read()
+        urlopen(ip, timeout=1)
+        return True
+    except:
+        return False
               
