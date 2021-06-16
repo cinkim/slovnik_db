@@ -62,6 +62,9 @@ class slovnik:
             self.seznam_studentu = []
         else:
             self.seznam_studentu = prace_s_db.seznam_studentu()
+            for filename in os.listdir('.'):
+                if filename.endswith('.mp3'):
+                    os.remove(filename)
 
 
 class slovnikGUI(tk.Frame):
@@ -334,6 +337,7 @@ class slovnikGUI(tk.Frame):
          
     def ulozit_ucebnice(self):
         uc.ulozit_novou_ucebnici(self) # uloží novou učebnici
+        self.Lekce.destroy()
             
 
     """____________________________ pridat_lek.py ___________________________________________________________________"""
