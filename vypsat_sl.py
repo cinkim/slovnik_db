@@ -7,6 +7,10 @@ from pyttsx3 import voice
 
 import platform
 
+from gtts import gTTS
+from io import BytesIO
+
+from yandex_speech import TTS
 
 def vypis_slovicka(self,seznam_slovicek):
         
@@ -90,34 +94,40 @@ def precti(slovicko, jazyk, rychlost):
             # print(rec) # vypíše název jazykového balíčku, po úpravě podmínek se řádka musí smazat
 
             if ("United States" in rec) and (jazyk == "Aj"):  # upravit podmínku podle názvu jazykového balíčku
-                engine.setProperty(voice,newVoiceRate)
-                engine.say(slovicko)
-                engine.runAndWait()
+                mp3_fp = BytesIO()
+                tts = gTTS(slovicko, lang='en', tld="co.uk")
+                tts.write_to_fp(mp3_fp)
+                break
 
             elif ("German" in rec) and (jazyk == "Nj"):  # upravit podmínku podle názvu jazykového balíčku
-                engine.setProperty(voice,newVoiceRate)
-                engine.say(slovicko)
-                engine.runAndWait()
+                mp3_fp = BytesIO()
+                tts = gTTS(slovicko, lang='de')
+                tts.write_to_fp(mp3_fp)
+                break
 
             elif ("Russian" in rec) and (jazyk == "Ru"):    # upravit podmínku podle názvu jazykového balíčku
-                engine.setProperty(voice,newVoiceRate)
-                engine.say(slovicko)
-                engine.runAndWait()
+                mp3_fp = BytesIO()
+                tts = gTTS(slovicko, lang='ru')
+                tts.write_to_fp(mp3_fp)
+                break
 
             elif ("French" in rec) and (jazyk == "Fr"):  # upravit podmínku podle názvu jazykového balíčku
-                engine.setProperty(voice,newVoiceRate)
-                engine.say(slovicko)
-                engine.runAndWait()
+                mp3_fp = BytesIO()
+                tts = gTTS(slovicko, lang='fr', tld="fr")
+                tts.write_to_fp(mp3_fp)
+                break
 
             elif ("Spanish" in rec) and (jazyk == "Es"):    # upravit podmínku podle názvu jazykového balíčku
-                engine.setProperty(voice,newVoiceRate)
-                engine.say(slovicko)
-                engine.runAndWait()
+                mp3_fp = BytesIO()
+                tts = gTTS(slovicko, lang='es', tld="com.mx")
+                tts.write_to_fp(mp3_fp)
+                break
 
             elif ("Italy" in rec) and (jazyk == "It"):   # upravit podmínku podle názvu jazykového balíčku
-                engine.setProperty(voice,newVoiceRate)
-                engine.say(slovicko)
-                engine.runAndWait()
+                mp3_fp = BytesIO()
+                tts = gTTS(slovicko, lang='it')
+                tts.write_to_fp(mp3_fp)
+                break
     else:
         tk.messagebox.showwarning("???", """Pro tuto verzi systému není k dispozici jazykový balíček,\n
                 pokud chcete využívat všechny funkce slovníku, musíte přejít na Windows-10.""") 
