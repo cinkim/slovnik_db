@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W, NO
 
+import os
 import pyttsx3
 from pyttsx3.drivers import sapi5
 from pyttsx3 import voice
@@ -10,7 +11,6 @@ import platform
 from gtts import gTTS
 from io import BytesIO
 
-from yandex_speech import TTS
 
 def vypis_slovicka(self,seznam_slovicek):
         
@@ -94,39 +94,39 @@ def precti(slovicko, jazyk, rychlost):
             # print(rec) # vypíše název jazykového balíčku, po úpravě podmínek se řádka musí smazat
 
             if ("United States" in rec) and (jazyk == "Aj"):  # upravit podmínku podle názvu jazykového balíčku
-                mp3_fp = BytesIO()
                 tts = gTTS(slovicko, lang='en', tld="co.uk")
-                tts.write_to_fp(mp3_fp)
+                tts.save(slovicko + '.mp3')
+                os.startfile(slovicko + ".mp3")
                 break
 
             elif ("German" in rec) and (jazyk == "Nj"):  # upravit podmínku podle názvu jazykového balíčku
-                mp3_fp = BytesIO()
                 tts = gTTS(slovicko, lang='de')
-                tts.write_to_fp(mp3_fp)
+                tts.save(slovicko + '.mp3')
+                os.startfile(slovicko + ".mp3")
                 break
 
             elif ("Russian" in rec) and (jazyk == "Ru"):    # upravit podmínku podle názvu jazykového balíčku
-                mp3_fp = BytesIO()
                 tts = gTTS(slovicko, lang='ru')
-                tts.write_to_fp(mp3_fp)
+                tts.save(slovicko + '.mp3')
+                os.startfile(slovicko + ".mp3")
                 break
 
             elif ("French" in rec) and (jazyk == "Fr"):  # upravit podmínku podle názvu jazykového balíčku
-                mp3_fp = BytesIO()
                 tts = gTTS(slovicko, lang='fr', tld="fr")
-                tts.write_to_fp(mp3_fp)
+                tts.save(slovicko + '.mp3')
+                os.startfile(slovicko + ".mp3")
                 break
 
             elif ("Spanish" in rec) and (jazyk == "Es"):    # upravit podmínku podle názvu jazykového balíčku
-                mp3_fp = BytesIO()
                 tts = gTTS(slovicko, lang='es', tld="com.mx")
-                tts.write_to_fp(mp3_fp)
+                tts.save(slovicko + '.mp3')
+                os.startfile(slovicko + ".mp3")
                 break
 
             elif ("Italy" in rec) and (jazyk == "It"):   # upravit podmínku podle názvu jazykového balíčku
-                mp3_fp = BytesIO()
                 tts = gTTS(slovicko, lang='it')
-                tts.write_to_fp(mp3_fp)
+                tts.save(slovicko + '.mp3')
+                os.startfile(slovicko + ".mp3")
                 break
     else:
         tk.messagebox.showwarning("???", """Pro tuto verzi systému není k dispozici jazykový balíček,\n
