@@ -44,7 +44,7 @@ def vypis_slovicka(self,seznam_slovicek):
         self.tree_slovicka.heading("špatně", text="ŠPATNĚ\n ")
         self.tree_slovicka.column("špatně", minwidth=0, width=65, stretch=NO, anchor='center')
                 
-        self.tree_slovicka.bind("<ButtonRelease-1>", lambda x:precti(self.tree_slovicka.item(self.tree_slovicka.focus())["values"][1], self.akt_jazyk.get()))
+        self.tree_slovicka.bind("<ButtonRelease-1>", lambda x:precti(self.tree_slovicka.item(self.tree_slovicka.focus())["values"][1], self.akt_jazyk.get(), self.slovnik.rychlost_cteni))
        
         self.mez = tk.Label(self.slovicka, text="", height=1)
         self.mez.grid(row=2, column=0)
@@ -59,42 +59,46 @@ def vypis_slovicka(self,seznam_slovicek):
             pozice += 1
 
     
-def precti(slovicko, jazyk):  
+def precti(slovicko, jazyk, rychlost):  
     engine = pyttsx3.init("sapi5")      
 
     if internet_on() == True:
+        if rychlost == 0:
+            rych = False
+        else:
+            rych = True
         if jazyk == "Aj":  # upravit podmínku podle názvu jazykového balíčku
-            tts = gTTS(slovicko, lang='en', tld="co.uk")
+            tts = gTTS(slovicko, lang='en', tld="co.uk", slow=rych)
             nazev_souboru = zamen_znak(slovicko)
             tts.save(nazev_souboru + '.mp3')
             os.startfile(nazev_souboru + ".mp3")
 
         elif jazyk == "Nj":  # upravit podmínku podle názvu jazykového balíčku
-            tts = gTTS(slovicko, lang='de')
+            tts = gTTS(slovicko, lang='de', slow=rych)
             nazev_souboru = zamen_znak(slovicko)
             tts.save(nazev_souboru + '.mp3')
             os.startfile(nazev_souboru + ".mp3")
 
         elif jazyk == "Ru":    # upravit podmínku podle názvu jazykového balíčku
-            tts = gTTS(slovicko, lang='ru')
+            tts = gTTS(slovicko, lang='ru', slow=rych)
             nazev_souboru = zamen_znak(slovicko)
             tts.save(nazev_souboru + '.mp3')
             os.startfile(nazev_souboru + ".mp3")
 
         elif jazyk == "Fr":  # upravit podmínku podle názvu jazykového balíčku
-            tts = gTTS(slovicko, lang='fr', tld="fr")
+            tts = gTTS(slovicko, lang='fr', tld="fr", slow=rych)
             nazev_souboru = zamen_znak(slovicko)
             tts.save(nazev_souboru + '.mp3')
             os.startfile(nazev_souboru + ".mp3")
 
         elif jazyk == "Es":    # upravit podmínku podle názvu jazykového balíčku
-            tts = gTTS(slovicko, lang='es', tld="com.mx")
+            tts = gTTS(slovicko, lang='es', tld="com.mx", slow=rych)
             nazev_souboru = zamen_znak(slovicko)
             tts.save(nazev_souboru + '.mp3')
             os.startfile(nazev_souboru + ".mp3")
 
         elif jazyk == "It":   # upravit podmínku podle názvu jazykového balíčku
-            tts = gTTS(slovicko, lang='it', tld="co.uk")
+            tts = gTTS(slovicko, lang='it', slow=rych)
             nazev_souboru = zamen_znak(slovicko)
             tts.save(nazev_souboru + '.mp3')
             os.startfile(nazev_souboru + ".mp3")
