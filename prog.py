@@ -43,7 +43,7 @@ class slovnik:
         self.pocet_kol_testu = None # počet kol testování se stejnými slovíčky
         self.typ_prekladu = None # "směr" překladu: 1=cz/cizí, 2=cizí/cz, 3=míchat
         self.testovat_jen_spatne = None  # Testovat jen ze slovíček se špatnou odpovědí>3,   1=ano, 2=ne
-        self.rychlost_cteni = None # Nastavení rychlosti pro čení Aj slovíček, hodnoty 75/110/150
+        self.rychlost_cteni = 0 # Nastavení rychlosti pro čení Aj slovíček, 0=pomalu/1=rychle
         
         
         self.vysledky_db = [] # vysledky spravnych sloviček pro uložení do db
