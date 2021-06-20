@@ -3,10 +3,13 @@ from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W, NO
 
 import os
 import pyttsx3
-from pyttsx3.drivers import sapi5
+import pyttsx3.drivers
 from pyttsx3 import voice
 
 import platform
+
+import pyttsx3
+from pyttsx3.drivers import sapi5
 
 from gtts import gTTS
 
@@ -41,10 +44,8 @@ def vypis_slovicka(self,seznam_slovicek):
         self.tree_slovicka.heading("špatně", text="ŠPATNĚ\n ")
         self.tree_slovicka.column("špatně", minwidth=0, width=65, stretch=NO, anchor='center')
                 
-        self.tree_slovicka.bind("<ButtonRelease-1>", lambda x:precti(self.tree_slovicka.item(self.tree_slovicka.focus())["values"][1], self.akt_jazyk.get(), self.slovnik.rychlost_cteni ) )
-        self.tree_slovicka.bind("<Up>", lambda x:precti(self.tree_slovicka.item(self.tree_slovicka.focus())["values"][1], self.akt_jazyk.get(), self.slovnik.rychlost_cteni ) )
-        self.tree_slovicka.bind("<Down>", lambda x:precti(self.tree_slovicka.item(self.tree_slovicka.focus())["values"][1], self.akt_jazyk.get(), self.slovnik.rychlost_cteni ) )
-
+        self.tree_slovicka.bind("<ButtonRelease-1>", lambda x:precti(self.tree_slovicka.item(self.tree_slovicka.focus())["values"][1], self.akt_jazyk.get()))
+       
         self.mez = tk.Label(self.slovicka, text="", height=1)
         self.mez.grid(row=2, column=0)
 
@@ -58,89 +59,48 @@ def vypis_slovicka(self,seznam_slovicek):
             pozice += 1
 
     
-def precti(slovicko, jazyk, rychlost):        
-    #https://stackoverflow.com/questions/65977155/change-pyttsx3-language
-    #https://betterprogramming.pub/an-introduction-to-pyttsx3-a-text-to-speech-converter-for-python-4a7e1ce825c3
+def precti(slovicko, jazyk):  
+    engine = pyttsx3.init("sapi5")      
 
-    win = platform.platform()   # vytahne z pc verzi systému Windows
-    # print(win)  # vypíše operační systém, po úpravě podmínek se řádka musí smazat
+    if internet_on() == True:
+        if jazyk == "Aj":  # upravit podmínku podle názvu jazykového balíčku
+            tts = gTTS(slovicko, lang='en', tld="co.uk")
+            nazev_souboru = zamen_znak(slovicko)
+            tts.save(nazev_souboru + '.mp3')
+            os.startfile(nazev_souboru + ".mp3")
 
-    newVoiceRate = rychlost     # nastaví rychlost čtení
+        elif jazyk == "Nj":  # upravit podmínku podle názvu jazykového balíčku
+            tts = gTTS(slovicko, lang='de')
+            nazev_souboru = zamen_znak(slovicko)
+            tts.save(nazev_souboru + '.mp3')
+            os.startfile(nazev_souboru + ".mp3")
 
-    engine = pyttsx3.init("sapi5")
-    voices = engine.getProperty('voices')   # vytahne ze systému jazykové balíčky
+        elif jazyk == "Ru":    # upravit podmínku podle názvu jazykového balíčku
+            tts = gTTS(slovicko, lang='ru')
+            nazev_souboru = zamen_znak(slovicko)
+            tts.save(nazev_souboru + '.mp3')
+            os.startfile(nazev_souboru + ".mp3")
 
+        elif jazyk == "Fr":  # upravit podmínku podle názvu jazykového balíčku
+            tts = gTTS(slovicko, lang='fr', tld="fr")
+            nazev_souboru = zamen_znak(slovicko)
+            tts.save(nazev_souboru + '.mp3')
+            os.startfile(nazev_souboru + ".mp3")
 
-    if "Windows-7" in win:
-        if jazyk == "Aj":
-            engine.setProperty("rate",newVoiceRate)
-            engine.say(slovicko)
-            engine.runAndWait()
-        else:
-            tk.messagebox.showwarning("???", """Pro tuto verzi systému není k dispozici jazykový balíček,\n
-                pokud chcete využívat všechny funkce slovníku, musíte přejít na Windows-10.""")
+        elif jazyk == "Es":    # upravit podmínku podle názvu jazykového balíčku
+            tts = gTTS(slovicko, lang='es', tld="com.mx")
+            nazev_souboru = zamen_znak(slovicko)
+            tts.save(nazev_souboru + '.mp3')
+            os.startfile(nazev_souboru + ".mp3")
 
-    elif "Windows-8" in win:
-        if jazyk == "Aj":
-            engine.setProperty("rate",newVoiceRate)
-            engine.say(slovicko)
-            engine.runAndWait()
-        else:
-            tk.messagebox.showwarning("???", """Pro tuto verzi systému není k dispozici jazykový balíček,\n
-                pokud chcete využívat všechny funkce slovníku, musíte přejít na Windows-10.""") 
-
-    elif "Windows-10" in win:
-        if internet_on():
-            for voice in voices:     
-                rec = voice.name # převede název jazykového balíčku na řetězec 
-                # print(rec) # vypíše název jazykového balíčku, po úpravě podmínek se řádka musí smazat
-
-                if ("United States" in rec) and (jazyk == "Aj"):  # upravit podmínku podle názvu jazykového balíčku
-                    tts = gTTS(slovicko, lang='en', tld="co.uk")
-                    nazev_souboru = zamen_znak(slovicko)
-                    tts.save(nazev_souboru + '.mp3')
-                    os.startfile(nazev_souboru + ".mp3")
-                    break
-
-                elif ("German" in rec) and (jazyk == "Nj"):  # upravit podmínku podle názvu jazykového balíčku
-                    tts = gTTS(slovicko, lang='de')
-                    nazev_souboru = zamen_znak(slovicko)
-                    tts.save(nazev_souboru + '.mp3')
-                    os.startfile(nazev_souboru + ".mp3")
-                    break
-
-                elif ("Russian" in rec) and (jazyk == "Ru"):    # upravit podmínku podle názvu jazykového balíčku
-                    tts = gTTS(slovicko, lang='ru')
-                    nazev_souboru = zamen_znak(slovicko)
-                    tts.save(nazev_souboru + '.mp3')
-                    os.startfile(nazev_souboru + ".mp3")
-                    break
-
-                elif ("French" in rec) and (jazyk == "Fr"):  # upravit podmínku podle názvu jazykového balíčku
-                    tts = gTTS(slovicko, lang='fr', tld="fr")
-                    nazev_souboru = zamen_znak(slovicko)
-                    tts.save(nazev_souboru + '.mp3')
-                    os.startfile(nazev_souboru + ".mp3")
-                    break
-
-                elif ("Spanish" in rec) and (jazyk == "Es"):    # upravit podmínku podle názvu jazykového balíčku
-                    tts = gTTS(slovicko, lang='es', tld="com.mx")
-                    nazev_souboru = zamen_znak(slovicko)
-                    tts.save(nazev_souboru + '.mp3')
-                    os.startfile(nazev_souboru + ".mp3")
-                    break
-
-                elif ("Italy" in rec) and (jazyk == "It"):   # upravit podmínku podle názvu jazykového balíčku
-                    tts = gTTS(slovicko, lang='it', tld="co.uk")
-                    nazev_souboru = zamen_znak(slovicko)
-                    tts.save(nazev_souboru + '.mp3')
-                    os.startfile(nazev_souboru + ".mp3")
-                    break
-        else:
-            tk.messagebox.showwarning("ERROR", "Není k dispozici internetové přípojení") 
+        elif jazyk == "It":   # upravit podmínku podle názvu jazykového balíčku
+            tts = gTTS(slovicko, lang='it', tld="co.uk")
+            nazev_souboru = zamen_znak(slovicko)
+            tts.save(nazev_souboru + '.mp3')
+            os.startfile(nazev_souboru + ".mp3")
     else:
-        tk.messagebox.showwarning("???", """Pro tuto verzi systému není k dispozici jazykový balíček,\n
-                pokud chcete využívat všechny funkce slovníku, musíte přejít na Windows-10.""") 
+        tk.messagebox.showwarning("ERROR", "Není k dispozici internetové přípojení") 
+
 
 
 
@@ -150,6 +110,8 @@ def internet_on():
             ip = ip.read()
         urlopen(ip, timeout=1)
         return True
+    except FileNotFoundError:
+        tk.messagebox.showwarning("ERROR", "Nenalezen soubor s ověřovací IP adresou.")
     except:
         return False
 
