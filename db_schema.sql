@@ -7,7 +7,7 @@ CREATE TABLE OSOBY (
 	pocet_opakovani_testu integer DEFAULT 2,
 	typ_prekladu integer DEFAULT 3,
 	testovat_jen_spatne integer DEFAULT 2,
-	rychlost_reci integer DEFAULT 110		
+	rychlost_reci integer DEFAULT 0		
 	
 );
 
