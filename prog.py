@@ -26,6 +26,7 @@ class slovnik:
     def __init__(self):
         self.seznam_studentu = [] # vrácený seznam studentů z db
         self.nacti_studenty() # načte z db seznam studentů
+        self.nacti_vyslovnost() # načte předvolenou výslovnost
         self.jazyky_studenta = [] # seznam jazyků aktuálního studenta
         self.akt_jazyk = "" # aktuální jazyk k testování zvoleného studenta
         self.seznam_ucebnic = [] # seznam učebnic studenta/jazyku
@@ -52,7 +53,12 @@ class slovnik:
         self.pocet_sl_pro_procenta = 0 # mezivýpočet pro procentuelní vyhodnocení testu
         self.pocet_spravnych_pro_procenta = 0 # mezivýpočet pro procentuelní vyhodnocení testu
         self.zbyva_k_testovani = 0
-        
+        self.aj = ""
+        self.de = ""
+        self.fr = ""
+        self.it = ""
+        self.es = ""
+        self.ru = ""        
 
     """_____________ načtení všech studentů po startu aplikace ______________"""
     def nacti_studenty(self):
@@ -65,6 +71,28 @@ class slovnik:
             for filename in os.listdir('.'):
                 if filename.endswith('.mp3'):
                     os.remove(filename)
+
+    def nacti_vyslovnost(self):
+        try:
+            with open("vyslovnost.txt", mode="r", encoding="UTF-8") as vyslov:
+                for radka in vyslov:
+                    radka = radka.strip()
+                    radka = radka.split(";")
+                    if radka[0] == "aj":
+                        self.aj = radka[1]
+                    elif radka[0] == "de":
+                        self.de = radka[1]
+                    elif radka[0] == "fr":
+                        self.fr = radka[1]
+                    elif radka[0] == "it":
+                        self.it = radka[1]
+                    elif radka[0] == "es":
+                        self.es = radka[1]
+                    elif radka[0] == "ru":
+                        self.ru = radka[1]
+        except FileNotFoundError:
+            tk.messagebox.showwarning("ERROR", "Soubor s přednastavenou výslovností nenalezen.")
+
 
 
 class slovnikGUI(tk.Frame):

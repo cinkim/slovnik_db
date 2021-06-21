@@ -132,10 +132,8 @@ def nastaveni_studenta(self):
     self.nastaveni_cteni.grid(row=17, column=3, columnspan=2,rowspan=5, sticky=W)
     
     pozice = 1 # pozice řádky v rámci skupiny RadioButtonu
-    rychlost = [("Pomalu","75"),
-            ("Středně","110"),
-            ("Rychle","150"),
-            ]
+    rychlost = [("Pomalu","0"),
+            ("Rychle","1")]
     self.var_rychlost = tk.IntVar()
     for text, hodnota in rychlost:      # indicatoron=0, 
         self.rychlost_Radio = tk.Radiobutton(self.nastaveni_cteni, text=text, variable=self.var_rychlost, value=hodnota)      
