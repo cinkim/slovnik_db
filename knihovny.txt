@@ -4,4 +4,3 @@ openpyxl
 pywin32
 gtts
 tornado
-auto-py-to-exe
