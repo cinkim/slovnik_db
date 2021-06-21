@@ -1,0 +1,6 @@
+aj;co.uk
+de;de
+fr;fr
+it;it
+es;com.mx
+ru;ru
