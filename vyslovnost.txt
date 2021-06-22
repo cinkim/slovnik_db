@@ -2,5 +2,5 @@ aj;co.uk
 de;de
 fr;fr
 it;it
-es;com.mx
+es;es
 ru;ru
