@@ -25,8 +25,7 @@ class slovnik:
 
     def __init__(self):
         self.seznam_studentu = [] # vrácený seznam studentů z db
-        self.nacti_studenty() # načte z db seznam studentů
-        self.nacti_vyslovnost() # načte předvolenou výslovnost
+        self.nacti_studenty() # načte z db seznam studentů 
         self.jazyky_studenta = [] # seznam jazyků aktuálního studenta
         self.akt_jazyk = "" # aktuální jazyk k testování zvoleného studenta
         self.seznam_ucebnic = [] # seznam učebnic studenta/jazyku
@@ -58,7 +57,8 @@ class slovnik:
         self.fr = ""
         self.it = ""
         self.es = ""
-        self.ru = ""        
+        self.ru = "" 
+        self.nacti_vyslovnost() # načte předvolenou výslovnost       
 
     """_____________ načtení všech studentů po startu aplikace ______________"""
     def nacti_studenty(self):
@@ -90,6 +90,7 @@ class slovnik:
                         self.es = radka[1]
                     elif radka[0] == "ru":
                         self.ru = radka[1]
+            return
         except FileNotFoundError:
             tk.messagebox.showwarning("ERROR", "Soubor s přednastavenou výslovností nenalezen.")
 

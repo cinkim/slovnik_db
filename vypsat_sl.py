@@ -4,7 +4,7 @@ from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W, NO
 import os
 # import pyttsx3
 # import pyttsx3.drivers
-# rom pyttsx3 import voice
+# from pyttsx3 import voice
 
 # import platform
 
@@ -60,7 +60,7 @@ def vypis_slovicka(self,seznam_slovicek):
 
     
 def precti(slovicko, jazyk, rychlost, aj, de, fr, it, es, ru):  
-    # engine = pyttsx3.init("sapi5")      
+    # engine = pyttsx3.init("sapi5")
 
     if internet_on() == True:
         if rychlost == 0:
