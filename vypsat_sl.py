@@ -44,7 +44,7 @@ def vypis_slovicka(self,seznam_slovicek):
         self.tree_slovicka.column("špatně", minwidth=0, width=65, stretch=NO, anchor='center')
                 
         self.tree_slovicka.bind("<ButtonRelease-1>", lambda x:precti(self.tree_slovicka.item(self.tree_slovicka.focus())["values"][1],
-            self.akt_jazyk.get(), self.slovnik.rychlost_cteni), self.slovnik.aj, self.slovnik.de, self.slovnik.fr, self.slovnik.it, self.slovnik.es, self.slovnik.ru)
+                self.akt_jazyk.get(), self.slovnik.rychlost_cteni, self.slovnik.aj, self.slovnik.de, self.slovnik.fr, self.slovnik.it, self.slovnik.es, self.slovnik.ru))
        
         self.mez = tk.Label(self.slovicka, text="", height=1)
         self.mez.grid(row=2, column=0)
