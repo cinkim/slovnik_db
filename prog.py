@@ -10,6 +10,8 @@ import os
 
 import win32com.client as win32
 
+import webbrowser
+
 import new_student as ns
 import prace_s_db
 import nastaveni
@@ -25,7 +27,7 @@ class slovnik:
 
     def __init__(self):
         self.seznam_studentu = [] # vrácený seznam studentů z db
-        self.nacti_studenty() # načte z db seznam studentů 
+        self.nacti_studenty() # načte z db seznam studentů
         self.jazyky_studenta = [] # seznam jazyků aktuálního studenta
         self.akt_jazyk = "" # aktuální jazyk k testování zvoleného studenta
         self.seznam_ucebnic = [] # seznam učebnic studenta/jazyku
@@ -58,7 +60,9 @@ class slovnik:
         self.it = ""
         self.es = ""
         self.ru = "" 
-        self.nacti_vyslovnost() # načte předvolenou výslovnost       
+        self.nacti_vyslovnost() # načte předvolenou výslovnost 
+
+
 
     """_____________ načtení všech studentů po startu aplikace ______________"""
     def nacti_studenty(self):
@@ -232,10 +236,18 @@ class slovnikGUI(tk.Frame):
         self.mezera2 = tk.Label(self.pole_nastaveni, text="")
         self.mezera2.grid(row=7, column=2, sticky=W)
 
+        self.novinky = tk.Button(self.pole_nastaveni, text="Zkontrolovat novinky", command=self.kontrola_novinek, font="Arial 8", width=20)
+        self.novinky.grid(row=8, column=2, sticky=W)
+
+        self.mezera3 = tk.Label(self.pole_nastaveni, text="")
+        self.mezera3.grid(row=9, column=2, sticky=W)
+
         self.button_tov_nastaveni = tk.Button(self.pole_nastaveni, text="Obnovit\ntovární nastavení", command=self.tovarni_nastaveni, fg="red", font="Arial 8", width=20)
-        self.button_tov_nastaveni.grid(row=8, column=2, sticky=W)
+        self.button_tov_nastaveni.grid(row=10, column=2, sticky=W)
 
-
+    """_______________________Novinky___________________________"""
+    def kontrola_novinek(self):
+        webbrowser.open('www.pyladiesplzen.wz.cz', new = 2)
     """__________________________email vývojářům________________"""
     def email_vyvojarum(self):
         try:
