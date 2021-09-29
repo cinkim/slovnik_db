@@ -10,6 +10,10 @@ import os
 
 import win32com.client as win32
 
+import webbrowser
+
+import requests
+
 import new_student as ns
 import prace_s_db
 import nastaveni
@@ -52,7 +56,15 @@ class slovnik:
         self.pocet_sl_pro_procenta = 0 # mezivýpočet pro procentuelní vyhodnocení testu
         self.pocet_spravnych_pro_procenta = 0 # mezivýpočet pro procentuelní vyhodnocení testu
         self.zbyva_k_testovani = 0
-        
+        self.aj = ""
+        self.de = ""
+        self.fr = ""
+        self.it = ""
+        self.es = ""
+        self.ru = "" 
+        self.nacti_vyslovnost() # načte předvolenou výslovnost 
+
+
 
     """_____________ načtení všech studentů po startu aplikace ______________"""
     def nacti_studenty(self):
@@ -66,6 +78,29 @@ class slovnik:
                 if filename.endswith('.mp3'):
                     os.remove(filename)
 
+    def nacti_vyslovnost(self):
+        try:
+            with open("vyslovnost.txt", mode="r", encoding="UTF-8") as vyslov:
+                for radka in vyslov:
+                    radka = radka.strip()
+                    radka = radka.split(";")
+                    if radka[0] == "aj":
+                        self.aj = radka[1]
+                    elif radka[0] == "de":
+                        self.de = radka[1]
+                    elif radka[0] == "fr":
+                        self.fr = radka[1]
+                    elif radka[0] == "it":
+                        self.it = radka[1]
+                    elif radka[0] == "es":
+                        self.es = radka[1]
+                    elif radka[0] == "ru":
+                        self.ru = radka[1]
+            return
+        except FileNotFoundError:
+            tk.messagebox.showwarning("ERROR", "Soubor s přednastavenou výslovností nenalezen.")
+
+
 
 class slovnikGUI(tk.Frame):
 
@@ -76,9 +111,49 @@ class slovnikGUI(tk.Frame):
         self.parent.title("Slovnik")
         self.parent.protocol("WM_DELETE_WINDOW", self.on_close)
         self.create_widgets_uzivatele()
+        self.novinky()
         self.zobraz()
         self.akt_ucebnice = ""
+
+    """____________________________novinky______________"""
+    def novinky(self):
+        coding = "UTF-8"
+        try:
+            with open("web.txt", mode="r", encoding=coding) as url:
+                url = url.read()
+                url = url + "/novinky.txt"
+        except FileNotFoundError:
+            tk.messagebox.showwarning("Error", "Soubor s webovou adresou nenalezen.")
+
+        try:
+            target_url = url
+            response = requests.get(target_url)
+            data = str(response.text)
+            data = data.replace("\r", "")
+        except:
+            tk.messagebox.showwarning("Error", "Nebylo navázané spojení se serverem.")
+            return
+
+        try:
+            with open("novinky.txt", mode="r", encoding=coding) as now:
+                now = str(now.read())
+                now = now.rstrip()      
+        except FileNotFoundError:
+            with open("novinky.txt", mode="w", encoding=coding) as prepsat:
+                pass
+        finally:
+            with open("novinky.txt", mode="r", encoding=coding) as now:
+                now = str(now.read())
+                now = now.rstrip()
+            if data == now:
+                pass
+            else:
+                tk.messagebox.showwarning("Nová verze.", data)
+                with open("novinky.txt", mode="w", encoding=coding) as prepsat:
+                    print(data, file=prepsat)
+                    return
         
+            
 
     """__________________ vytvoří pole se seznamem studentů _________________________________________"""
     def create_widgets_uzivatele(self):
@@ -203,10 +278,20 @@ class slovnikGUI(tk.Frame):
         self.mezera2 = tk.Label(self.pole_nastaveni, text="")
         self.mezera2.grid(row=7, column=2, sticky=W)
 
+        self.novinky = tk.Button(self.pole_nastaveni, text="Zkontrolovat novinky", command=self.kontrola_novinek, font="Arial 8", width=20)
+        self.novinky.grid(row=8, column=2, sticky=W)
+
+        self.mezera3 = tk.Label(self.pole_nastaveni, text="")
+        self.mezera3.grid(row=9, column=2, sticky=W)
+
         self.button_tov_nastaveni = tk.Button(self.pole_nastaveni, text="Obnovit\ntovární nastavení", command=self.tovarni_nastaveni, fg="red", font="Arial 8", width=20)
-        self.button_tov_nastaveni.grid(row=8, column=2, sticky=W)
+        self.button_tov_nastaveni.grid(row=10, column=2, sticky=W)
 
-
+    """_______________________Novinky___________________________"""
+    def kontrola_novinek(self):
+        with open("web.txt", mode="r", encoding="utf-8") as web:
+            web = web.read()
+        webbrowser.open(web, new = 2)
     """__________________________email vývojářům________________"""
     def email_vyvojarum(self):
         try:

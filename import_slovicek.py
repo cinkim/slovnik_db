@@ -6,6 +6,8 @@ import pandas as pd
 import pathlib
 import prace_s_db
 
+import openpyxl
+
 
 def import_sl(self):
     file_path = filedialog.askopenfilename()

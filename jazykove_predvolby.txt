@@ -1,0 +1,9 @@
+co.uk - anglická
+de - německá
+fr - francouzská
+it - italská
+ru - ruská
+es - španělská
+com.mx - mexická španělština
+ca - kanadská francouzština
+com.au - australská angličtina

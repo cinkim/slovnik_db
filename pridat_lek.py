@@ -46,7 +46,7 @@ def ulozit_Lek(self):
     nazev = self.nova_lek.get()
     seznam_l = db.seznam_lekci(self.akt_ucebnice)
     for qq in seznam_l:
-        if (id_l in str(qq[0])) or (nazev in qq[1]):
+        if (id_l in str(qq[0])) or (nazev == qq[1]):
             tk.messagebox.showwarning("ERROR", "Číslo lekce, nebo název již existuje.")
             return
     if messagebox.askyesno("Uložit???", "Přidat lekci?") == True:
@@ -56,7 +56,8 @@ def ulozit_Lek(self):
                 return
             try:
                 # print(self.akt_j, self.akt_ucebnice, self.nova_lek.get(), int(self.nova_lek_cislo.get()))
-                db.uloz_lekci(self.akt_j, self.akt_ucebnice, self.nova_lek.get(), int(self.nova_lek_cislo.get()))
+                nova = nazev + " - " + self.akt_ucebnice
+                db.uloz_lekci(self.akt_j, self.akt_ucebnice, nova, int(self.nova_lek_cislo.get()))
                 self.nacti_lekce()
                 self.cl.set("")
                 self.nl.set("") 
@@ -76,13 +77,3 @@ def ulozit_Lek(self):
     # child_id = self.tree_Lekce.get_children()[-1] # poslední řádek
     # child_id = self.tree_Lekce.get_children()[self.seznam_lekci.index((int(cislo),nazev))] # máme řazené tak hledá ID pro danou hodnotu
     # self.tree_Lekce.selection_set(child_id)
-
-
-
-
-
-
-
-
-
-

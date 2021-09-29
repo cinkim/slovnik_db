@@ -355,7 +355,7 @@ def vyhodnoceni(self):
     otazka_bez_mezer = otazka.replace(" ", "")
     odpoved_bez_mezer = odpoved.replace(" ", "")
 
-    rozsekana_otazka = otazka.split(",")
+    rozsekana_otazka = otazka.split(";")
     
     orezana_otazka = []
     for slovo in rozsekana_otazka:

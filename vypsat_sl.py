@@ -2,14 +2,13 @@ import tkinter as tk
 from tkinter import ttk, StringVar, NORMAL, CENTER, N, S, E, W, NO
 
 import os
-import pyttsx3
-import pyttsx3.drivers
-from pyttsx3 import voice
+# import pyttsx3
+# import pyttsx3.drivers
+# from pyttsx3 import voice
 
-import platform
+# import platform
 
-import pyttsx3
-from pyttsx3.drivers import sapi5
+# from pyttsx3.drivers import sapi5
 
 from gtts import gTTS
 
@@ -44,7 +43,8 @@ def vypis_slovicka(self,seznam_slovicek):
         self.tree_slovicka.heading("špatně", text="ŠPATNĚ\n ")
         self.tree_slovicka.column("špatně", minwidth=0, width=65, stretch=NO, anchor='center')
                 
-        self.tree_slovicka.bind("<ButtonRelease-1>", lambda x:precti(self.tree_slovicka.item(self.tree_slovicka.focus())["values"][1], self.akt_jazyk.get(), self.slovnik.rychlost_cteni))
+        self.tree_slovicka.bind("<ButtonRelease-1>", lambda x:precti(self.tree_slovicka.item(self.tree_slovicka.focus())["values"][1],
+                self.akt_jazyk.get(), self.slovnik.rychlost_cteni, self.slovnik.aj, self.slovnik.de, self.slovnik.fr, self.slovnik.it, self.slovnik.es, self.slovnik.ru))
        
         self.mez = tk.Label(self.slovicka, text="", height=1)
         self.mez.grid(row=2, column=0)
@@ -59,8 +59,8 @@ def vypis_slovicka(self,seznam_slovicek):
             pozice += 1
 
     
-def precti(slovicko, jazyk, rychlost):  
-    engine = pyttsx3.init("sapi5")      
+def precti(slovicko, jazyk, rychlost, aj, de, fr, it, es, ru):  
+    # engine = pyttsx3.init("sapi5")
 
     if internet_on() == True:
         if rychlost == 0:
@@ -68,37 +68,37 @@ def precti(slovicko, jazyk, rychlost):
         else:
             rych = True
         if jazyk == "Aj":  # upravit podmínku podle názvu jazykového balíčku
-            tts = gTTS(slovicko, lang='en', tld="co.uk", slow=rych)
+            tts = gTTS(slovicko, lang='en', tld=aj, slow=rych)
             nazev_souboru = zamen_znak(slovicko)
             tts.save(nazev_souboru + '.mp3')
             os.startfile(nazev_souboru + ".mp3")
 
         elif jazyk == "Nj":  # upravit podmínku podle názvu jazykového balíčku
-            tts = gTTS(slovicko, lang='de', slow=rych)
+            tts = gTTS(slovicko, lang='de',tld=de, slow=rych)
             nazev_souboru = zamen_znak(slovicko)
             tts.save(nazev_souboru + '.mp3')
             os.startfile(nazev_souboru + ".mp3")
 
         elif jazyk == "Ru":    # upravit podmínku podle názvu jazykového balíčku
-            tts = gTTS(slovicko, lang='ru', slow=rych)
+            tts = gTTS(slovicko, lang='ru', tld=ru, slow=rych)
             nazev_souboru = zamen_znak(slovicko)
             tts.save(nazev_souboru + '.mp3')
             os.startfile(nazev_souboru + ".mp3")
 
         elif jazyk == "Fr":  # upravit podmínku podle názvu jazykového balíčku
-            tts = gTTS(slovicko, lang='fr', tld="fr", slow=rych)
+            tts = gTTS(slovicko, lang='fr', tld=fr, slow=rych)
             nazev_souboru = zamen_znak(slovicko)
             tts.save(nazev_souboru + '.mp3')
             os.startfile(nazev_souboru + ".mp3")
 
         elif jazyk == "Es":    # upravit podmínku podle názvu jazykového balíčku
-            tts = gTTS(slovicko, lang='es', tld="com.mx", slow=rych)
+            tts = gTTS(slovicko, lang='es', tld=es, slow=rych)
             nazev_souboru = zamen_znak(slovicko)
             tts.save(nazev_souboru + '.mp3')
             os.startfile(nazev_souboru + ".mp3")
 
         elif jazyk == "It":   # upravit podmínku podle názvu jazykového balíčku
-            tts = gTTS(slovicko, lang='it', slow=rych)
+            tts = gTTS(slovicko, lang='it', tld=it, slow=rych)
             nazev_souboru = zamen_znak(slovicko)
             tts.save(nazev_souboru + '.mp3')
             os.startfile(nazev_souboru + ".mp3")
@@ -112,7 +112,7 @@ def internet_on():
     try:
         with open("ip.txt", mode="r", encoding="UTF-8") as ip:
             ip = ip.read()
-        urlopen(ip, timeout=1)
+        urlopen(ip, timeout=2)
         return True
     except FileNotFoundError:
         tk.messagebox.showwarning("ERROR", "Nenalezen soubor s ověřovací IP adresou.")
