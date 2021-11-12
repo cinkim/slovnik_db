@@ -11,6 +11,7 @@ def nastaveni_studenta(self):
     except AttributeError:
         pass
     self.top_student = tk.Toplevel()
+    self.top_student.attributes('-topmost', 'true')
     self.top_student.title("Nastavení studenta")  
     
     self.nastaveni = tk.LabelFrame(self.top_student, text="Nastavení studenta: "  + self.akt_student, font="Arial 14")
@@ -31,7 +32,7 @@ def nastaveni_studenta(self):
     self.pocet_opakovani_Entry.grid(row=3, column=2, sticky=W)
     self.pocet_opakovani_Entry.insert(0,self.slovnik.pocet_kol_testu)
 
-    self.pocet_spravne_popis = tk.Label(self.nastaveni, text="Počet správných odpovědí pro vyřazení slovíčka z testu     (0-10): ")
+    self.pocet_spravne_popis = tk.Label(self.nastaveni, text="Počet správných odpovědí pro vyřazení slovíčka z testu     (1-10): ")
     self.pocet_spravne_popis.grid(row=4, column=0, columnspan=3, sticky=W)
     self.pocet_spravne_Entry = tk.Entry(self.nastaveni, width=10, justify="center")
     self.pocet_spravne_Entry.grid(row=4, column=3, sticky=W)
@@ -223,11 +224,11 @@ def uloz_nastaveni_studenta(self):
         chyba = True
         text_chyby = text_chyby + "\n" + "Počet slovíček v jednom testu"
 
-    if self.pocet_spravne_Entry.get().isdigit() and int(self.pocet_spravne_Entry.get()) <= 10 and int(self.pocet_spravne_Entry.get()) >= 0 :
+    if self.pocet_spravne_Entry.get().isdigit() and int(self.pocet_spravne_Entry.get()) <= 10 and int(self.pocet_spravne_Entry.get()) > 0 :
         pass
     else:
         chyba = True
-        text_chyby = text_chyby + "\n" + "Počet správných odpovědí pro vyřazení slovíčka z testu"
+        text_chyby = text_chyby + "\n" + "Hodnota musí být v uvedeném rozsahu."
     
     if self.pocet_opakovani_Entry.get().isdigit() and int(self.pocet_opakovani_Entry.get()) <= 5 and int(self.pocet_opakovani_Entry.get()) >= 1 :
         pass

@@ -4,6 +4,7 @@ from tkinter import ttk, E, W, NO
 
 def vypis_vysledky(self,seznam_vysledku):
         self.vysledky = tk.Toplevel()
+        self.vysledky.attributes('-topmost', 'true')
         self.vysledky.title("Výsledky studenta: " + self.akt_student)
 
         self.nadpis = tk.Label(self.vysledky, text="Jazyk: " + self.akt_j + "\nUčebnice:" + self.akt_ucebnice, font="Ariel 14", bg="red")

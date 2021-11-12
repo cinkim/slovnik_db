@@ -15,6 +15,7 @@ import os
 def tes(self):
     self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
     self.top_test = tk.Toplevel()
+    self.top_test.attributes('-topmost', 'true')
     self.top_test.title("Testování lekce: "+ self.akt_Lekce)
     self.top_test.grid_columnconfigure(0, weight=4)
     self.top_test.grid_columnconfigure(1, weight=4)

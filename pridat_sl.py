@@ -6,6 +6,7 @@ import prace_s_db
 
 def new_words(self):
         self.words = tk.Toplevel()
+        self.words.attributes('-topmost', 'true')
         self.words.title("Nová slovíčka")
         try:
                 pozor = "POZOR: Ukládáš data do"

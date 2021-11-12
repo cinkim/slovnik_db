@@ -1,0 +1,32 @@
+ERROR 1000: Pravděpodobně chybí opávnění pro zápis:
+			Uložte SlovnikLite na jiné místo v PC.
+
+ERROR 1001: Chybí soubor "web_novinky_aktualizace.txt" s uloženou cestou na náš server:
+			Vytvořte v adresáři slovníku soubor "web_novinky_aktualizace.txt" a vepište adresu
+			http://pyladiesplzen.wz.cz/SlovnikLite/
+			
+ERROR 1002: Není spojení se serverem:
+			Není internetové připojení, nebo na stránkách "http://pyladiesplzen.wz.cz/SlovnikLite/"
+			není soubor aktualizační soubor
+			
+ERROR 1003: Nepodařilo se rozbalit aktualizační soubory:
+			Překontrolujte, zda se skutečně stáhli potřebné soubory.
+			
+ERROR 1004: Nejde vytvořit záloha starých souborů:
+			Tady je každá rada drahá. Vnitřní chyby kódu. Kontaktujte vývojáře.
+			
+ERROR 1005: Nepodařilo se odstranit stará(všechna) data:
+			Slovník má otevřený jiný uživatel. Požádejte všechny uživatele o uzavření Slovníku.
+			Spustit ručně soubor "update.exe" v adresáři Slovníku.
+			Pokud nepomůže, vrátit stará data ze zálohy a kontaktovat vývojáře.
+			
+ERROR 1006: Nepodařilo se stáhnout nová data:
+			Pravděpodobně tato chyba nikdy nenastane, program by již měl dříve registrovat chybu ERROR 1002 nebo ERROR 1003
+			
+ERROR 1007: Nepodařilo se nahrát nová data:
+			Spustit ručně soubor "update.exe" v adresáři Slovníku.
+			Pokud nepomůže, vrátit stará data ze zálohy. Kontaktujte vývojáře.
+						
+ERROR 1002_Z: Není spojení se serverem:
+			Není internetové připojení, nebo na stránkách "http://pyladiesplzen.wz.cz/SlovnikLite/"
+			není soubor "aktualizace.txt"

@@ -485,38 +485,41 @@ class slovnikGUI(tk.Frame):
 
    
     def Testuj(self): # spustí se po kliknutí na tlačítko Testuj
-        self.nacti_nastaveni_studenta()
-        if self.slovnik.aktualni_slovo == 0:
-            self.slovnik.vysledky = []
-            self.slovnik.aktualni_slovo = 0
-            ts.nacti(self)
-            ts.spust_test(self)
-        elif self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
-            if tk.messagebox.askyesno("???", "Testovat znuvu?") == True:
-                self.slovnik.k_testovani = []
-                self.slovnik.testuj = []
-                self.slovnik.netestuj = []
-                self.slovnik.aktualni_slovo = 0
-                self.slovnik.vysledky_pro_ulozeni_do_db = []
-                self.slovnik.vysledky_db = []
+        if len(self.slovnik.testuj) > 0:
+            pass
+        else:
+            self.nacti_nastaveni_studenta()
+            if self.slovnik.aktualni_slovo == 0:
                 self.slovnik.vysledky = []
-                self.slovnik.pocet_sl_pro_procenta = 0
-                self.slovnik.pocet_spravnych_pro_procenta = 0
+                self.slovnik.aktualni_slovo = 0
                 ts.nacti(self)
                 ts.spust_test(self)
+            elif self.slovnik.aktualni_slovo == len(self.slovnik.testuj):
+                if tk.messagebox.askyesno("???", "Testovat znovu?") == True:
+                    self.slovnik.k_testovani = []
+                    self.slovnik.testuj = []
+                    self.slovnik.netestuj = []
+                    self.slovnik.aktualni_slovo = 0
+                    self.slovnik.vysledky_pro_ulozeni_do_db = []
+                    self.slovnik.vysledky_db = []
+                    self.slovnik.vysledky = []
+                    self.slovnik.pocet_sl_pro_procenta = 0
+                    self.slovnik.pocet_spravnych_pro_procenta = 0
+                    ts.nacti(self)
+                    ts.spust_test(self)
+                else:
+                    self.slovnik.k_testovani = []
+                    self.slovnik.testuj = []
+                    self.slovnik.netestuj = []
+                    self.slovnik.aktualni_slovo = 0
+                    self.slovnik.vysledky_pro_ulozeni_do_db = []
+                    self.slovnik.vysledky_db = []
+                    self.slovnik.vysledky = []
+                    self.slovnik.pocet_sl_pro_procenta = 0
+                    self.slovnik.pocet_spravnych_pro_procenta = 0
+                    self.top_test.destroy()
             else:
-                self.slovnik.k_testovani = []
-                self.slovnik.testuj = []
-                self.slovnik.netestuj = []
-                self.slovnik.aktualni_slovo = 0
-                self.slovnik.vysledky_pro_ulozeni_do_db = []
-                self.slovnik.vysledky_db = []
-                self.slovnik.vysledky = []
-                self.slovnik.pocet_sl_pro_procenta = 0
-                self.slovnik.pocet_spravnych_pro_procenta = 0
-                self.top_test.destroy()
-        else:
-            pass
+                pass
             
 
 
@@ -626,6 +629,7 @@ class slovnikGUI(tk.Frame):
         self.create_widgets_uzivatele()
         self.zobraz()
         return
+
 
 
     """___________________________ načtení studenta ____________________________________________________________"""

@@ -6,6 +6,7 @@ import prace_s_db as db
 def nova_lekce(self):
         
     self.lekce_nova = tk.Toplevel()
+    self.lekce_nova.attributes('-topmost', 'true')
     self.lekce_nova.title("Nová lekce")
 
     self.nadpis = tk.Label(self.lekce_nova, text="Jazyk: " + self.akt_j + "\nUčebnice:" + self.akt_ucebnice, font="Ariel 14", bg="red")

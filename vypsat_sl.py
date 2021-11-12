@@ -18,6 +18,7 @@ from urllib.request import urlopen
 def vypis_slovicka(self,seznam_slovicek):
         
         self.slovicka = tk.Toplevel()
+        self.slovicka.attributes('-topmost', 'true')
         self.slovicka.title("Slovíčka lekce: " + self.akt_Lekce)
 
         self.nadpis = tk.Label(self.slovicka, text="Jazyk: " + self.akt_j + "\nUčebnice:" + self.akt_ucebnice + "\nLekce:" + self.akt_Lekce, font="Ariel 14", bg="grey")

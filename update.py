@@ -31,8 +31,9 @@ def vytvor_adresare(folders):
             if not os.path.exists(folder):
                 os.makedirs(folder)
     except:
-        print("ERROR 1000: Není možné vytvořit adresářovou strukturu.")
-        input("Kliknutím aktualizaci ukončíte.")
+        input("""ERROR 1000:\n
+                Není možné vytvořit adresářovou strukturu.\n
+                Stisknutím klávesy 'Enter' aktualizaci ukončíte.""")
         os.startfile("SlovnikLite.exe")
         os._exit(0)
 
@@ -44,9 +45,10 @@ def nacti_adresu(cesta):
         cesta = cesta.strip()
         return cesta
     except FileNotFoundError:
-        print("ERROR 1001: Nebyl nalezen soubor s cestou na server aktualizací.")
-        print("Na stránkách vývojářů v sekci 'Kontakt' požádejte o možné řešení.")
-        input("Kliknutím aktualizaci ukončíte.")
+        input("""ERROR 1001:\n
+                Nebyl nalezen soubor s cestou na server aktualizací.\n
+                Na stránkách vývojářů v sekci 'Kontakt' požádejte o možné řešení.\n
+                Stisknutím klávesy 'Enter' aktualizaci ukončíte.""")
         os.startfile("SlovnikLite.exe")
         os._exit(0) 
         
@@ -65,9 +67,10 @@ def stahni_soubor(cesta_webu, DOWN_ZIP):
         r = requests.get(url, allow_redirects=True)
         open(DOWN_ZIP + "SlovnikLite.zip", 'wb').write(r.content)
     except:
-        print("ERROR 1002: Nebylo navázené spojení se serverem.")
-        print("Na stránkách vývojářů v sekci 'Kontakt' požádejte o možné řešení.")
-        input("Kliknutím aktualizaci ukončíte.")
+        input("""ERROR 1002:\n
+                Nebylo navázené spojení se serverem.\n
+                Na stránkách vývojářů v sekci 'Kontakt' požádejte o možné řešení.\n
+                Stisknutím klávesy 'Enter' aktualizaci ukončíte.""")
         os.startfile("SlovnikLite.exe")
         os._exit(0)
 
@@ -84,9 +87,10 @@ def extract_data_file(filename, input_folder, output_folder):
                             'r') as zip_ref:
             zip_ref.extractall(output_folder)
     except:
-        print("ERROR 1003: Nepodařilo se rozbalit aktualizační soubory.")
-        print("Na stránkách vývojářů v sekci 'Kontakt' požádejte o možné řešení.")
-        input("Kliknutím aktualizaci ukončíte.")
+        input("""ERROR 1003:\n
+                Nepodařilo se rozbalit aktualizační soubory.\n
+                Na stránkách vývojářů v sekci 'Kontakt' požádejte o možné řešení.\n
+                Stisknutím klávesy 'Enter' aktualizaci ukončíte.""")
         os.startfile("SlovnikLite.exe")
         os._exit(0)
 
@@ -103,9 +107,10 @@ def vytvor_zalohu(TEMP):
         for soubor_zalohy in zaloha:
             shutil.copy2(soubor_zalohy, TEMP + soubor_zalohy)
     except:
-        print("ERROR 1004: Nepodařilo se vytvořit zálohu starých souborů.")
-        print("Na stránkách vývojářů v sekci 'Kontakt' nás informujte o tomto problému.")
-        input("Kliknutím aktualizaci ukončíte.")
+        input("""ERROR 1004:\n
+                Nepodařilo se vytvořit zálohu starých souborů.\n
+                Na stránkách vývojářů v sekci 'Kontakt' nás informujte o tomto problému.\n
+                Stisknutím klávesy 'Enter' aktualizaci ukončíte.""")
         os.startfile("SlovnikLite.exe")
         os._exit(0)
 
@@ -119,8 +124,9 @@ def smaz():
     try:       
         overeni_dat = glob.glob(os.path.join(".ExtraktZip/" + "SlovnikLite/", "*.*"))
         if overeni_dat == []:
-            print("ERROR 1006: Nepodařilo se stáhnout nová data.")
-            input("Kliknutím aktualizaci ukončíte.")
+            input("""ERROR 1006:\n
+                    Nepodařilo se stáhnout nová data.\n
+                    Stisknutím klávesy 'Enter' aktualizaci ukončíte.""")
             os.startfile("SlovnikLite.exe")
             os._exit(0)
 
@@ -149,12 +155,13 @@ def smaz():
                 os.remove(soubor)
 
     except:
-        print("ERROR 1005: Nepodařilo se smazat některé staré soubory, pravděpodobně Slovník používá zároveň jiný uživatel.")
-        print("Požádejte všechny uživatele o uzavření SlovníkuLite a ručně spusťte soubor 'update.exe' v adresáři SlovnikLite.")
-        print("""Pokud se ani pak nepodaří tento problém odstranit, nemá cenu již Slovník spouštět,\n 
-                pravděpodobně budou scházet důležité soubory, kontaktujte nás na našich stránkách.""")
-        print("Poradíme Vám, jak vrátit již smazané soubory.")
-        input("Kliknutím aktualizaci ukončíte.")
+        input("""ERROR 1005:\n
+                Nepodařilo se smazat některé staré soubory, pravděpodobně Slovník používá zároveň jiný uživatel.\n
+                Požádejte všechny uživatele o uzavření SlovníkuLite a ručně spusťte soubor 'update.exe' v adresáři SlovnikLite.\n
+                Pokud se ani pak nepodaří tento problém odstranit, nemá cenu již Slovník spouštět,\n
+                pravděpodobně budou scházet důležité soubory, kontaktujte nás na našich stránkách.\n
+                Poradíme Vám, jak vrátit již smazané soubory.\n
+                Stisknutím klávesy 'Enter' aktualizaci ukončíte.""")
         os._exit(0)
 
 
@@ -186,12 +193,13 @@ def nakopiruj_nove():
                 time.sleep(1)
                           
     except:
-        print("ERROR 1007: Nepodařilo se nakopírovat některé nové soubory.")
-        print("Požádejte všechny uživatele o uzavření SlovníkuLite a ručně spusťte soubor 'update.exe' v adresáři SlovnikLite.")
-        print("""Pokud se ani pak nepodaří tento problém odstranit, nemá cenu již Slovník spouštět,\n 
-                pravděpodobně budou scházet důležité soubory, kontaktujte nás na našich stránkách.""")
-        print("Poradíme Vám, jak vrátit již smazané soubory.")
-        input("Kliknutím aktualizaci ukončíte.")
+        input("""ERROR 1007:\n
+                Nepodařilo se nakopírovat některé nové soubory.\n
+                Požádejte všechny uživatele o uzavření SlovníkuLite a ručně spusťte soubor 'update.exe' v adresáři SlovnikLite.\n
+                Pokud se ani pak nepodaří tento problém odstranit, nemá cenu již Slovník spouštět,\n
+                pravděpodobně budou scházet důležité soubory, kontaktujte nás na našich stránkách.\n
+                Poradíme Vám, jak vrátit již smazané soubory.\n
+                Stisknutím klávesy 'Enter' aktualizaci ukončíte.""")
         os._exit(0)
 
 

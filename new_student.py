@@ -8,6 +8,7 @@ import prace_s_db
 
 def vytvor_top_okno_novy_student(self):
         self.st = tk.Toplevel()
+        self.st.attributes('-topmost', 'true')
         self.st.title("Nový student")
 
         self.newst = StringVar()

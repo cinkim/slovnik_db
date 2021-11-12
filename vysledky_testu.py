@@ -4,6 +4,7 @@ from tkinter import DISABLED, NORMAL
 
 def zobraz_vysledky_testu(self):
     self.vypis_odpovedi = tk.Toplevel()
+    self.vypis_odpovedi.attributes('-topmost', 'true')
     self.vypis_odpovedi.title("Odpovědi testu: " + self.akt_Lekce)
 
 
