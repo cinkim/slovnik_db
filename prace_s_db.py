@@ -1,5 +1,6 @@
 ﻿import sqlite3
 from os import path
+import os
 
 import datetime
 
@@ -385,6 +386,74 @@ def reset_slovicek(student,lekce):
     conn.commit()  
 
 
+def nazev_lekce_bez_ucebnice(lekce):
+    conn, cursor = pripojeni_db()
+    cursor.execute(f'''SELECT ucebnice_id from lekce where nazev = "{lekce}"''')     
+    id_ucebnice = cursor.fetchone()[0]
+    cursor.execute(f'''SELECT nazev from ucebnice where id = "{id_ucebnice}"''') 
+    nazev_ucebnice = cursor.fetchone()[0]
+    return lekce.replace(' - '+ nazev_ucebnice,"")
+
+def export_lekce(lekce,jazyk, adr=''): 
+    """
+    - exportuje slovicka zvolene lekce do adresare Export 
+                            (pro lekci může být bez zadání 3.partametru)
+                            (pro učebnici se zadáním 3.parametru = název učebnice)
+    VSTUP: lekce,jazyk, adr
+    """    
+    
+    if not os.path.exists('Export'):
+        os.makedirs('Export')
+
+    if adr !='':
+        adresar = 'Export/' + adr + '/'  # při exportu celé učebnice budou lekce v adresáři s názvem lekce        
+    else:
+        adresar = 'Export/'
+    if not os.path.exists(adresar):
+        os.makedirs(adresar)
+
+    conn, cursor = pripojeni_db()
+    cursor.execute(f'''SELECT id, cislo from lekce where nazev = "{lekce}"''')     
+    id_lekce, cislo_lekce = cursor.fetchone()    
+    cursor.execute(f'''SELECT cz,preklad from slovicka where lekce_id = {id_lekce}                         
+                        ''')
+    slovicka = cursor.fetchall()    
+    nazev_souboru = str(cislo_lekce) + '_' + nazev_lekce_bez_ucebnice(lekce) + '.txt'
+
+    with open(adresar + nazev_souboru, mode='w', encoding='utf-8') as soubor:
+        print('cz/preklad', file = soubor)
+        for slovo in slovicka:
+            print(slovo[0] + '/' + slovo[1], file = soubor)   
+    
+def export_ucebnice(ucebnice,jazyk): 
+    """
+    - exportuje slovíčka celé učebnice do adresáře Export, podadresářem název učebnice                            
+    VSTUP: učebnice, jazyk
+    """       
+    conn, cursor = pripojeni_db()
+    seznam = seznam_lekci(ucebnice)
+    for l in seznam:
+        export_lekce(l[1],jazyk,ucebnice)
+
+
+def smaz_slovicka_lekce(lekce):
+    """
+    - vymaže slovíčka zvolené lekce
+    """
+    conn, cursor = pripojeni_db()
+    cursor.execute(f'''SELECT id from lekce where nazev = "{lekce}"''')     
+    id_lekce = cursor.fetchone()[0]   
+    cursor.execute(f''' DELETE from SLOVICKA where lekce_id = {id_lekce} ''')
+    conn.commit()
+    return
+
+def export_vseho():
+    seznam_ucebnic = seznam_vsech_ucebnic()
+    jazyk = ""
+    for l in seznam_ucebnic:
+        export_ucebnice(l, jazyk)
+
+        
 #reset_slovicek("Lenka","Greeting colors numbers")
 
 #print(nastaveni_studenta("Lenka"))

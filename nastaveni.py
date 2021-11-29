@@ -112,7 +112,7 @@ def nastaveni_studenta(self):
     self.mezera3.grid(row=1 , column=0, columnspan=3, sticky=W)
     
     global reset_nastaveni
-    reset_nastaveni = tk.LabelFrame(self.nastaveni, text="Vynulovat odpovědi u slovíček: ", font="Arial 8", width=600)
+    reset_nastaveni = tk.LabelFrame(self.nastaveni, text="Vynulovat odpovědi u slovíček\nSmazat slovíčka lekce:            ", font="Arial 8", width=600)
     self.t1 = tk.Label(reset_nastaveni, text="Jazyk:", width=10)
     self.t1.grid(row=0 , column=1, sticky=W)
     self.t2 = tk.Label(reset_nastaveni, text="Učebnice:", width=20)
@@ -179,12 +179,22 @@ def reset_poctu_odpovedi(lekce,student):
         command=lambda: resetovat(lekce, student), fg="blue", font="Arial 8", width=70)
     resetovat_Button.grid(row=2, column=0, columnspan=4, sticky=W)
 
+    smaz_slovicka = tk.Button(reset_nastaveni, text="Smaž slovíčka!", 
+        command=lambda: smaz_slovicka_lek(lekce), fg="red", font="Arial 8", width=70)
+    smaz_slovicka.grid(row=3, column=0, columnspan=4, sticky=W)
+
+
 def resetovat(lekce, student):
     if messagebox.askyesno("Reset???", "Opravdu vynulovat počty u lekce - " + lekce+"?") == True:
         prace_s_db.reset_slovicek(student,lekce)
     else:
         pass
 
+def smaz_slovicka_lek(lekce):
+    if messagebox.askyesno("Smazat???", "Opravdu smazat slovíčka " + lekce+"?") == True:
+        prace_s_db.smaz_slovicka_lekce(lekce)
+    else:
+        pass
 
 def studovane(student):
     return prace_s_db.jazyky_studenta(student)
