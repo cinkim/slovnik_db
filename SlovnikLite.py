@@ -37,6 +37,7 @@ class slovnik:
         self.nacti_studenty() # načte z db seznam studentů
         self.jazyky_studenta = [] # seznam jazyků aktuálního studenta
         self.akt_jazyk = "" # aktuální jazyk k testování zvoleného studenta
+        # self.akt_U = ""
         self.seznam_ucebnic = [] # seznam učebnic studenta/jazyku
         self.nova_sl = [] # nová slovíčka k uložení do db
 
@@ -76,7 +77,10 @@ class slovnik:
             with open("aktualizace.txt", mode="r", encoding="utf-8") as c_verze:
                 c_verze = c_verze.read()
             c_verze = c_verze.strip()
-            return c_verze
+            if c_verze == "":
+                return "Není k dispozici aktuální číslo verze."
+            else:
+                return c_verze
         except FileNotFoundError:
             tk.messagebox.showwarning("Error", "Nebyl nalezen soubor s číslem verze.")
             c_verze = "???"
@@ -164,18 +168,24 @@ class slovnik:
             with open("aktualizace.txt", mode="r", encoding=coding) as now:
                 now = str(now.read())
                 now = now.rstrip()
-            if data == now:
+            if now == "":
+                tk.messagebox.showwarning("Error", "Nebylo zjištěno číslo vaší verze.\nByla nastavena výchozí hodnota.")
+                now = 1.0
+
+            if float(data) == float(now):
                 pass
             else:
-                if messagebox.askyesno("Nalezena nová verze programu.", "Byla nalezena nová verze programu\nchtete spustit aktualizaci?") == True:
-                    self.upgrade()
-                    time.sleep(1)
-                    os.startfile("update.exe")
-                    time.sleep(2)
-                    os._exit(0)
-                else:
-                    pass
-                    # self.upgrade()
+                if float(data) > float(now):
+                    if messagebox.askyesno("Nalezena nová verze programu.", "Byla nalezena nová verze programu\nchtete spustit aktualizaci?") == True:
+                        self.upgrade()
+                        time.sleep(0)
+                        os.startfile("update.exe")
+                        time.sleep(0)
+                        os._exit(0)
+                    else:
+                        pass
+                elif float(data) < float(now):
+                    tk.messagebox.showwarning("???", "Nejde aktualizovat na nižší verzi programu.")
 
     def upgrade(self):
         DOWN_ZIP = "./.DownloadZip/"
@@ -313,14 +323,19 @@ class slovnikGUI(tk.Frame):
             pass
         self.ucebnice = tk.LabelFrame(root, text="Učebnice", font="Arial 8")
         self.ucebnice.grid(row=1, column=2, rowspan=11, sticky=N)
+
         self.scrollbar_ucebnice = tk.Scrollbar(self.ucebnice, orient=VERTICAL)
+
         self.ucebnice_ListBox = tk.Listbox(self.ucebnice, width=21, yscrollcommand=self.scrollbar_ucebnice.set, height=15, font="Arial 8")
-        self.ucebnice_ListBox.bind( "<ButtonRelease-1>", self.nacti_lekce)  # po kliknutí se načtou slovíčka z dané učebnice
+        self.ucebnice_ListBox.bind( "<ButtonRelease-1>", self.nacti_lekce, self.export_ucebnice) 
         
         self.ucebnice_ListBox.grid(row=2, column=2, sticky=W)
 
         self.button_pridat_ucebnici = tk.Button(self.ucebnice, text="Přidat učebnici", command=self.pridat_ucebnici, font="Arial 8", width=20)
         self.button_pridat_ucebnici.grid(row=8, column=2, sticky=W)
+
+        self.button_export_ucebnici = tk.Button(self.ucebnice, text="Export učebnice", command=self.export_ucebnice, font="Arial 8", width=20)
+        self.button_export_ucebnici.grid(row=9, column=2, sticky=W)
 
 
 
@@ -355,8 +370,13 @@ class slovnikGUI(tk.Frame):
         self.button_pridat_slovicka = tk.Button(self.Lekce, text="Vypsat slovíčka", command=self.vypsat_slovicka, font="Arial 8", width=20)
         self.button_pridat_slovicka.grid(row=5, column=0, sticky=W)
 
-        self.button_Test = tk.Button(self.Lekce, text="Testovat", command=self.Test, font="Arial 8", width=20)
-        self.button_Test.grid(row=5, column=1, sticky=W)
+        self.button_export_lekce = tk.Button(self.Lekce, text="Export lekce", command=self.export_lekce, font="Arial 8", width=20)
+        self.button_export_lekce.grid(row=5, column=1, sticky=W)
+
+        self.button_Test = tk.Button(self.Lekce, text="Testovat", command=self.Test, font="Arial 8", width=20, bg="lightgreen")
+        self.button_Test.grid(row=6, column=0, columnspan=2, sticky=W+E)
+
+
               
     """_________________ vytvoří pravé pole pro další volby - nastavení/testování/historie ____________________________"""
     def create_ovl_sekce(self):
@@ -405,7 +425,7 @@ class slovnikGUI(tk.Frame):
         self.slovnik.upgrade()
         time.sleep(1)
         os.startfile("update.exe")
-        time.sleep(2)
+        time.sleep(1)
         os._exit(0)
 
 
@@ -427,12 +447,13 @@ class slovnikGUI(tk.Frame):
             return
         except:
             tk.messagebox.showwarning("Error", "Je nutné mít nainstalovanou aplikaci MS Outlook\npokud aplikaci nechcete instalovat, použijte jeden z následujících kontaktů\n\nlucie.jimenez@gmail.com\nlenka@konstant.cz\ncinkim@seznam.cz")
-            print("ok")
+
 
 
     """_______________________ Tovární nastavení______________________________"""
     def tovarni_nastaveni(self):
-        if messagebox.askyesno("POZOR", "Program se uvede do prvotního spuštění\nBudou smazána tato data!!!\n-registrovaní studenti\n-přidané učebnice\n-přidané lekce\n-přidaná slovíčka\n-výsledky testů") == True:
+        if messagebox.askyesno("POZOR", "Program se uvede do prvotního spuštění\nVšechny učebnice budou exportovány do adresáře 'Export'") == True:
+            prace_s_db.export_vseho()
             os.remove("db_slovnik.sqlite")
             tk.messagebox.showwarning("???", "Nastaveno prvotní zobrazení\nSPUSŤE PROGRAM ZNOVU")
             self.parent.destroy()
@@ -550,8 +571,18 @@ class slovnikGUI(tk.Frame):
     def ulozit_ucebnice(self):
         uc.ulozit_novou_ucebnici(self) # uloží novou učebnici
         self.Lekce.destroy()
-            
 
+
+    """_______________________Export učebnice_________________________"""
+
+    def export_ucebnice(self):
+        try:
+            prace_s_db.export_ucebnice(self.slovnik.akt_U, self.slovnik.akt_jazyk)
+        except AttributeError:
+            tk.messagebox.showwarning("ERROR", "Vyber učebnici k exportu.")
+            return
+
+            
     """____________________________ pridat_lek.py ___________________________________________________________________"""
 
     # vše k lekci
@@ -606,6 +637,16 @@ class slovnikGUI(tk.Frame):
             self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
             v_sl.vypis_slovicka(self,prace_s_db.slovicka_lekce(self.akt_Lekce, self.akt_student))
             #print(prace_s_db.nastaveni_studenta(self.akt_student))
+        except IndexError:
+            tk.messagebox.showwarning("ERROR", "Vyber lekci.")
+
+
+    """_________________________Export lekce__________________________________"""
+
+    def export_lekce(self):
+        try:
+            self.akt_Lekce = str(self.tree_Lekce.item(self.tree_Lekce.focus())["values"][1])
+            prace_s_db.export_lekce(self.akt_Lekce, self.akt_jazyk, "Export_Lekce")
         except IndexError:
             tk.messagebox.showwarning("ERROR", "Vyber lekci.")
 
@@ -697,6 +738,7 @@ class slovnikGUI(tk.Frame):
         try:
             if event !="":  # funkci spouštím z akce ListBoxu - <on click>     
                 self.akt_ucebnice = self.seznam_ucebnic[self.ucebnice_ListBox.curselection()[0]]
+                self.slovnik.akt_U = self.akt_ucebnice
         except IndexError:
             tk.messagebox.showwarning("ERROR", "Vyber, nebo založ novou učebnici.")
             self.akt_ucebnice = ""
