@@ -1,8 +1,5 @@
-pyttsx3
 pandas
 openpyxl
 pywin32
 gtts
-tornado
 webbrowser
-urllib2
